@@ -5,7 +5,6 @@ import { useFieldArray, useForm, Form } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-
 type Parameters = [
   {
     id: number;
@@ -84,7 +83,7 @@ const UnderTestingForm = ({
     register,
     getValues,
     formState: { isLoading, isSubmitting },
-    handleSubmit
+    handleSubmit,
   } = useForm({
     defaultValues: {
       status: "",
@@ -111,7 +110,7 @@ const UnderTestingForm = ({
   );
   const router = useRouter();
 
-  const handleForm = async (data:{}) => {
+  const handleForm = async (data: {}) => {
     console.log(data);
     const res = await patchFn(data);
     setState(res);
@@ -153,15 +152,15 @@ const UnderTestingForm = ({
 
     setState(res);
   };
-// console.log(isLoading, isSubmitting)
-//   if (isLoading || isSubmitting){
-//     return(
-//       <Loader bg="bg-transparent z-20"/>
-//     )
-//   }
+  // console.log(isLoading, isSubmitting)
+  //   if (isLoading || isSubmitting){
+  //     return(
+  //       <Loader bg="bg-transparent z-20"/>
+  //     )
+  //   }
 
   return (
-    <form onSubmit={handleSubmit(handleForm)}  className="p-2">
+    <form onSubmit={handleSubmit(handleForm)} className="p-2">
       <input type="hidden" {...register("status")} />
       <input type="hidden" {...register("status_id")} />
       <input type="hidden" {...register("assigned_to")} />
@@ -181,19 +180,19 @@ const UnderTestingForm = ({
           <table className="w-full table-auto">
             <thead>
               <tr className="bg-gray-2 p-2 text-left dark:bg-meta-4">
-                <th className="w-[10px]  font-medium text-black dark:text-white ">
+                <th className="w-[10px] font-medium text-black dark:text-white">
                   S.NO
                 </th>
-                <th className="w-1/5  font-medium text-black dark:text-white ">
+                <th className="w-1/5 font-medium text-black dark:text-white">
                   Test Parameter Name
                 </th>
-                <th className="w-1/5  font-medium text-black dark:text-white ">
+                <th className="w-1/5 font-medium text-black dark:text-white">
                   Order
                 </th>
-                <th className="w-1/5  font-medium text-black dark:text-white ">
+                <th className="w-1/5 font-medium text-black dark:text-white">
                   Value
                 </th>
-                <th className="w-1/5  font-medium text-black dark:text-white ">
+                <th className="w-1/5 font-medium text-black dark:text-white">
                   Result
                 </th>
               </tr>
@@ -201,12 +200,12 @@ const UnderTestingForm = ({
             <tbody>
               {fields.map((item, index) => (
                 <tr key={item.id}>
-                  <td className=" w-[20px] border-b border-[#eee] dark:border-strokedark ">
-                    <h5 className="w-[20px]  font-medium text-black dark:text-white">
+                  <td className="w-[20px] border-b border-[#eee] dark:border-strokedark">
+                    <h5 className="w-[20px] font-medium text-black dark:text-white">
                       {index + 1}
                     </h5>
                   </td>
-                  <td className="border-b border-[#eee] dark:border-strokedark ">
+                  <td className="border-b border-[#eee] dark:border-strokedark">
                     <input
                       type="text"
                       {...register(`test_params.${index}.test_name`)}
@@ -214,7 +213,7 @@ const UnderTestingForm = ({
                       disabled
                     />
                   </td>
-                  <td className="border-b border-[#eee] px-2 dark:border-strokedark ">
+                  <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                     <input
                       type="text"
                       {...register(`test_params.${index}.order`)}
@@ -222,14 +221,14 @@ const UnderTestingForm = ({
                     />
                   </td>
 
-                  <td className="border-b border-[#eee] px-2 dark:border-strokedark ">
+                  <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                     <input
                       type="text"
                       {...register(`test_params.${index}.value`)}
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
                   </td>
-                  <td className="border-b border-[#eee] px-2 dark:border-strokedark ">
+                  <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                     <Select
                       label={null}
                       name={`test_params.${index}.result`}
@@ -249,11 +248,11 @@ const UnderTestingForm = ({
         <button
           type="submit"
           className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray disabled:bg-slate-500"
-          disabled={isLoading||isSubmitting}
+          disabled={isLoading || isSubmitting}
         >
           {isLoading || isSubmitting ? "Loading..." : buttonName}
         </button>
-        
+
         {showRejectButton && (
           <button
             onClick={handleReject}

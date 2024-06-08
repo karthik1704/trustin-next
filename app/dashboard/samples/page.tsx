@@ -20,7 +20,7 @@ async function getData() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
-    next:{tags:['Samples']}
+    next: { tags: ["Samples"] },
   });
 
   // The return value is *not* serialized
@@ -28,10 +28,9 @@ async function getData() {
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    console.log(res)
+    console.log(res);
     console.log("error");
     throw new Error("Failed to fetch data");
- 
   }
 
   if (res.status === 401) redirect("/signin");
@@ -49,12 +48,12 @@ const SamplePage = async () => {
         <h2 className="text-title-md2 font-semibold text-black dark:text-white">
           Samples
         </h2>
-        <Link
+        {/* <Link
           href="samples/new"
           className="inline-flex items-center justify-center rounded-md border border-black py-4 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10"
         >
           New Sample
-        </Link>
+        </Link> */}
       </div>
       <div className="flex flex-col gap-10">
         <SampleTable data={data} />

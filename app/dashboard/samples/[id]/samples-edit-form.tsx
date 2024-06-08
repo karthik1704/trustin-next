@@ -9,9 +9,12 @@ import { createSamples } from "../actions";
 import { SERVER_API_URL } from "@/app/constant";
 
 type Sample = {
-  name: string;
-  batch_id: number | string;
-  test_type_id: string;
+  sample_name: string;
+  batch_or_lot_no: string;
+  manufactured_date: number;
+  expiry_date: number;
+  batch_size: 0;
+  received_quantity: 0;
   test_params: Array<{
     test_parameter_id: string;
     order: number | string;
@@ -48,63 +51,59 @@ const SamplesEditForm = ({
     handleSubmit,
   } = useForm<Sample>({
     defaultValues: {
-      name: data?.sample?.name,
-      batch_id: data?.sample?.batch_id,
-      test_type_id: data?.sample?.test_type_id,
       test_params: [{ test_parameter_id: "", order: 0 }],
     },
   });
 
-  const sampleWatch = useWatch({
-    control,
-    name: "test_type_id",
-  });
-  const batchWatch = useWatch({
-    control,
-    name: "batch_id",
-  });
+  // const sampleWatch = useWatch({
+  //   control,
+  //   name: "test_type_id",
+  // });
+  // const batchWatch = useWatch({
+  //   control,
+  //   name: "batch_id",
+  // });
 
-  const [filterId, setFilterId] = useState(
-    data?.sample?.test_type_id.toString(),
-  );
-  const [parameters, setParameters] = useState<[]>([]);
-  const [selectedBatch, setSelectBatch] = useState<{} | null>(null);
+  // const [filterId, setFilterId] = useState(
+  //   data?.sample?.test_type_id.toString(),
+  // );
+  // const [parameters, setParameters] = useState<[]>([]);
+  // const [selectedBatch, setSelectBatch] = useState<{} | null>(null);
 
-  useEffect(() => {
-    // TODO: need some imporvement in future
-    // const ids = sampleWatch.map((field, idx) => field.test_type_id);
-    setFilterId(sampleWatch);
-  }, [sampleWatch]);
+  // useEffect(() => {
+  //   // TODO: need some imporvement in future
+  //   // const ids = sampleWatch.map((field, idx) => field.test_type_id);
+  //   setFilterId(sampleWatch);
+  // }, [sampleWatch]);
 
-  
-  useEffect(() => {
-    async function fetchTestParameters(query: string, product: string) {
-      let res = await fetch(
-        `${SERVER_API_URL}/parameters/product/${product}?${query}`,
-      );
-      const response: any = await res.json();
-      setParameters(response);
-    }
+  // useEffect(() => {
+  //   async function fetchTestParameters(query: string, product: string) {
+  //     let res = await fetch(
+  //       `${SERVER_API_URL}/parameters/product/${product}?${query}`,
+  //     );
+  //     const response: any = await res.json();
+  //     setParameters(response);
+  //   }
 
-    if (filterId && batchWatch) {
-      const query = `test_type=${encodeURIComponent(filterId)}`;
-      const batch = data.batches.find(
-        (batch: any) => batch.id.toString() === batchWatch.toString(),
-      );
-      setSelectBatch(batch);
-      if (filterId === "2") {
-        if (batch) {
-          fetchTestParameters(query, batch.product_id.toString());
-        }
-      }
-      if (filterId === "1") {
-        const micro_params = data.test_params.filter(
-          (test: any) => test.test_type_id.toString() === "1",
-        );
-        if (micro_params.length) setParameters(micro_params);
-      }
-    }
-  }, [batchWatch, data.batches, data.test_params,data, filterId]);
+  //   if (filterId && batchWatch) {
+  //     const query = `test_type=${encodeURIComponent(filterId)}`;
+  //     const batch = data.batches.find(
+  //       (batch: any) => batch.id.toString() === batchWatch.toString(),
+  //     );
+  //     setSelectBatch(batch);
+  //     if (filterId === "2") {
+  //       if (batch) {
+  //         fetchTestParameters(query, batch.product_id.toString());
+  //       }
+  //     }
+  //     if (filterId === "1") {
+  //       const micro_params = data.test_params.filter(
+  //         (test: any) => test.test_type_id.toString() === "1",
+  //       );
+  //       if (micro_params.length) setParameters(micro_params);
+  //     }
+  //   }
+  // }, [batchWatch, data.batches, data.test_params, data, filterId]);
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
@@ -138,55 +137,73 @@ const SamplesEditForm = ({
       <div className="p-6.5">
         <div>
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
-            <div className="w-full xl:w-full ">
-              <label className="mb-2.5 block w-full table-auto text-black dark:text-white">
-                Batch
-              </label>
-
-              <div className="relative z-20 bg-transparent dark:bg-form-input">
-                <select
-                  {...register(`batch_id`)}
-                  className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                >
-                  <option value={0}>------------</option>
-                  {data?.batches?.map((t: any) => (
-                    <option value={t.id} key={t.id}>
-                      {t.batch_no}
-                    </option>
-                  ))}
-                </select>
-                <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
-                  <svg
-                    className="fill-current"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g opacity="0.8">
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                        fill=""
-                      ></path>
-                    </g>
-                  </svg>
-                </span>
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+              <div className="">
+                <label className="mb-2.5 block text-black dark:text-white">
+                  Sample Name
+                </label>
+                <input
+                  type="text"
+                  {...register(`sample_name`)}
+                  placeholder="Enter Sample Name"
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                />
               </div>
-            </div>
-
-            <div className="w-full xl:w-full">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Sample Name
-              </label>
-              <input
-                type="text"
-                {...register(`name`)}
-                placeholder="Enter Sample Name"
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              />
+              <div className="">
+                <label className="mb-2.5 block text-black dark:text-white">
+                  Batch No
+                </label>
+                <input
+                  type="text"
+                  {...register(`batch_or_lot_no`)}
+                  placeholder="Enter Batch No"
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                />
+              </div>
+              <div className="">
+                <label className="mb-2.5 block text-black dark:text-white">
+                  Manufactured Date
+                </label>
+                <input
+                  type="date"
+                  {...register(`manufactured_date`)}
+                  placeholder="Enter Manufactured Date"
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                />
+              </div>
+              <div className="">
+                <label className="mb-2.5 block text-black dark:text-white">
+                  Expiry Date
+                </label>
+                <input
+                  type="date"
+                  {...register(`expiry_date`)}
+                  placeholder="Enter Expiry Date"
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                />
+              </div>
+              <div className="">
+                <label className="mb-2.5 block text-black dark:text-white">
+                  Batch Size
+                </label>
+                <input
+                  type="text"
+                  {...register(`batch_size`)}
+                  placeholder="Enter Batch Size"
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                />
+              </div>
+              <div className="">
+                <label className="mb-2.5 block text-black dark:text-white">
+                  Received Quantity
+                </label>
+                <input
+                  type="text"
+                  {...register(`received_quantity`)}
+                  placeholder="Enter Received Quantity"
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                />
+              </div>
             </div>
 
             {/* <div className="w-full xl:w-1/4">
@@ -201,7 +218,7 @@ const SamplesEditForm = ({
                 />
               </div>*/}
 
-            <div className="w-full xl:w-full">
+            {/* <div className="w-full xl:w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Test Type
               </label>
@@ -234,24 +251,12 @@ const SamplesEditForm = ({
                   </svg>
                 </span>
               </div>
-            </div>
-            <div className="w-full xl:w-full">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Product Name
-              </label>
-              <h5>{selectedBatch?.product?.product_name}</h5>
-            </div>
-            <div className="w-full xl:w-full">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Company Name
-              </label>
-              <h5>{selectedBatch?.customer?.company_name}</h5>
-            </div>
+            </div> */}
           </div>
           {/* // Test Params */}
           <TestParamsForm
-            filterId={filterId}
-            parameters={parameters}
+            filterId={"1"}
+            parameters={[]}
             data={data}
             {...{ control, register }}
           />
@@ -348,14 +353,14 @@ const TestParamsForm = ({
     <div className="mb-4">
       {fields.map((item, index) => (
         <div key={item.id} className="mb-4 mt-2">
-          <div className="mb-2 flex  justify-between border-b-2">
+          <div className="mb-2 flex justify-between border-b-2">
             <p>
               Test Parameter <strong>#{index + 1}:</strong>
             </p>
             <div>
               <button
                 type="button"
-                className="flex  justify-center rounded-full p-2   font-medium text-black hover:bg-gray "
+                className="flex justify-center rounded-full p-2 font-medium text-black hover:bg-gray"
                 onClick={() => remove(index)}
               >
                 <Trash2 className="w-4" />

@@ -49,7 +49,7 @@ type Props = {
   ) => Promise<
     { fieldErrors: null; type: string; message: string | undefined } | undefined
   >;
-  actionUpdateSample : (
+  actionUpdateSample: (
     data: any,
   ) => Promise<
     { fieldErrors: null; type: string; message: string | undefined } | undefined
@@ -249,11 +249,11 @@ const SampleWorkflowForm = ({
 
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-      <div className="align-items:flex-end flex flex-col items-end gap-3 sm:flex-row sm:justify-end ">
+      <div className="align-items:flex-end flex flex-col items-end gap-3 sm:flex-row sm:justify-end">
         <button
           type="button"
           onClick={openModal}
-          className="  align-items: flex-end m-1 justify-center rounded bg-primary p-2 font-medium text-gray"
+          className="align-items: flex-end m-1 justify-center rounded bg-primary p-2 font-medium text-gray"
         >
           Print
         </button>
@@ -276,18 +276,18 @@ const SampleWorkflowForm = ({
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
         <TabsContent value="status">
-          {data?.sample?.status_id === 1 && (
-            <div className="mb-3 w-full flex-col">
-              <SamplesEditForm data={data}  actionFn={actionUpdateSample}/>
-            </div>
-          )}
+          {/* {data?.sample?.status_id === 1 && ( */}
+          <div className="mb-3 w-full flex-col">
+            <SamplesEditForm data={data} actionFn={actionUpdateSample} />
+          </div>
+          {/* )} */}
           {data?.sample?.registration_id && (
             <div>
               <div className="mb-3 w-full flex-col">
                 <StatusStepper step={data?.sample?.status_id} />
                 {/* <p>{data?.sample?.status}</p> */}
 
-                <div className="mt-1 flex flex-col gap-9 ">
+                <div className="mt-1 flex flex-col gap-9">
                   {data?.sample?.status_id === 1 && (
                     <WorkFlowForm
                       rejectActionData={actionFnReject}
@@ -415,7 +415,7 @@ const SampleWorkflowForm = ({
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Batch No:
                   </p>
-                  <p>{data.sample.batch.batch_no}</p>
+                  <p>{data?.sample?.batch_or_lot_no}</p>
                 </div>
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
@@ -423,7 +423,7 @@ const SampleWorkflowForm = ({
                   </p>
                   <p>
                     {
-                      new Date(data.sample.batch.manufactured_date)
+                      new Date(data.sample.manufactured_date)
                         .toISOString()
                         .split("T")[0]
                     }
@@ -436,7 +436,7 @@ const SampleWorkflowForm = ({
                   </p>
                   <p>
                     {
-                      new Date(data.sample.batch.expiry_date)
+                      new Date(data.sample.expiry_date)
                         .toISOString()
                         .split("T")[0]
                     }
@@ -446,13 +446,13 @@ const SampleWorkflowForm = ({
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Batch Size:
                   </p>
-                  <p>{data.sample.batch.batch_size}</p>
+                  <p>{data.sample.batch_size}</p>
                 </div>
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Receiverd Quantity:
                   </p>
-                  <p>{data.sample.batch.received_quantity}</p>
+                  <p>{data.sample.received_quantity}</p>
                 </div>
               </div>
 
