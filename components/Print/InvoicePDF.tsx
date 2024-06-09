@@ -221,13 +221,13 @@ const MyDocument = ({ data }: { data: any }) => {
                 Batch No
               </Text>
               <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}>
-                {data.sample.batch.batch_no}
+                {data.sample.batch_or_lot_no}
               </Text>
 
               <Text style={{ borderRight: "1 solid #000", width: 100, padding: 2 }}>
                 Batch Size
               </Text>
-              <Text style={{padding: 2}}>{data.sample.batch.batch_size}</Text>
+              <Text style={{padding: 2}}>{data.sample.batch_size}</Text>
             </View>
             <View
               style={{
@@ -244,7 +244,7 @@ const MyDocument = ({ data }: { data: any }) => {
               </Text>
               <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}>
                 {new Date(
-                  data.sample.batch.manufactured_date,
+                  data.sample.manufactured_date,
                 ).toLocaleDateString()}
               </Text>
 
@@ -253,7 +253,7 @@ const MyDocument = ({ data }: { data: any }) => {
               </Text>
               <Text style={{padding: 2 }}>
                 {" "}
-                {new Date(data.sample.batch.expiry_date).toLocaleDateString()}
+                {new Date(data.sample.expiry_date).toLocaleDateString()}
               </Text>
             </View>
             <View
@@ -269,7 +269,7 @@ const MyDocument = ({ data }: { data: any }) => {
               <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}>
                 Test Method
               </Text>
-              <Text style={{padding:2}} >{data.sample.test_type_id === 2 ? "Mech" : "Micro"}</Text>
+              <Text style={{padding:2}} >{data.sample.registration.test_type_id === 2 ? "Mech" : "Micro"}</Text>
             </View>
             <View
               style={{
