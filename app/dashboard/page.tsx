@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { SERVER_API_URL } from "@/app/constant";
+import { formatDate, getDateRange } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Trustin | Dashboard",
@@ -33,32 +34,47 @@ export type DashboardInfo = {
 
 export type DashboardData = {
   dashboard: DashboardInfo;
-  menus: string[]
-}
+  menus: string[];
+};
 
+const { startDate, endDate } = getDateRange();
 
+// Format the dates as strings (in DD-MM-YYYY format)
+const startDateString = formatDate(startDate);
+const endDateString = formatDate(endDate);
 
-async function getData() {
+async function getData(
+  start_date: string,
+  end_date: string 
+) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
+  
+  if (start_date==="" || start_date===undefined) start_date=startDateString;
+  if (end_date==="" || end_date===undefined) end_date=endDateString;
 
-  const res = await fetch(`${SERVER_API_URL}/dashboard/`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token?.value}`,
+  console.log(start_date, end_date)
+
+  const res = await fetch(
+    `${SERVER_API_URL}/dashboard/?start_date_str=${start_date}&${end_date}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token?.value}`,
+      },
+      next: {
+        tags: ["Dashboard", "Users", "Followup", "Registration", "Samples"],
+        revalidate: 100000,
+      },
     },
-    next: {
-      tags: ["Dashboard", "Users", "Followup", "Registration", "Samples"],
-      revalidate: 100000,
-    },
-  });
+  );
   const res1 = await fetch(`${SERVER_API_URL}/users/menus`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
     next: {
-      tags:["Menus",],
+      tags: ["Menus"],
       revalidate: 100000,
     },
   });
@@ -87,14 +103,25 @@ async function getData() {
 
   const menus = menusRes.map((menu: { id: number; name: string }) => menu.name);
 
-  return {dashboard, menus};
+  return { dashboard, menus };
 }
 
-export default async function DashboardPage() {
-  const data:DashboardData = await getData(); 
+export default async function DashboardPage({
+  searchParams: { start_date_str, end_date_str },
+}: {
+  searchParams: {
+    start_date_str: string | undefined;
+    end_date_str: string | undefined;
+  };
+}) {
+  console.log(start_date_str, end_date_str);
+  const data: DashboardData = await getData(
+    start_date_str ?? "",
+    end_date_str ?? "",
+  );
   return (
     <>
-      <ECommerce data={data}/>
+      <ECommerce data={data} startDate={start_date_str} endDate={end_date_str} />
     </>
   );
 }

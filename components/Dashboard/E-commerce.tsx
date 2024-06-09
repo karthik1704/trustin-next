@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import RegistrationChart from "./registration-chart";
 import FollowupCountTable from "./followup-count-table";
+import Select from "../select-input";
+import DashboardForm from "./dashboard-form";
 // import Map from "../Maps/TestMap";
 
 // without this the component renders on server and throws an error
@@ -24,9 +26,14 @@ import FollowupCountTable from "./followup-count-table";
 //   ssr: false,
 // });
 
-const ECommerce = ({ data }: { data: DashboardData }) => {
+const ECommerce = ({ data, startDate, endDate }: { data: DashboardData, startDate: string | undefined, endDate: string | undefined }) => {
   return (
     <>
+      <div className="flex justify-end">
+        <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+          <DashboardForm startDate={startDate} endDate={endDate}/>
+        </div>
+      </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-5 2xl:gap-7.5">
         {data?.dashboard?.customer && (
           <CardDataStats
