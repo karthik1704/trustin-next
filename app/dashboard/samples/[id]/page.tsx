@@ -129,12 +129,16 @@ export type Data = {
   sample: {
     id: number;
     sample_id: string;
-    name: string;
+    sample_name: string;
     registration_id: number;
     status_id: number;
     department: string;
     assigned_to: number;
-    batch_id: number;
+    received_quantity: number;
+    batch_size: number;
+    manufactured_date: string;
+    expiry_date: string;
+    batch_or_lot_no: string;
 
     created_by: number;
     updated_by: number;
@@ -173,6 +177,7 @@ export type Data = {
       company_name: string;
       customer_address_line1: string;
       customer_address_line2: string;
+      test_type_id: number;
       city: string;
       state: string;
       pincode_no: string;
@@ -217,7 +222,7 @@ export type Data = {
       last_name: string;
       department: string;
     };
-    batch: {
+    batch?: {
       id: number;
       registration_id: number;
       batch_no: string;
@@ -264,7 +269,7 @@ export type Data = {
     created_by: number;
     updated_by: number;
   };
-  parameters: {
+  test_params: {
     id: number;
     branch_id: number;
     test_type_id: number;

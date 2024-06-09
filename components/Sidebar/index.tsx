@@ -75,11 +75,11 @@ const menulist = [
     pathname: "front-desk",
     icon: <UserCheck />,
   },
-  {
-    name: "Batches",
-    pathname: "batches",
-    icon:  <SwatchBook />,
-  },
+  // {
+  //   name: "Batches",
+  //   pathname: "batches",
+  //   icon:  <SwatchBook />,
+  // },
 
   // {
   //   name: "TRF",

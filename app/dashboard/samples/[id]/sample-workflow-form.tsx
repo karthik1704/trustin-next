@@ -277,9 +277,9 @@ const SampleWorkflowForm = ({
         </TabsList>
         <TabsContent value="status">
           {/* {data?.sample?.status_id === 1 && ( */}
-          <div className="mb-3 w-full flex-col">
+          {/* <div className="mb-3 w-full flex-col">
             <SamplesEditForm data={data} actionFn={actionUpdateSample} />
-          </div>
+          </div> */}
           {/* )} */}
           {data?.sample?.registration_id && (
             <div>
@@ -383,7 +383,7 @@ const SampleWorkflowForm = ({
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Sample Name:
                   </p>
-                  <p>{data.sample.name}</p>
+                  <p>{data.sample.sample_name}</p>
                 </div>
 
                 <div className="w-full xl:w-1/5">
@@ -462,18 +462,22 @@ const SampleWorkflowForm = ({
                     Assignee:
                   </p>
                   <p>
-                    {data?.sample?.assignee?.first_name +
-                      " " +
-                      data?.sample?.assignee?.last_name}
+                    {data?.sample?.assignee?.first_name ??
+                      "---" + " " + data?.sample?.assignee?.last_name ??
+                      "---"}
                   </p>
                 </div>
-                {/* 
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Department:
-              </p>
-              <p>{data?.sample?.assignee?.department}</p>
-            </div> */}
+
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Test Type:
+                  </p>
+                  <p>
+                    {data?.sample?.registration.test_type_id === 1
+                      ? "Micro "
+                      : "Mech"}
+                  </p>
+                </div>
               </div>
               {data.currentUser.department_id !== 3 && (
                 <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">

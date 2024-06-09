@@ -14,6 +14,7 @@ export type RegisterType = {
   sample_id: string;
   sample_name: string;
   department: string;
+  status: string;
   registration: {
     code: string | null;
   };
@@ -35,7 +36,7 @@ const SampleTable = ({ data }: { data: RegisterType }) => {
               <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 Registration Code
               </th>
-              <th className="px-4 py-4 font-medium text-black dark:text-white">
+              <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
                 Status
               </th>
 
