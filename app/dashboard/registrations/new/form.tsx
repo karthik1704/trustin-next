@@ -57,6 +57,8 @@ const RegistrationForm = ({ data }: { data: Data }) => {
   const form = useForm<CreateData>({
     defaultValues: {
       branch_id: "1",
+      test_params:[],
+      samples:[]
     },
   });
   const { fields, append, remove, replace } = useFieldArray({
@@ -129,7 +131,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
         replace([]);
         for (let i = 0; i < watchNoOfSamplesValue; i++) {
           append({
-            sample_name: form.getValues("sample_name"),
+            sample_name: form.getValues("sample_name") + " -" + (i + 1),
             batch_or_lot_no: form.getValues("batch_or_lot_no"),
             manufactured_date: form.getValues("manufactured_date"),
             expiry_date: form.getValues("expiry_date"),
@@ -380,11 +382,12 @@ const RegistrationForm = ({ data }: { data: Data }) => {
           </div>
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-            <div className="w-full ">
+            <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Date Of Received
               </label>
               <input
+                required
                 type="date"
                 {...form.register("date_of_received")}
                 placeholder="Enter Date Of Recived"
@@ -394,13 +397,14 @@ const RegistrationForm = ({ data }: { data: Data }) => {
           </div>
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-            <div className="w-full ">
+            <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Product
               </label>
 
               <div className="relative z-20 bg-transparent dark:bg-form-input">
                 <select
+                  required
                   {...form.register("product_id")}
                   className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                 >
@@ -543,6 +547,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 Sample Name
               </label>
               <input
+                required
                 {...form.register("sample_name")}
                 placeholder="Enter Sample Name"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -553,6 +558,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 Batch / Lot No
               </label>
               <input
+                required
                 {...form.register("batch_or_lot_no")}
                 placeholder="Enter Batch / Lot No"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -565,6 +571,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 Manufactured Date
               </label>
               <input
+                required
                 {...form.register("manufactured_date")}
                 type="date"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -575,6 +582,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 Expiry Date
               </label>
               <input
+                required
                 {...form.register("expiry_date")}
                 type="date"
                 placeholder="Enter Expiry Date"
@@ -589,6 +597,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 Batch Size
               </label>
               <input
+                required
                 {...form.register("batch_size")}
                 placeholder="Enter Batch Size"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -599,6 +608,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 Received Quantity
               </label>
               <input
+                required
                 {...form.register("received_quantity")}
                 placeholder="Enter Received Quantity"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -607,11 +617,12 @@ const RegistrationForm = ({ data }: { data: Data }) => {
           </div>
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-            <div className="w-full ">
+            <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 No of Samples
               </label>
               <input
+                required
                 {...form.register("no_of_samples")}
                 placeholder="Enter No of Samples"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -628,14 +639,14 @@ const RegistrationForm = ({ data }: { data: Data }) => {
               <div className="mb-4">
                 {fields.map((item, index) => (
                   <div key={item.id} className="mb-4 mt-2">
-                    <div className="mb-2 flex  justify-between border-b-2">
+                    <div className="mb-2 flex justify-between border-b-2">
                       <p>
                         Sample <strong>#{index + 1}:</strong>
                       </p>
                       <div>
                         <button
                           type="button"
-                          className="flex  justify-center rounded-full p-2   font-medium text-black hover:bg-gray "
+                          className="flex justify-center rounded-full p-2 font-medium text-black hover:bg-gray"
                           onClick={() => remove(index)}
                         >
                           <Trash2 className="w-4" />
@@ -814,14 +825,14 @@ const TestParamsForm = ({
     <div className="mb-4">
       {fields.map((item, index) => (
         <div key={item.id} className="mb-4 mt-2">
-          <div className="mb-2 flex  justify-between border-b-2">
+          <div className="mb-2 flex justify-between border-b-2">
             <p>
               Test Parameter <strong>#{index + 1}:</strong>
             </p>
             <div>
               <button
                 type="button"
-                className="flex  justify-center rounded-full p-2   font-medium text-black hover:bg-gray "
+                className="flex justify-center rounded-full p-2 font-medium text-black hover:bg-gray"
                 onClick={() => remove(index)}
               >
                 <Trash2 className="w-4" />
