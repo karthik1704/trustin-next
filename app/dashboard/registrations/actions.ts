@@ -113,6 +113,7 @@ export async function updateRegistration(id: string, data: any) {
   }
 
   revalidateTag("Registration");
+  revalidateTag("Samples");
 
   if (res.status === 200) {
     return {

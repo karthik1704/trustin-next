@@ -7,6 +7,7 @@ import { createFrontDesk } from "../actions";
 import SubmitButton from "@/components/submit-button/submit-button";
 import Select from "@/components/select-input";
 import { Data } from "./page";
+import { getCurrentLocalISOString } from "@/lib/utils";
 
 const Customers = [
   { id: 1, name: "Muthu" },
@@ -51,7 +52,8 @@ const FrontDeskAddForm = ({ data }:props) => {
     }
   }, [state, router]);
 
- 
+ console.log(new Date().toISOString().slice(0, 16))
+ console.log(getCurrentLocalISOString().slice(0, 16))
 
   return (
     <form action={formAction}>
@@ -80,12 +82,12 @@ const FrontDeskAddForm = ({ data }:props) => {
 
         <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
-            Courier Name
+            Mode of Received
           </label>
           <input
             type="text"
             name="courier_name"
-            placeholder="Courier Name"
+            placeholder=" Mode of Received"
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
         </div>
@@ -98,27 +100,27 @@ const FrontDeskAddForm = ({ data }:props) => {
             type="datetime-local"
             name="date_of_received"
             placeholder="Date Received"
-            defaultValue={new Date().toISOString().slice(0, 16)}
+            defaultValue={getCurrentLocalISOString().slice(0, 16)}
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
         </div>
         <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
-          Temperature
+          Storage Condition
           </label>
           <input
             type="text"
             name="temperature"
-            placeholder="Temperature"
+            placeholder="Storage Condition"
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
         </div>
-        <div className="mb-4.5">
+        {/* <div className="mb-4.5">
           <Select label="Parcel Recived" name="parcel_received">
            <option value="SAMPLE">Sample</option>
            <option value="Material">Material</option>
           </Select>
-        </div>
+        </div> */}
         <div className="mb-4.5">
           <Select label="Received Condition" name="received_condition">
             
@@ -132,7 +134,7 @@ const FrontDeskAddForm = ({ data }:props) => {
         </div>
         
         <div className="mb-4.5">
-          <Select label="Department" name="deparment_id">
+          <Select label="Department" name="deparment_id" defaultValue={"6"}>
             {data?.departments.map((department) => (
               <option value={department.id} key={department.id}>
                 {department.name}
@@ -142,7 +144,7 @@ const FrontDeskAddForm = ({ data }:props) => {
         </div>
         <div className="mb-4.5">
           <Select label="Status" name="status">
-          <option value="Not_REGISTRATION">
+          <option value="NOT_REGISTRATION">
                 Not Registration
               </option>
               <option value="REGISTRATION">

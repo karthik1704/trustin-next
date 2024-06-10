@@ -52,7 +52,7 @@ const FrontDeskTable = ({ data }) => {
                   <p
                     className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium `}
                   >
-                    {packageItem. status}
+                    {packageItem.status.split("_").join(" ")}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

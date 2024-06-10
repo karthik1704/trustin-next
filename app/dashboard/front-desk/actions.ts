@@ -25,6 +25,14 @@ export async function createFrontDesk(prevState: any, formData: FormData) {
   });
 
   if (res.status === 401) redirect("/signin");
+  if (res.status == 422) {
+    const resJson = await res.json();
+
+    console.log(resJson);
+    console.log(resJson.detail[0].loc);
+    console.log(resJson.detail[0].input);
+  }
+
 
   if (res.status !== 200) {
     const error = await res.json();
@@ -36,6 +44,7 @@ export async function createFrontDesk(prevState: any, formData: FormData) {
   }
 
   revalidateTag("front-desk");
+
 
   if (res.status === 200) {
     const error = await res.json();

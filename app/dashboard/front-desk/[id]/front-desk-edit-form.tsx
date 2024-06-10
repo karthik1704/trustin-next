@@ -67,7 +67,6 @@ const FrontDeskEditForm = ({
             label="Customer"
             name="customer_id"
             defaultValue={data.frontDesk.customer_id}
-
           >
             {data.customers.map((customer) => (
               <option value={customer.id} key={customer.id}>
@@ -76,24 +75,15 @@ const FrontDeskEditForm = ({
             ))}
           </Select>
         </div>
-        {/* <label className="mb-2.5 block text-black dark:text-white">
-            Customer
-          </label>
-          <input
-            type="text"
-            name="customer_id"
-            placeholder=" Customer"
-            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          /> */}
 
         <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
-            Courier Name
+            Mode of Received
           </label>
           <input
             type="text"
             name="courier_name"
-            placeholder="Courier Name"
+            placeholder="Mode of Received"
             defaultValue={data.frontDesk.courier_name}
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
@@ -104,45 +94,45 @@ const FrontDeskEditForm = ({
             Date Received
           </label>
           <input
-            type="date"
+            type="datetime-local"
             name="date_of_received"
             placeholder="Date Received"
-            defaultValue={new Date(data.frontDesk.date_of_received).toISOString().split("T")[0]}
+            defaultValue={new Date(data.frontDesk.date_of_received)
+              .toISOString()
+              .slice(0, 16)}
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
         </div>
         <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
-          Temperature
+            Storage Condition
           </label>
           <input
             type="text"
             name="temperature"
-            placeholder="Temperature"
+            placeholder="Storage Condition"
             defaultValue={data.frontDesk.temperature}
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
         </div>
+
         <div className="mb-4.5">
-          <Select label="Parcel Recived" name="parcel_received"  defaultValue={data.frontDesk.parcel_received}>
-           <option value="SAMPLE">Sample</option>
-           <option value="Material">Material</option>
+          <Select
+            label="Received Condition"
+            name="received_condition"
+            defaultValue={data.frontDesk.received_condition}
+          >
+            <option value="GOOD">Good</option>
+            <option value="DAMAGED">Damaged</option>
           </Select>
         </div>
+
         <div className="mb-4.5">
-          <Select label="Received Condition" name="received_condition"  defaultValue={data.frontDesk.received_condition}>
-            
-              <option value="GOOD" >
-              Good
-              </option>
-              <option value="DAMAGED">Damaged</option>
-              
-           
-          </Select>
-        </div>
-        
-        <div className="mb-4.5">
-          <Select label="Department" name="deparment_id"  defaultValue={data.frontDesk.deparment_id}>
+          <Select
+            label="Department"
+            name="deparment_id"
+            defaultValue={data.frontDesk.deparment_id}
+          >
             {data?.departments.map((department) => (
               <option value={department.id} key={department.id}>
                 {department.name}
@@ -151,13 +141,13 @@ const FrontDeskEditForm = ({
           </Select>
         </div>
         <div className="mb-4.5">
-          <Select label="Status" name="status"  defaultValue={data.frontDesk.status}>
-          <option value="Not_REGISTRATION">
-                Not Registration
-              </option>
-              <option value="REGISTRATION">
-                Registration
-              </option>
+          <Select
+            label="Status"
+            name="status"
+            defaultValue={data.frontDesk.status}
+          >
+            <option value="NOT_REGISTRATION">Not Registration</option>
+            <option value="REGISTRATION">Registration</option>
           </Select>
         </div>
         <SubmitButton />

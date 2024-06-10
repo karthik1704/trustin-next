@@ -70,3 +70,11 @@ export function parseFormattedDate(formattedDate: string): string  {
 
   return isoFormattedDate;
 }
+
+
+export function getCurrentLocalISOString() {
+  const date = new Date();
+  const offset = date.getTimezoneOffset();
+  const localISOString = new Date(date.getTime() - (offset * 60 * 1000)).toISOString();
+  return localISOString;
+}
