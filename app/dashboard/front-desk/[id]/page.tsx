@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { updateCustomers } from "../actions";
 import { SERVER_API_URL } from "@/app/constant";
 import FrontDeskEditForm from "./front-desk-edit-form";
-import { Customer } from "./typings";
+import { Customer, Data } from "./typings";
 
 export const metadata: Metadata = {
   title: "Edit  Front Desk | Trustin",
@@ -16,47 +16,46 @@ async function getData(id: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
   console.log(access_token);
-  try {
-    const res = await fetch(`${SERVER_API_URL}/customers/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${access_token?.value}`,
-      },
-    });
-    const res1 = await fetch(`${SERVER_API_URL}/front-desks/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${access_token?.value}`,
-      },
-    });
+  const res = await fetch(`${SERVER_API_URL}/customers/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+  const res1 = await fetch(`${SERVER_API_URL}/front-desks/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
 
-    const res2 =await fetch(`${SERVER_API_URL}/departments/`,{
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${access_token?.value}`,
-      },
-    })
-    // The return value is *not* serialized
-    // You can return Date, Map, Set, etc.
+  const res2 = await fetch(`${SERVER_API_URL}/departments/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
 
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      // console.log(res)
-      // throw new Error("Failed to fetch data");
-      console.log("error");
-    }
-
-    if(!res2.ok){
-        console.log("error")
-    }
-
-    const customers = await res.json();
-    const frontDesk = await res1.json();
-    const departments = await res2.json();
-    return {customers, frontDesk,departments};
-  } catch (e) {
-    console.log(e);
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error");
   }
+
+  if (!res2.ok) {
+    console.log("error");
+  }
+  if (!res1.ok) {
+    console.log("error");
+  }
+
+  const customers = await res.json();
+  const frontDesk = await res1.json();
+  const departments = await res2.json();
+  return { customers, frontDesk, departments };
 }
 
 const FrontDeskForm = async ({
@@ -64,7 +63,7 @@ const FrontDeskForm = async ({
 }: {
   params: { id: string };
 }) => {
-  const data = await getData(id);
+  const data: Data = await getData(id);
   const updateWithId = updateCustomers.bind(null, id);
   console.log(data);
   return (

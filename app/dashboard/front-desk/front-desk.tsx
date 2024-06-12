@@ -2,9 +2,8 @@ import { Package } from "@/types/package";
 import Link from "next/link";
 import { Data } from "./page";
 
-const FrontDeskTable = ({ data }) => {
+const FrontDeskTable = ({ data }:{data:Data}) => {
 
-  console.log(data.date_of_received)
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">

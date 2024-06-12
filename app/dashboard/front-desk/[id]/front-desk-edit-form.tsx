@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useFormState } from "react-dom";
 import { createFrontDesk } from "../actions";
 import SubmitButton from "@/components/submit-button/submit-button";
-import { Customer } from "./typings";
+import { Customer, Data } from "./typings";
 import Select from "@/components/select-input";
 
 const Customers = [
@@ -31,7 +31,7 @@ const FrontDeskEditForm = ({
   data,
   actionFn,
 }: {
-  data: any;
+  data: Data;
   actionFn: (
     prevState: any,
     formData: FormData,

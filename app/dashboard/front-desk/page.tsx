@@ -43,11 +43,19 @@ async function getData() {
 }
 
 export type Data = {
-  id: number;
-  company_name: string;
-  company_id: string;
-  frontdesk_code: string;
-  email: string;
+    customer_id: number;
+    courier_name: string;
+    date_of_received: string;
+    received_condition: string;
+    temperature: string;
+    department_id: number;
+    status: string;
+    id: number;
+    customer: {
+      id:number;
+      company_name: string;
+    };
+  
 }[];
 
 const FrontDeskPage = async () => {
