@@ -16,6 +16,9 @@ const FrontDeskTable = ({ data }:{data:Data}) => {
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                 Courier Name
               </th>
+              <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
+                Received By
+              </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
                 Date Of Received
               </th>
@@ -38,6 +41,11 @@ const FrontDeskTable = ({ data }:{data:Data}) => {
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {packageItem.courier_name}
+                  </p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {packageItem?.user_received_by?.first_name ?? ""} {packageItem?.user_received_by?.last_name ?? ""}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

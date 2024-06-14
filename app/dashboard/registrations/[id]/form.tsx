@@ -693,23 +693,49 @@ const RegistrationEditForm = ({
             </div>
           </div>
 
-          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Controlled Quantity
+              </label>
+              <input
+                required
+                {...form.register("controlled_quantity")}
+                placeholder="Enter Controlled quantity"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+            </div>
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 No of Samples
               </label>
               <input
+                required
                 {...form.register("no_of_samples")}
                 placeholder="Enter No of Samples"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
+            <button
+              type="button"
+              className="relative flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
+              onClick={createSamples}
+            >
+              Add Samples
+            </button>
           </div>
 
           <Tabs defaultValue="samples" className="w-full">
             <TabsList>
               <TabsTrigger value="samples">Samples</TabsTrigger>
-              <TabsTrigger value="parameters">Test Parameters</TabsTrigger>
+              <TabsTrigger value="micro-parameters">
+                Mech Parameters
+              </TabsTrigger>
+              <TabsTrigger value="mech-parameters">
+                Micro Parameters
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="samples">
               <div className="mb-4">
@@ -811,14 +837,22 @@ const RegistrationEditForm = ({
                 ))}
               </div>
             </TabsContent>
-            <TabsContent value="parameters">
+            <TabsContent value="mech-parameters">
               <TestParamsForm
                 control={form.control}
                 register={form.register}
-                data={data.registration.test_params}
-                allData={data}
-                parameters={parameters}
+                data={parameters}
                 filterId={filterId}
+                arrayFieldName="mech-params"
+              />
+            </TabsContent>
+            <TabsContent value="micro-parameters">
+              <TestParamsForm
+                control={form.control}
+                register={form.register}
+                data={data?.microParameters??[]}
+                filterId={filterId}
+                arrayFieldName="micro-params"
               />
             </TabsContent>
           </Tabs>
@@ -931,79 +965,136 @@ const TestParamsForm = ({
     }
   }, [data, test_watch, parameters]);
 
-  return (
-    <div className="mb-4">
-      {fields.map((item, index) => (
-        <div key={item.id} className="mb-4 mt-2">
-          <div className="mb-2 flex justify-between border-b-2">
-            <p>
-              Test Parameter <strong>#{index + 1}:</strong>
-            </p>
-            <div>
-              <button
-                type="button"
-                className="flex justify-center rounded-full p-2 font-medium text-black hover:bg-gray"
-                onClick={() => remove(index)}
-              >
-                <Trash2 className="w-4" />
-              </button>
-            </div>
-          </div>
-          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-            <Select
-              name={`test_params.${index}.test_params_id`}
-              register={register}
-              label={"Test Parameter Name"}
-              width="w-full xl:w-1/5 "
-            >
-              <option value="">------------</option>
-              {parameters
-                ?.filter((t: any) => t.test_type_id.toString() === filterId)
-                .map((t: any) => (
-                  <option value={t.id} key={t.id}>
-                    {t.testing_parameters}
-                  </option>
-                ))}
-            </Select>
-            <div className="w-full xl:w-1/5">
-              <label className="mb-2.5 block text-black dark:text-white">
-                order
-              </label>
-              <input
-                type="number"
-                {...register(`test_params.${index}.order`)}
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              />
-            </div>
-            <div className="w-full xl:w-1/5">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Method
-              </label>
-              <h5 className="font-medium text-black dark:text-white">
-                {methods[index] ?? ""}
-              </h5>
-            </div>
-            <div className="w-full xl:w-1/5">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Test Type
-              </label>
-              <h5 className="font-medium text-black dark:text-white">
-                {testTypesName[index] ?? ""}
-              </h5>
-            </div>
-          </div>
+ 
+    return (
+      <div className="rounded-sm border border-stroke bg-white px-2 pb-2.5 pt-2 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-3.5 xl:pb-1">
+        <div className="flex justify-end">
+          <button type="button" onClick={()=>replace([])}
+            className="mb-1 flex transform-gpu font-medium text-primary transition-all duration-300 hover:text-blue-400 hover:text-bule-400 active:scale-95 disabled:bg-slate-500"
+            >Reset</button>
         </div>
-      ))}
-      {fields.length !== parameters.length && (
-        <button
-          type="button"
-          className="mb-4 mt-2 flex justify-center rounded bg-primary p-3 font-medium text-gray"
-          onClick={() => append({ test_parameter_id: "", order: 0 })}
-        >
-          Add Test parameter
-        </button>
-      )}
-    </div>
+        <div className="max-w-full overflow-x-auto">
+          <table className="w-full table-auto">
+            <thead>
+              <tr className="bg-gray-2 text-left dark:bg-meta-4">
+                <th className="w-[30px] px-2 py-4 font-medium text-black dark:text-white xl:pl-8">
+                  S.NO
+                </th>
+                <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                  Test Parameter Name
+                </th>
+                <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                  QTY
+                </th>
+                <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                  Test Type
+                </th>
+                <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                  Method / Spec
+                </th>
+                <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                  Priority Order
+                </th>
+                <th className="w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-6">
+                  Remove?
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {fields.map((item, idx) => (
+                <tr key={item.id}>
+                  <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-8">
+                    <h5 className="font-medium text-black dark:text-white">
+                      {idx + 1}
+                    </h5>
+                  </td>
+                  <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                    {/* <h5 className="font-medium text-black dark:text-white">
+                    {
+                      data.trf?.test_details?.[idx]?.parameter
+                        ?.testing_parameters
+                    }
+                  </h5>
+                  <input
+                    type="hidden"
+                    {...form.register(
+                      `testing_details.${idx}.parameter_id`
+                    )}
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  /> */}
+  
+                    <Select
+                      name={`${arrayFieldName}.${idx}.test_params_id`}
+                      register={register}
+                    >
+                      <option value="">------------</option>
+                      {data?.map((parameter) => (
+                        <option value={parameter.id} key={parameter.id}>
+                          {parameter.testing_parameters}
+                        </option>
+                      ))}
+                    </Select>
+                  </td>
+                  <td className="border-b border-[#eee] px-1 py-3 pl-9 dark:border-strokedark xl:pl-11">
+                    <input
+                      type="text"
+                      {...register(`${arrayFieldName}.${idx}.quantity`)}
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 pl-1 pr-2 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </td>
+                  <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">
+                      {testTypesName[idx]}
+                    </h5>
+                  </td>
+                  <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">
+                      {methods[idx]}
+                    </h5>
+                  </td>
+                  <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                    <input
+                      type="text"
+                      {...register(`testing_details.${idx}.priority_order`)}
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </td>
+                  <td className="border-b border-[#eee] px-2 py-5 pl-6 dark:border-strokedark xl:pl-6">
+                    <button type="button" onClick={() => remove(idx)}>
+                      <Trash2 />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="flex gap-4">
+  
+          <button
+            type="button"
+            className="mt-2 flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
+            onClick={() =>
+              append({
+                parameter_id: "",
+                priority_order: fields.length + 1,
+              })
+            }
+          >
+            Add Test
+          </button>
+          <button
+            type="button"
+            className="mt-2 flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
+            onClick={addAllTestParameters
+            }
+          >
+            Add All
+          </button>
+          </div>
+  
+        </div>
+      </div>
+    );
   );
 };
 

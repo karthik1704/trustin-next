@@ -95,13 +95,13 @@ async function getData() {
   const registration = await res7.json(); 
   console.log(parameters)
 
-  // const microParameters = parameters.filter(para=>para.test_type_id ==1)
-  // const mechParameters = parameters.filter(para=>para.test_type_id ==2)
+  const microParameters = parameters.filter(para=>para.test_type_id ==1)
+  const mechParameters = parameters.filter(para=>para.test_type_id ==2)
 
   // const trflist = trf.map((t) => ({ label: t.trf_code, value: t.id.toString() })) ;
   // return { trf: trf, trflist, customers, branches, products, parameters, microParameters, mechParameters };
   // return { trf: trf, trflist, customers, branches, products, parameters, microParameters, mechParameters };
-  return {  customers, branches, products, samples,parameters};
+  return {  customers, branches, products, samples,parameters, microParameters, mechParameters};
 }
 
 const NewRegistrationPage = async () => {

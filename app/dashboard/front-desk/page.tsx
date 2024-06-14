@@ -55,6 +55,10 @@ export type Data = {
       id:number;
       company_name: string;
     };
+    user_received_by:{
+      first_name:string;
+      last_name:string;
+    }
   
 }[];
 

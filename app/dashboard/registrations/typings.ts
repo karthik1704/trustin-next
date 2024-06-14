@@ -51,6 +51,7 @@ export type CreateData = {
   expiry_date: string;
   batch_size: number;
   received_quantity: number;
+  controlled_quantity:number;
   no_of_samples: number;
   reports_send_by: string;
   test_params: TestParam[];
