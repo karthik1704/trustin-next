@@ -94,6 +94,7 @@ export type UpdateData = {
   batch_size: number;
   received_quantity: number;
   no_of_samples: number;
+  controlled_quantity:number;
   reports_send_by: string;
   test_params: TestParam[];
   samples: RegistrationUpdateSamples[]; 
@@ -279,6 +280,7 @@ export type RegistrationType = {
   batch_size: number;
   received_quantity: number;
   no_of_samples: number;
+  controlled_quantity: number;
   reports_send_by: string;
   
   samples: RegSample[];

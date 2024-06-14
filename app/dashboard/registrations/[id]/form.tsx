@@ -90,6 +90,7 @@ const RegistrationEditForm = ({
       batch_size: data?.registration?.batch_size,
       received_quantity: data?.registration?.received_quantity,
       no_of_samples: data?.registration?.no_of_samples,
+      controlled_quantity: data?.registration?.controlled_quantity,
       samples:
         data?.registration?.samples?.map((sample) => ({
           id: sample.id,
@@ -216,6 +217,43 @@ const RegistrationEditForm = ({
     replace,
     watchNoOfSamplesValue,
   ]);
+
+  const createSamples = () => {
+    const {
+      sample_name,
+      batch_or_lot_no,
+      manufactured_date,
+      expiry_date,
+      batch_size,
+      received_quantity,
+    } = form.getValues();
+
+    if (watchNoOfSamplesValue !== data?.registration.no_of_samples) {
+      if (watchNoOfSamplesValue === 0) {
+        replace([]);
+      } else if (watchNoOfSamplesValue > 0) {
+        const extraSamples = Math.abs(
+          data?.registration?.no_of_samples - watchNoOfSamplesValue,
+        );
+        console.log(extraSamples);
+
+        let fieldsLength = fields.length;
+
+        for (let i = 0; i < extraSamples; i++) {
+          if (fieldsLength === watchNoOfSamplesValue) break;
+          append({
+            id: null,
+            sample_name: `${sample_name} ${fieldsLength + i}`,
+            batch_or_lot_no,
+            manufactured_date,
+            expiry_date,
+            batch_size,
+            received_quantity,
+          });
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     // Make API call when the watched field value changes
@@ -841,18 +879,23 @@ const RegistrationEditForm = ({
               <TestParamsForm
                 control={form.control}
                 register={form.register}
-                data={parameters}
+                data={data?.registration.test_params ?? []}
                 filterId={filterId}
                 arrayFieldName="mech-params"
+                parameters={data.mechParameters ??[]}
+                allData={data}
               />
             </TabsContent>
             <TabsContent value="micro-parameters">
               <TestParamsForm
                 control={form.control}
                 register={form.register}
-                data={data?.microParameters??[]}
+                data={data?.registration.test_params??[]}
                 filterId={filterId}
                 arrayFieldName="micro-params"
+                parameters={data.microParameters ??[]}
+                allData={data}
+
               />
             </TabsContent>
           </Tabs>
@@ -877,6 +920,7 @@ const TestParamsForm = ({
   data,
   allData,
   filterId,
+  arrayFieldName
 }: {
   control: any;
   register: any;
@@ -884,6 +928,7 @@ const TestParamsForm = ({
   data: TestParameter[];
   allData: UpdateDataType;
   filterId: [] | number | string;
+  arrayFieldName:string;
 }) => {
   const { fields, append, remove, replace } = useFieldArray({
     control,
@@ -964,7 +1009,17 @@ const TestParamsForm = ({
       setMethods(methods);
     }
   }, [data, test_watch, parameters]);
-
+  const addAllTestParameters = ()=>{
+    if (data.length) {
+      replace([]);
+      data.forEach((para, idx) =>
+        append({
+          test_params_id: para.id,
+          order: idx + 1,
+        }),
+      );
+    }
+  }
  
     return (
       <div className="rounded-sm border border-stroke bg-white px-2 pb-2.5 pt-2 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-3.5 xl:pb-1">
@@ -1095,7 +1150,7 @@ const TestParamsForm = ({
         </div>
       </div>
     );
-  );
+  
 };
 
 export default RegistrationEditForm;
