@@ -57,6 +57,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
   const form = useForm<CreateData>({
     defaultValues: {
       branch_id: "1",
+      date_of_received: new Date().toISOString().split('T')[0],
       no_of_samples: 0,
       test_params: [],
       samples: [],
@@ -72,10 +73,10 @@ const RegistrationForm = ({ data }: { data: Data }) => {
     name: "company_id",
   });
 
-  const watchTestTypeId = useWatch({
-    control: form.control,
-    name: "test_type_id",
-  });
+  // const watchTestTypeId = useWatch({
+  //   control: form.control,
+  //   name: "test_type_id",
+  // });
   const watchProductId = useWatch({
     control: form.control,
     name: "product_id",
@@ -94,11 +95,11 @@ const RegistrationForm = ({ data }: { data: Data }) => {
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
 
-  useEffect(() => {
-    // TODO: need some imporvement in future
-    // const ids = sampleWatch.map((field, idx) => field.test_type_id);
-    if (watchTestTypeId) setFilterId(watchTestTypeId.toString());
-  }, [watchTestTypeId]);
+  // useEffect(() => {
+  //   // TODO: need some imporvement in future
+  //   // const ids = sampleWatch.map((field, idx) => field.test_type_id);
+  //   if (watchTestTypeId) setFilterId(watchTestTypeId.toString());
+  // }, [watchTestTypeId]);
 
   useEffect(() => {
     async function fetchTestParameters(query: string, product: string) {
@@ -109,21 +110,19 @@ const RegistrationForm = ({ data }: { data: Data }) => {
       setParameters(response);
     }
 
-    if (filterId && watchProductId) {
-      const query = `test_type=${encodeURIComponent(filterId)}`;
+    if ( watchProductId) {
+      const query = `test_type=${encodeURIComponent('2')}`;
 
-      if (filterId === "2") {
         fetchTestParameters(query, watchProductId.toString());
-      }
-      if (filterId === "1") {
-        const micro_params =
-          data?.parameters?.filter(
-            (test: any) => test.test_type_id.toString() === "1",
-          ) ?? [];
-        if (micro_params.length) setParameters(micro_params);
-      }
+      // if (filterId === "1") {
+      //   const micro_params =
+      //     data?.parameters?.filter(
+      //       (test: any) => test.test_type_id.toString() === "1",
+      //     ) ?? [];
+      //   if (micro_params.length) setParameters(micro_params);
+      // }
     }
-  }, [data?.parameters, filterId, watchProductId]);
+  }, [data?.parameters,  watchProductId]);
 
   // useEffect(() => {
   //   if (defferdSampleNO) {
@@ -466,7 +465,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
             </div>
           </div>
 
-          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+          {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Test type
@@ -501,7 +500,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 </span>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full xl:w-1/2">
@@ -510,7 +509,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
               </label>
               <input
                 {...form.register("license_no")}
-                placeholder="Enter Licese No"
+                placeholder="Enter License No"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
@@ -656,7 +655,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
-            </div>
+          </div>
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -681,10 +680,10 @@ const RegistrationForm = ({ data }: { data: Data }) => {
           <Tabs defaultValue="samples" className="w-full">
             <TabsList>
               <TabsTrigger value="samples">Samples</TabsTrigger>
-              <TabsTrigger value="micro-parameters">
+              <TabsTrigger value="mech-parameters">
                 Mech Parameters
               </TabsTrigger>
-              <TabsTrigger value="mech-parameters">
+              <TabsTrigger value="micro-parameters">
                 Micro Parameters
               </TabsTrigger>
             </TabsList>
@@ -717,6 +716,15 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
                       </div>
+                      <Select
+                        name={`samples.${index}.test_type_id`}
+                        label="Test Type"
+                        register={form.register}
+                        width={"w-full xl:w-1/6"}
+                      >
+                        <option value="1">Micro</option>
+                        <option value="2">Mech</option>
+                      </Select>
                       <div className="w-full xl:w-1/6">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Batch / Lot No{" "}
@@ -790,16 +798,16 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 register={form.register}
                 data={parameters}
                 filterId={filterId}
-                arrayFieldName="mech-params"
+                arrayFieldName="mech_params"
               />
             </TabsContent>
             <TabsContent value="micro-parameters">
               <TestParamsForm
                 control={form.control}
                 register={form.register}
-                data={data?.microParameters??[]}
+                data={data?.microParameters ?? []}
                 filterId={filterId}
-                arrayFieldName="micro-params"
+                arrayFieldName="micro_params"
               />
             </TabsContent>
           </Tabs>
@@ -886,7 +894,7 @@ const TestParamsForm = ({
     setMethods(methods);
   }, [data, test_watch]);
 
-  const addAllTestParameters = ()=>{
+  const addAllTestParameters = () => {
     if (data.length) {
       replace([]);
       data.forEach((para, idx) =>
@@ -896,14 +904,18 @@ const TestParamsForm = ({
         }),
       );
     }
-  }
+  };
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-2 pb-2.5 pt-2 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-3.5 xl:pb-1">
       <div className="flex justify-end">
-        <button type="button" onClick={()=>replace([])}
-          className="mb-1 flex transform-gpu font-medium text-primary transition-all duration-300 hover:text-blue-400 hover:text-bule-400 active:scale-95 disabled:bg-slate-500"
-          >Reset</button>
+        <button
+          type="button"
+          onClick={() => replace([])}
+          className="hover:text-bule-400 mb-1 flex transform-gpu font-medium text-primary transition-all duration-300 hover:text-blue-400 active:scale-95 disabled:bg-slate-500"
+        >
+          Reset
+        </button>
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
@@ -987,7 +999,7 @@ const TestParamsForm = ({
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <input
                     type="text"
-                    {...register(`testing_details.${idx}.priority_order`)}
+                    {...register(`${arrayFieldName}.${idx}.priority_order`)}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </td>
@@ -1001,29 +1013,26 @@ const TestParamsForm = ({
           </tbody>
         </table>
         <div className="flex gap-4">
-
-        <button
-          type="button"
-          className="mt-2 flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
-          onClick={() =>
-            append({
-              parameter_id: "",
-              priority_order: fields.length + 1,
-            })
-          }
-        >
-          Add Test
-        </button>
-        <button
-          type="button"
-          className="mt-2 flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
-          onClick={addAllTestParameters
-          }
-        >
-          Add All
-        </button>
+          <button
+            type="button"
+            className="mt-2 flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
+            onClick={() =>
+              append({
+                parameter_id: "",
+                priority_order: fields.length + 1,
+              })
+            }
+          >
+            Add Test
+          </button>
+          <button
+            type="button"
+            className="mt-2 flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
+            onClick={addAllTestParameters}
+          >
+            Add All
+          </button>
         </div>
-
       </div>
     </div>
   );
