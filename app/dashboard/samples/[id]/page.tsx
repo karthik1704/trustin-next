@@ -139,6 +139,7 @@ export type Data = {
     manufactured_date: string;
     expiry_date: string;
     batch_or_lot_no: string;
+    test_type_id: number;
 
     created_by: number;
     updated_by: number;

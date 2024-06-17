@@ -473,7 +473,7 @@ const SampleWorkflowForm = ({
                     Test Type:
                   </p>
                   <p>
-                    {data?.sample?.registration.test_type_id === 1
+                    {data?.sample?.test_type_id === 1
                       ? "Micro "
                       : "Mech"}
                   </p>
