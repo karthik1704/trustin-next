@@ -999,7 +999,7 @@ const TestParamsForm = ({
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <input
                     type="text"
-                    {...register(`${arrayFieldName}.${idx}.priority_order`)}
+                    {...register(`${arrayFieldName}.${idx}.order`)}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </td>
@@ -1018,8 +1018,8 @@ const TestParamsForm = ({
             className="mt-2 flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
             onClick={() =>
               append({
-                parameter_id: "",
-                priority_order: fields.length + 1,
+                test_params_id: "",
+                order: fields.length + 1,
               })
             }
           >

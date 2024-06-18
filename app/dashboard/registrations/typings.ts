@@ -217,7 +217,7 @@ export interface TestParameter {
   id: number;
   registration_id: number;
   test_params_id: number;
-  quantity: int;
+  quantity: number;
   order: number | string;
   created_at: string;
   updated_at: string;
@@ -240,6 +240,7 @@ export interface TestParameter {
 }
 
 type RegSample={
+  test_type_id: number | string;
   id:number;
   sample_name: string;
   batch_or_lot_no: string;

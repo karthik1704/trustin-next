@@ -23,7 +23,7 @@ type InitialState = {
 };
 
 type props = {
-  data : Data
+  data: Data;
 };
 
 const initalState: InitialState = {
@@ -31,7 +31,7 @@ const initalState: InitialState = {
   type: null,
   message: null,
 };
-const FrontDeskAddForm = ({ data }:props) => {
+const FrontDeskAddForm = ({ data }: props) => {
   const [state, formAction] = useFormState(createFrontDesk, initalState);
   const router = useRouter();
   useEffect(() => {
@@ -52,8 +52,8 @@ const FrontDeskAddForm = ({ data }:props) => {
     }
   }, [state, router]);
 
- console.log(new Date().toISOString().slice(0, 16))
- console.log(getCurrentLocalISOString().slice(0, 16))
+  console.log(new Date().toISOString().slice(0, 16));
+  console.log(getCurrentLocalISOString().slice(0, 16));
 
   return (
     <form action={formAction}>
@@ -106,7 +106,7 @@ const FrontDeskAddForm = ({ data }:props) => {
         </div>
         <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
-          Storage Condition
+            Storage Condition
           </label>
           <input
             type="text"
@@ -123,33 +123,20 @@ const FrontDeskAddForm = ({ data }:props) => {
         </div> */}
         <div className="mb-4.5">
           <Select label="Received Condition" name="received_condition">
-            
-              <option value="GOOD" >
-              Good
-              </option>
-              <option value="DAMAGED">Damaged</option>
-              
-           
+            <option value="GOOD">Good</option>
+            <option value="DAMAGED">Damaged</option>
           </Select>
         </div>
-        
+
         <div className="mb-4.5">
           <Select label="Department" name="deparment_id" defaultValue={"6"}>
-            {data?.departments.map((department) => (
-              <option value={department.id} key={department.id}>
-                {department.name}
-              </option>
-            ))}
+            <option value={6}>Registration</option>
           </Select>
         </div>
         <div className="mb-4.5">
           <Select label="Status" name="status">
-          <option value="NOT_REGISTRATION">
-                Not Registration
-              </option>
-              <option value="REGISTRATION">
-                Registration
-              </option>
+            <option value="UNDER_REGISTRATION">Under Registration</option>
+            <option value="REGISTERED">Registered</option>
           </Select>
         </div>
         <SubmitButton />

@@ -102,6 +102,7 @@ const RegistrationEditForm = ({
           expiry_date: new Date(sample.expiry_date).toISOString().split("T")[0],
           batch_size: sample.batch_size,
           received_quantity: sample.received_quantity,
+          test_type_id: sample.test_type_id.toString()
         })) ?? [],
       micro_params: data?.registration?.test_params?.filter(para=>para.test_parameter.test_type_id===1).map((test) => ({
         test_params_id: test.test_params_id,
@@ -111,6 +112,7 @@ const RegistrationEditForm = ({
       mech_params: data?.registration?.test_params?.filter(para=>para.test_parameter.test_type_id===2).map((test) => ({
         test_params_id: test.test_params_id,
         order: test.order,
+        quantity: test.quantity,  
       })),
     },
   });
@@ -797,6 +799,10 @@ const RegistrationEditForm = ({
                           Sample Name <span className="text-meta-1">*</span>
                         </label>
                         <input
+                          {...form.register(`samples.${index}.id`)}
+                          type="hidden"
+                        />
+                        <input
                           {...form.register(`samples.${index}.sample_name`)}
                           placeholder="Enter Sample Name"
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -806,6 +812,17 @@ const RegistrationEditForm = ({
                           {...form.register(`samples.${index}.id`)}
                         />
                       </div>
+
+                      <Select
+                        name={`samples.${index}.test_type_id`}
+                        label="Test Type"
+                        register={form.register}
+                        width={"w-full xl:w-1/6"}
+                      >
+                        <option value="1">Micro</option>
+                        <option value="2">Mech</option>
+                      </Select>
+
                       <div className="w-full xl:w-1/6">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Batch / Lot No{" "}
@@ -1038,6 +1055,7 @@ const TestParamsForm = ({
                 <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                   QTY
                 </th>
+                
                 <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                   Test Type
                 </th>
@@ -1107,7 +1125,7 @@ const TestParamsForm = ({
                   <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                     <input
                       type="text"
-                      {...register(`testing_details.${idx}.priority_order`)}
+                      {...register(`testing_details.${idx}.order`)}
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
                   </td>
@@ -1127,8 +1145,8 @@ const TestParamsForm = ({
             className="mt-2 flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
             onClick={() =>
               append({
-                parameter_id: "",
-                priority_order: fields.length + 1,
+                test_params_id: "",
+                order: fields.length + 1,
               })
             }
           >

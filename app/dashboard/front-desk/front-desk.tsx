@@ -1,9 +1,9 @@
 import { Package } from "@/types/package";
 import Link from "next/link";
 import { Data } from "./page";
+import { convertToLocalISOString } from "@/lib/utils";
 
-const FrontDeskTable = ({ data }:{data:Data}) => {
-
+const FrontDeskTable = ({ data }: { data: Data }) => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
@@ -22,7 +22,7 @@ const FrontDeskTable = ({ data }:{data:Data}) => {
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
                 Date Of Received
               </th>
-              <th className="min-w-[120px] px-4 py-4 pl-0 lg:pl-9 font-medium text-black dark:text-white">
+              <th className="min-w-[120px] px-4 py-4 pl-0 font-medium text-black dark:text-white lg:pl-9">
                 Status
               </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
@@ -45,19 +45,20 @@ const FrontDeskTable = ({ data }:{data:Data}) => {
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {packageItem?.user_received_by?.first_name ?? ""} {packageItem?.user_received_by?.last_name ?? ""}
+                    {packageItem?.user_received_by?.first_name ?? ""}{" "}
+                    {packageItem?.user_received_by?.last_name ?? ""}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p
-                    className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium `}
+                    className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium`}
                   >
-                    {new Date(packageItem.date_of_received).toISOString().slice(0, 16)}
+                    {new Date(convertToLocalISOString(packageItem.date_of_received)).toLocaleString()}
                   </p>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark ">
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p
-                    className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium `}
+                    className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium`}
                   >
                     {packageItem.status.split("_").join(" ")}
                   </p>

@@ -133,11 +133,7 @@ const FrontDeskEditForm = ({
             name="deparment_id"
             defaultValue={data.frontDesk.deparment_id}
           >
-            {data?.departments.map((department) => (
-              <option value={department.id} key={department.id}>
-                {department.name}
-              </option>
-            ))}
+            <option value={6}>Registration</option>
           </Select>
         </div>
         <div className="mb-4.5">
@@ -146,10 +142,11 @@ const FrontDeskEditForm = ({
             name="status"
             defaultValue={data.frontDesk.status}
           >
-            <option value="NOT_REGISTRATION">Not Registration</option>
-            <option value="REGISTRATION">Registration</option>
+            <option value="UNDER_REGISTRATION">Under Registration</option>
+            <option value="REGISTERED">Registered</option>
           </Select>
         </div>
+
         <SubmitButton />
       </div>
     </form>

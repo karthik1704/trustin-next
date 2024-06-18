@@ -78,3 +78,19 @@ export function getCurrentLocalISOString() {
   const localISOString = new Date(date.getTime() - (offset * 60 * 1000)).toISOString();
   return localISOString;
 }
+
+export function convertToLocalISOString(timestring:string) {
+  // Create a Date object from the provided timestring
+  const date = new Date(timestring);
+
+  // Get the current timezone offset in minutes
+  const offset = date.getTimezoneOffset();
+
+  // Adjust the date to get the local time
+  const localDate = new Date(date.getTime() - (offset * 60 * 1000));
+
+  // Get the ISO string representation of the local date
+  const localISOString = localDate.toISOString();
+
+  return localISOString;
+}
