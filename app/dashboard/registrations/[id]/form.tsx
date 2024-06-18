@@ -71,7 +71,7 @@ const RegistrationEditForm = ({
       date_of_received: new Date(data?.registration?.date_of_received)
         .toISOString()
         .split("T")[0],
-      test_type_id: data?.registration?.test_type_id,
+      // test_type_id: data?.registration?.test_type_id,
       nabl_logo: data?.registration?.nabl_logo ? "1" : "0",
       license_no: data?.registration?.license_no,
       testing_process: data?.registration?.testing_process,
@@ -103,7 +103,12 @@ const RegistrationEditForm = ({
           batch_size: sample.batch_size,
           received_quantity: sample.received_quantity,
         })) ?? [],
-      test_params: data?.registration?.test_params.map((test) => ({
+      micro_params: data?.registration?.test_params?.filter(para=>para.test_parameter.test_type_id===1).map((test) => ({
+        test_params_id: test.test_params_id,
+        order: test.order,  
+        quantity: test.quantity,  
+      })),
+      mech_params: data?.registration?.test_params?.filter(para=>para.test_parameter.test_type_id===2).map((test) => ({
         test_params_id: test.test_params_id,
         order: test.order,
       })),
@@ -120,10 +125,10 @@ const RegistrationEditForm = ({
     name: "company_id",
   });
 
-  const watchTestTypeId = useWatch({
-    control: form.control,
-    name: "test_type_id",
-  });
+  // const watchTestTypeId = useWatch({
+  //   control: form.control,
+  //   name: "test_type_id",
+  // });
   const watchProductId = useWatch({
     control: form.control,
     name: "product_id",
@@ -134,9 +139,9 @@ const RegistrationEditForm = ({
     name: "no_of_samples",
   });
 
-  const [filterId, setFilterId] = useState(
-    data?.registration?.test_type_id.toString(),
-  );
+  // const [filterId, setFilterId] = useState(
+  //   data?.registration?.test_type_id.toString(),
+  // );
   const [parameters, setParameters] = useState<FullParametersType[]>(
     data?.parameters ?? [],
   );
@@ -144,11 +149,11 @@ const RegistrationEditForm = ({
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
 
-  useEffect(() => {
-    // TODO: need some imporvement in future
-    // const ids = sampleWatch.map((field, idx) => field.test_type_id);
-    if (watchTestTypeId) setFilterId(watchTestTypeId.toString());
-  }, [watchTestTypeId]);
+  // useEffect(() => {
+  //   // TODO: need some imporvement in future
+  //   // const ids = sampleWatch.map((field, idx) => field.test_type_id);
+  //   if (watchTestTypeId) setFilterId(watchTestTypeId.toString());
+  // }, [watchTestTypeId]);
 
   useEffect(() => {
     async function fetchTestParameters(query: string, product: string) {
@@ -159,21 +164,13 @@ const RegistrationEditForm = ({
       setParameters(response);
     }
 
-    if (filterId && watchProductId) {
-      const query = `test_type=${encodeURIComponent(filterId)}`;
+    if ( watchProductId) {      const query = `test_type=${encodeURIComponent(2)}`;
 
-      if (filterId === "2") {
         fetchTestParameters(query, watchProductId.toString());
-      }
-      if (filterId === "1") {
-        const micro_params =
-          data?.parameters?.filter(
-            (test: any) => test.test_type_id.toString() === "1",
-          ) ?? [];
-        if (micro_params.length) setParameters(micro_params);
-      }
+
+   
     }
-  }, [data?.parameters, filterId, watchProductId]);
+  }, [data?.parameters,  watchProductId]);
 
   useEffect(() => {
     const {
@@ -201,6 +198,7 @@ const RegistrationEditForm = ({
           append({
             id: null,
             sample_name: `${sample_name} ${fieldsLength + i}`,
+          
             batch_or_lot_no,
             manufactured_date,
             expiry_date,
@@ -768,10 +766,10 @@ const RegistrationEditForm = ({
           <Tabs defaultValue="samples" className="w-full">
             <TabsList>
               <TabsTrigger value="samples">Samples</TabsTrigger>
-              <TabsTrigger value="micro-parameters">
+              <TabsTrigger value="mech-parameters">
                 Mech Parameters
               </TabsTrigger>
-              <TabsTrigger value="mech-parameters">
+              <TabsTrigger value="micro-parameters">
                 Micro Parameters
               </TabsTrigger>
             </TabsList>
@@ -879,9 +877,9 @@ const RegistrationEditForm = ({
               <TestParamsForm
                 control={form.control}
                 register={form.register}
-                data={data?.registration.test_params ?? []}
-                filterId={filterId}
-                arrayFieldName="mech-params"
+                data={data?.registration?.test_params?.filter(para=>para.test_parameter.test_type_id===2) ?? []}
+                filterId={2}
+                arrayFieldName="mech_params"
                 parameters={data.mechParameters ??[]}
                 allData={data}
               />
@@ -890,9 +888,9 @@ const RegistrationEditForm = ({
               <TestParamsForm
                 control={form.control}
                 register={form.register}
-                data={data?.registration.test_params??[]}
-                filterId={filterId}
-                arrayFieldName="micro-params"
+                data={data?.registration?.test_params?.filter(para=>para.test_parameter.test_type_id===1) ?? []}
+                filterId={1}
+                arrayFieldName="micro_params"
                 parameters={data.microParameters ??[]}
                 allData={data}
 
@@ -944,24 +942,25 @@ const TestParamsForm = ({
   const [methods, setMethods] = useState<string[]>([]);
 
   useEffect(() => {
-    if (allData.registration.test_type_id.toString() !== filterId) {
-      if (parameters.length) {
-        replace([]);
-        parameters.forEach((para, idx) =>
-          append({
-            test_params_id: para.id,
-            order: idx + 1,
-          }),
-        );
-      }
-      return;
-    }
+    // if (allData.registration.test_type_id.toString() !== filterId) {
+    //   if (parameters.length) {
+    //     replace([]);
+    //     parameters.forEach((para, idx) =>
+    //       append({
+    //         test_params_id: para.id,
+    //         order: idx + 1,
+    //       }),
+    //     );
+    //   }
+    //   return;
+    // }
     if (parameters.length) {
       replace([]);
       data.forEach((para, idx) =>
         append({
           test_params_id: para.test_params_id,
           order: para.order,
+          quantity: para.quantity
         }),
       );
     }
@@ -970,8 +969,6 @@ const TestParamsForm = ({
     append,
     replace,
     parameters,
-    allData.registration.test_type_id,
-    filterId,
   ]);
   useEffect(() => {
     const ids =
@@ -1084,8 +1081,8 @@ const TestParamsForm = ({
                     >
                       <option value="">------------</option>
                       {data?.map((parameter) => (
-                        <option value={parameter.id} key={parameter.id}>
-                          {parameter.testing_parameters}
+                        <option value={parameter.test_params_id} key={parameter.test_params_id}>
+                          {parameter.test_parameter.testing_parameters}
                         </option>
                       ))}
                     </Select>

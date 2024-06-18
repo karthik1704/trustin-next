@@ -96,7 +96,8 @@ export type UpdateData = {
   no_of_samples: number;
   controlled_quantity:number;
   reports_send_by: string;
-  test_params: TestParam[];
+  micro_params: TestParam[];
+  mech_params: TestParam[];
   samples: RegistrationUpdateSamples[]; 
 
 };
@@ -216,6 +217,7 @@ export interface TestParameter {
   id: number;
   registration_id: number;
   test_params_id: number;
+  quantity: int;
   order: number | string;
   created_at: string;
   updated_at: string;
@@ -288,8 +290,8 @@ export type RegistrationType = {
   // trf: TestReportForm;
   // batches: UpdateBatchType[];
   test_params: TestParameter[];
-  // test_params_mech: TestParameter[];
-  // test_params_micro: TestParameter[];
+  test_params_mech: TestParameter[];
+  test_params_micro: TestParameter[];
   // test_types: string[];
 };
 
