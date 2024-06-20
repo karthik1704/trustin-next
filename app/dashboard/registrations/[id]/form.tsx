@@ -947,46 +947,48 @@ const TestParamsForm = ({
 }) => {
   const { fields, append, remove, replace } = useFieldArray({
     control,
-    name: `test_params`,
+    name: arrayFieldName,
   });
 
   const test_watch = useWatch({
     control: control,
-    name: "test_params",
+    name: arrayFieldName,
   });
 
   const [testTypesName, setTestTypesName] = useState<string[]>([]);
   const [methods, setMethods] = useState<string[]>([]);
 
-  useEffect(() => {
-    // if (allData.registration.test_type_id.toString() !== filterId) {
-    //   if (parameters.length) {
-    //     replace([]);
-    //     parameters.forEach((para, idx) =>
-    //       append({
-    //         test_params_id: para.id,
-    //         order: idx + 1,
-    //       }),
-    //     );
-    //   }
-    //   return;
-    // }
-    if (parameters.length) {
-      replace([]);
-      data.forEach((para, idx) =>
-        append({
-          test_params_id: para.test_params_id,
-          order: para.order,
-          quantity: para.quantity
-        }),
-      );
-    }
-  }, [
-    data,
-    append,
-    replace,
-    parameters,
-  ]);
+  // useEffect(() => {
+  //   // if (allData.registration.test_type_id.toString() !== filterId) {
+  //   //   if (parameters.length) {
+  //   //     replace([]);
+  //   //     parameters.forEach((para, idx) =>
+  //   //       append({
+  //   //         test_params_id: para.id,
+  //   //         order: idx + 1,
+  //   //       }),
+  //   //     );
+  //   //   }
+  //   //   return;
+  //   // }
+  //   console.log('Im runing')
+  //   if (parameters && parameters?.length) {
+  //     replace([]);
+  //     data.forEach((para, idx) =>
+  //       append({
+  //         test_params_id: para.test_params_id,
+  //         order: para.order,
+  //         quantity: para.quantity
+  //       }),
+  //     );
+  //   }
+  // }, [
+  //   data,
+  //   append,
+  //   replace,
+  //   parameters,
+  // ]);
+
   useEffect(() => {
     const ids =
       test_watch?.map((field: any) => {
@@ -1098,9 +1100,9 @@ const TestParamsForm = ({
                       register={register}
                     >
                       <option value="">------------</option>
-                      {data?.map((parameter) => (
-                        <option value={parameter.test_params_id} key={parameter.test_params_id}>
-                          {parameter.test_parameter.testing_parameters}
+                      {parameters?.map((parameter) => (
+                        <option value={parameter.id} key={parameter.id}>
+                          {parameter.testing_parameters}
                         </option>
                       ))}
                     </Select>
@@ -1125,7 +1127,7 @@ const TestParamsForm = ({
                   <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                     <input
                       type="text"
-                      {...register(`testing_details.${idx}.order`)}
+                      {...register(`${arrayFieldName}.${idx}.order`)}
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
                   </td>
