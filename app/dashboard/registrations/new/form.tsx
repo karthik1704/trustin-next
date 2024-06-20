@@ -57,9 +57,11 @@ const RegistrationForm = ({ data }: { data: Data }) => {
   const form = useForm<CreateData>({
     defaultValues: {
       branch_id: "1",
-      date_of_received: new Date().toISOString().split('T')[0],
+      date_of_received: new Date().toISOString().split("T")[0],
       no_of_samples: 0,
-      test_params: [],
+      controlled_quantity: 0,
+      mech_params: [],
+      micro_params: [],
       samples: [],
     },
   });
@@ -82,12 +84,18 @@ const RegistrationForm = ({ data }: { data: Data }) => {
     name: "product_id",
   });
 
-  // const watchNoOfSamplesValue = useWatch({
-  //   control: form.control,
-  //   name: "no_of_samples",
-  // });
-
-  // const defferdSampleNO = useDeferredValue(watchNoOfSamplesValue);
+  const watchMicroParams = useWatch({
+    control: form.control,
+    name: "micro_params",
+  });
+  const watchMechParams = useWatch({
+    control: form.control,
+    name: "mech_params",
+  });
+  const watchReceivedQuantiy = useWatch({
+    control: form.control,
+    name: "received_quantity",
+  });
 
   const [filterId, setFilterId] = useState("1");
   const [parameters, setParameters] = useState<FullParametersType[]>([]);
@@ -100,6 +108,30 @@ const RegistrationForm = ({ data }: { data: Data }) => {
   //   // const ids = sampleWatch.map((field, idx) => field.test_type_id);
   //   if (watchTestTypeId) setFilterId(watchTestTypeId.toString());
   // }, [watchTestTypeId]);
+  useEffect(() => {
+    // TODO: need some imporvement in future
+    const usedMechQuantity = watchMechParams.reduce(
+      (acc, field, idx) => acc + +field.quantity,
+      0,
+    );
+    const usedMicroQuantity = watchMicroParams.reduce(
+      (acc, field, idx) => acc + +field.quantity,
+      0,
+    );
+
+    const totalUsedQuantity = usedMechQuantity+ usedMicroQuantity;
+
+    const receivedQuantity = +form.getValues('received_quantity') ?? 0;
+    const constrolledQuantiy = receivedQuantity - totalUsedQuantity;
+    console.log('HI')
+    form.setValue('controlled_quantity', constrolledQuantiy)
+    if (constrolledQuantiy <0){
+      toast.error("Assinged Quantities higher than recieved quantity, Please Check test params quantity ", {
+        duration: 5000,
+        closeButton: true,
+      });
+    }
+  }, [form, watchMechParams, watchMicroParams, watchReceivedQuantiy]);
 
   useEffect(() => {
     async function fetchTestParameters(query: string, product: string) {
@@ -110,10 +142,10 @@ const RegistrationForm = ({ data }: { data: Data }) => {
       setParameters(response);
     }
 
-    if ( watchProductId) {
-      const query = `test_type=${encodeURIComponent('2')}`;
+    if (watchProductId) {
+      const query = `test_type=${encodeURIComponent("2")}`;
 
-        fetchTestParameters(query, watchProductId.toString());
+      fetchTestParameters(query, watchProductId.toString());
       // if (filterId === "1") {
       //   const micro_params =
       //     data?.parameters?.filter(
@@ -122,7 +154,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
       //   if (micro_params.length) setParameters(micro_params);
       // }
     }
-  }, [data?.parameters,  watchProductId]);
+  }, [data?.parameters, watchProductId]);
 
   // useEffect(() => {
   //   if (defferdSampleNO) {
@@ -513,6 +545,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
+            
             <Select
               name="nabl_logo"
               label="NABL Logo"
@@ -680,9 +713,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
           <Tabs defaultValue="samples" className="w-full">
             <TabsList>
               <TabsTrigger value="samples">Samples</TabsTrigger>
-              <TabsTrigger value="mech-parameters">
-                Mech Parameters
-              </TabsTrigger>
+              <TabsTrigger value="mech-parameters">Mech Parameters</TabsTrigger>
               <TabsTrigger value="micro-parameters">
                 Micro Parameters
               </TabsTrigger>
@@ -705,8 +736,8 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                         </button>
                       </div>
                     </div>
-                    <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                      <div className="w-full xl:w-1/6">
+                    <div className="mb-4.5 flex flex-col gap-3 xl:flex-row xl:flex-wrap">
+                      <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Sample Name <span className="text-meta-1">*</span>
                         </label>
@@ -716,16 +747,21 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
                       </div>
+                      <div className="w-full xl:w-1/4">
+                        <label className="mb-2.5 block text-black dark:text-white">
+                          Test Type <span className="text-meta-1">*</span>
+                        </label>
                       <Select
                         name={`samples.${index}.test_type_id`}
-                        label="Test Type"
+                        // label="Test Type"
                         register={form.register}
-                        width={"w-full xl:w-1/6"}
+                      
                       >
                         <option value="1">Micro</option>
                         <option value="2">Mech</option>
                       </Select>
-                      <div className="w-full xl:w-1/6">
+                      </div>
+                      <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Batch / Lot No{" "}
                         </label>
@@ -736,7 +772,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                         />
                       </div>
 
-                      <div className="w-full xl:w-1/6">
+                      <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Mfg Date
                         </label>
@@ -750,7 +786,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                         />
                       </div>
 
-                      <div className="w-full xl:w-1/6">
+                      <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Expiry Date
                         </label>
@@ -762,7 +798,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                         />
                       </div>
 
-                      <div className="w-full xl:w-1/6">
+                      <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Batch Size{" "}
                         </label>
@@ -773,7 +809,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
                       </div>
-                      <div className="w-full xl:w-1/6">
+                      <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Received Quantity{" "}
                         </label>
@@ -787,6 +823,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                         />
                       </div>
                     </div>
+                    <hr />
                     <hr />
                   </div>
                 ))}

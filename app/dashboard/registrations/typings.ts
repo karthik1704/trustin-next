@@ -14,6 +14,7 @@ type UpdateBatchType = BatchCreate & { id: string | null };
 
 type TestParam = {
   test_params_id: number | string;
+  quantity: number;
   order: number|string;
 };
 type RegistrationSamples = {
@@ -54,7 +55,8 @@ export type CreateData = {
   controlled_quantity:number;
   no_of_samples: number;
   reports_send_by: string;
-  test_params: TestParam[];
+  micro_params: TestParam[];
+  mech_params: TestParam[];
   samples: RegistrationSamples[]; 
 };
 
