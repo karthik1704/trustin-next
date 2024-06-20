@@ -207,7 +207,7 @@ const RegistrationEditForm = ({
         },
       );
     }
-  }, [data.registration.controlled_quantity, form, watchMechParams, watchMicroParams, watchReceivedQuantiy]);
+  }, [data.registration.controlled_quantity, form, watchControlledQuantity, watchMechParams, watchMicroParams, watchReceivedQuantiy]);
   useEffect(() => {
     async function fetchTestParameters(query: string, product: string) {
       let res = await fetch(
@@ -841,8 +841,8 @@ const RegistrationEditForm = ({
                         </button>
                       </div>
                     </div>
-                    <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                      <div className="w-full xl:w-1/6">
+                    <div className="mb-4.5 flex flex-col gap-3 xl:flex-row xl:flex-wrap">
+                      <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Sample Name <span className="text-meta-1">*</span>
                         </label>
@@ -865,13 +865,13 @@ const RegistrationEditForm = ({
                         name={`samples.${index}.test_type_id`}
                         label="Test Type"
                         register={form.register}
-                        width={"w-full xl:w-1/6"}
+                        width={"w-full xl:w-1/4"}
                       >
                         <option value="1">Micro</option>
                         <option value="2">Mech</option>
                       </Select>
 
-                      <div className="w-full xl:w-1/6">
+                      <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Batch / Lot No{" "}
                         </label>
@@ -882,7 +882,7 @@ const RegistrationEditForm = ({
                         />
                       </div>
 
-                      <div className="w-full xl:w-1/6">
+                      <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Mfg Date
                         </label>
@@ -896,7 +896,7 @@ const RegistrationEditForm = ({
                         />
                       </div>
 
-                      <div className="w-full xl:w-1/6">
+                      <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Expiry Date
                         </label>
@@ -908,7 +908,7 @@ const RegistrationEditForm = ({
                         />
                       </div>
 
-                      <div className="w-full xl:w-1/6">
+                      <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Batch Size{" "}
                         </label>
@@ -919,7 +919,7 @@ const RegistrationEditForm = ({
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
                       </div>
-                      <div className="w-full xl:w-1/6">
+                      <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
                           Received Quantity{" "}
                         </label>
