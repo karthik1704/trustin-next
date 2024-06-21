@@ -6,7 +6,7 @@ type Props = {
   label?: string | null;
   width?: string;
   name: string;
-  register?: RegisterFunction | undefined;
+  register?: RegisterFunction | undefined | any;
   error?: string[] | null;
 } & React.SelectHTMLAttributes<HTMLSelectElement>;
 

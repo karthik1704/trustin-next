@@ -730,7 +730,10 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                         <button
                           type="button"
                           className="flex justify-center rounded-full p-2 font-medium text-black hover:bg-gray"
-                          onClick={() => remove(index)}
+                          onClick={() =>{
+                            remove(index);
+                            form.setValue("no_of_samples", fields.length - 1);
+                          }}
                         >
                           <Trash2 className="w-4" />
                         </button>
@@ -1037,7 +1040,7 @@ const TestParamsForm = ({
                   <input
                     type="text"
                     {...register(`${arrayFieldName}.${idx}.order`)}
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </td>
                 <td className="border-b border-[#eee] px-2 py-5 pl-6 dark:border-strokedark xl:pl-6">

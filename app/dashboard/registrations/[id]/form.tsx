@@ -159,7 +159,11 @@ const RegistrationEditForm = ({
   });
   const watchControlledQuantity = useWatch({
     control: form.control,
-    name: "received_quantity",
+    name: "controlled_quantity",
+  });
+  const watchSamples = useWatch({
+    control: form.control,
+    name: "samples",
   });
 
   // const [filterId, setFilterId] = useState(
@@ -168,6 +172,8 @@ const RegistrationEditForm = ({
   const [parameters, setParameters] = useState<FullParametersType[]>(
     data?.parameters ?? [],
   );
+  const [sampleStatus, setSampleStatus] = useState<(number | null)[]>([]);
+  const [sampleCode, setSampleCode] = useState<(string | null)[]>([]);
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
@@ -207,7 +213,14 @@ const RegistrationEditForm = ({
         },
       );
     }
-  }, [data.registration.controlled_quantity, form, watchControlledQuantity, watchMechParams, watchMicroParams, watchReceivedQuantiy]);
+  }, [
+    data.registration.controlled_quantity,
+    form,
+    watchControlledQuantity,
+    watchMechParams,
+    watchMicroParams,
+    watchReceivedQuantiy,
+  ]);
   useEffect(() => {
     async function fetchTestParameters(query: string, product: string) {
       let res = await fetch(
@@ -224,49 +237,82 @@ const RegistrationEditForm = ({
     }
   }, [data?.parameters, watchProductId]);
 
+  // useEffect(() => {
+  //   const {
+  //     sample_name,
+  //     batch_or_lot_no,
+  //     manufactured_date,
+  //     expiry_date,
+  //     batch_size,
+  //     received_quantity,
+  //   } = form.getValues();
+
+  //   if (watchNoOfSamplesValue !== data?.registration.no_of_samples) {
+  //     if (watchNoOfSamplesValue === 0) {
+  //       replace([]);
+  //     } else if (watchNoOfSamplesValue > 0) {
+  //       const extraSamples = Math.abs(
+  //         data?.registration?.no_of_samples - watchNoOfSamplesValue,
+  //       );
+  //       console.log(extraSamples);
+
+  //       let fieldsLength = fields.length;
+
+  //       for (let i = 0; i < extraSamples; i++) {
+  //         if (fieldsLength === watchNoOfSamplesValue) break;
+  //         append({
+  //           id: null,
+  //           sample_name: `${sample_name} ${fieldsLength + i}`,
+
+  //           batch_or_lot_no,
+  //           manufactured_date,
+  //           expiry_date,
+  //           batch_size,
+  //           received_quantity,
+  //         });
+  //       }
+  //     }
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [
+  //   append,
+  //   data?.registration.no_of_samples,
+  //   form,
+  //   replace,
+  //   watchNoOfSamplesValue,
+  // ]);
   useEffect(() => {
-    const {
-      sample_name,
-      batch_or_lot_no,
-      manufactured_date,
-      expiry_date,
-      batch_size,
-      received_quantity,
-    } = form.getValues();
+    const ids = watchSamples.map((field) => field.id) ?? [];
+    if (ids.length) {
+      // const statusIds = data?.registration?.samples?.map((sample) => {
+      //   if (ids.includes(sample.id)) {
+      //     return sample.status_id;
+      //   }
+      // });
+      const statusIds: (number | null)[] = [];
+      const sampleIds: (string | null)[] = [];
 
-    if (watchNoOfSamplesValue !== data?.registration.no_of_samples) {
-      if (watchNoOfSamplesValue === 0) {
-        replace([]);
-      } else if (watchNoOfSamplesValue > 0) {
-        const extraSamples = Math.abs(
-          data?.registration?.no_of_samples - watchNoOfSamplesValue,
-        );
-        console.log(extraSamples);
+      ids.forEach((id: number|null) => {
+        const statusId =
+          data?.registration?.samples?.find((t) => t.id === id)?.status_id ??
+          null;
+          statusIds.push(statusId);
+      });
 
-        let fieldsLength = fields.length;
+      console.log(statusIds);
+      setSampleStatus(statusIds);
+      
+      ids.forEach((id: number|null) => {
+        const sampleID =
+          data?.registration?.samples?.find((t) => t.id === id)?.sample_id ??
+          null;
+          sampleIds.push(sampleID);
+      });
 
-        for (let i = 0; i < extraSamples; i++) {
-          if (fieldsLength === watchNoOfSamplesValue) break;
-          append({
-            id: null,
-            sample_name: `${sample_name} ${fieldsLength + i}`,
-
-            batch_or_lot_no,
-            manufactured_date,
-            expiry_date,
-            batch_size,
-            received_quantity,
-          });
-        }
-      }
+      console.log(sampleIds);
+      setSampleCode(sampleIds);
     }
-  }, [
-    append,
-    data?.registration.no_of_samples,
-    form,
-    replace,
-    watchNoOfSamplesValue,
-  ]);
+  }, [data?.registration?.samples, watchSamples]);
 
   const createSamples = () => {
     const {
@@ -282,18 +328,23 @@ const RegistrationEditForm = ({
       if (watchNoOfSamplesValue === 0) {
         replace([]);
       } else if (watchNoOfSamplesValue > 0) {
-        const extraSamples = Math.abs(
-          data?.registration?.no_of_samples - watchNoOfSamplesValue,
-        );
+        const extraSamples = watchNoOfSamplesValue - fields.length;
         console.log(extraSamples);
-
+        if (extraSamples < 0) {
+          toast.error("No of samples can't be lower then previous value", {
+            duration: 5000,
+            closeButton: true,
+          });
+          form.setValue("no_of_samples", fields.length);
+          return;
+        }
         let fieldsLength = fields.length;
 
         for (let i = 0; i < extraSamples; i++) {
           if (fieldsLength === watchNoOfSamplesValue) break;
           append({
             id: null,
-            sample_name: `${sample_name} ${fieldsLength + i}`,
+            sample_name: `${sample_name} - ${fieldsLength + 1}`,
             batch_or_lot_no,
             manufactured_date,
             expiry_date,
@@ -829,16 +880,27 @@ const RegistrationEditForm = ({
                   <div key={item.id} className="mb-4 mt-2">
                     <div className="mb-2 flex justify-between border-b-2">
                       <p>
-                        Sample <strong>#{index + 1}:</strong>
+                        Sample <strong>#{index + 1}: {sampleCode[index]?sampleCode[index]: 'Code generate after submission'} </strong>
                       </p>
                       <div>
-                        <button
-                          type="button"
-                          className="flex justify-center rounded-full p-2 font-medium text-black hover:bg-gray"
-                          onClick={() => remove(index)}
-                        >
-                          <Trash2 className="w-4" />
-                        </button>
+                        {sampleStatus[index] === null ||
+                        sampleStatus[index] === 1 ? (
+                          <button
+                            type="button"
+                            className="flex justify-center rounded-full p-2 font-medium text-black hover:bg-gray"
+                            onClick={() => {
+                              remove(index);
+                              form.setValue("no_of_samples", fields.length - 1);
+                            }}
+                          >
+                            <Trash2 className="w-4" />
+                          </button>
+                        ) : (
+                          <p className="text-muted-foreground">
+                            This sample moved to next stage, Edit and remove
+                            don&apos;t apply
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="mb-4.5 flex flex-col gap-3 xl:flex-row xl:flex-wrap">
@@ -1187,7 +1249,7 @@ const TestParamsForm = ({
                   <input
                     type="text"
                     {...register(`${arrayFieldName}.${idx}.order`)}
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </td>
                 <td className="border-b border-[#eee] px-2 py-5 pl-6 dark:border-strokedark xl:pl-6">

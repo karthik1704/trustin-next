@@ -242,9 +242,11 @@ export interface TestParameter {
 }
 
 type RegSample={
+  status_id: number;
   test_type_id: number | string;
   id:number;
   sample_name: string;
+  sample_id: string;
   batch_or_lot_no: string;
   manufactured_date: string;
   expiry_date: string;
