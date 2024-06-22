@@ -74,6 +74,10 @@ const RegistrationForm = ({ data }: { data: Data }) => {
     control: form.control,
     name: "company_id",
   });
+  const watchFrontDesk = useWatch({
+    control: form.control,
+    name: "front_desk_id",
+  });
 
   // const watchTestTypeId = useWatch({
   //   control: form.control,
@@ -110,6 +114,33 @@ const RegistrationForm = ({ data }: { data: Data }) => {
   // }, [watchTestTypeId]);
   useEffect(() => {
     // TODO: need some imporvement in future
+    // const ids = sampleWatch.map((field, idx) => field.test_type_id);
+    if (!watchFrontDesk) return;
+
+    const frontDesk = data?.frontDesks?.find(
+      (desk) => desk.id.toString() === watchFrontDesk.toString(),
+    );
+    form.setValue("company_id", frontDesk?.customer_id.toString() ?? "");
+    const customer = data.customers.find(
+      (customer) =>
+        customer.id.toString() === frontDesk?.customer_id.toString(),
+    );
+    form.setValue("company_name", customer?.company_name ?? "");
+    form.setValue("city", customer?.city ?? "");
+    form.setValue("state", customer?.state ?? "");
+    form.setValue("pincode_no", customer?.pincode_no ?? "");
+    form.setValue(
+      "customer_address_line1",
+      customer?.customer_address_line1 ?? "",
+    );
+    form.setValue(
+      "customer_address_line2",
+      customer?.customer_address_line2 ?? "",
+    );
+    form.setValue("gst", customer?.gst ?? "");
+  }, [data.customers, data?.frontDesks, form, watchFrontDesk]);
+
+  useEffect(() => {
     const usedMechQuantity = watchMechParams.reduce(
       (acc, field, idx) => acc + +field.quantity,
       0,
@@ -119,17 +150,20 @@ const RegistrationForm = ({ data }: { data: Data }) => {
       0,
     );
 
-    const totalUsedQuantity = usedMechQuantity+ usedMicroQuantity;
+    const totalUsedQuantity = usedMechQuantity + usedMicroQuantity;
 
-    const receivedQuantity = +form.getValues('received_quantity') ?? 0;
+    const receivedQuantity = +form.getValues("received_quantity") ?? 0;
     const constrolledQuantiy = receivedQuantity - totalUsedQuantity;
-    console.log('HI')
-    form.setValue('controlled_quantity', constrolledQuantiy)
-    if (constrolledQuantiy <0){
-      toast.error("Assinged Quantities higher than recieved quantity, Please Check test params quantity ", {
-        duration: 5000,
-        closeButton: true,
-      });
+    console.log("HI");
+    form.setValue("controlled_quantity", constrolledQuantiy);
+    if (constrolledQuantiy < 0) {
+      toast.error(
+        "Assinged Quantities higher than recieved quantity, Please Check test params quantity ",
+        {
+          duration: 5000,
+          closeButton: true,
+        },
+      );
     }
   }, [form, watchMechParams, watchMicroParams, watchReceivedQuantiy]);
 
@@ -310,6 +344,22 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 </span>
               </div>
             </div>
+          </div>
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <Select
+              name="front_desk_id"
+              register={form.register}
+              label={"Front Desk"}
+            >
+              {" "}
+              <option value="">------------</option>
+              {data.frontDesks.map((t) => (
+                <option value={t.id} key={t.id}>
+                  {t.customer.company_name} -{" "}
+                  {new Date(t.date_of_received).toDateString()}
+                </option>
+              ))}
+            </Select>
           </div>
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
@@ -545,7 +595,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
-            
+
             <Select
               name="nabl_logo"
               label="NABL Logo"
@@ -730,7 +780,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                         <button
                           type="button"
                           className="flex justify-center rounded-full p-2 font-medium text-black hover:bg-gray"
-                          onClick={() =>{
+                          onClick={() => {
                             remove(index);
                             form.setValue("no_of_samples", fields.length - 1);
                           }}
@@ -754,15 +804,14 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                         <label className="mb-2.5 block text-black dark:text-white">
                           Test Type <span className="text-meta-1">*</span>
                         </label>
-                      <Select
-                        name={`samples.${index}.test_type_id`}
-                        // label="Test Type"
-                        register={form.register}
-                      
-                      >
-                        <option value="1">Micro</option>
-                        <option value="2">Mech</option>
-                      </Select>
+                        <Select
+                          name={`samples.${index}.test_type_id`}
+                          // label="Test Type"
+                          register={form.register}
+                        >
+                          <option value="1">Micro</option>
+                          <option value="2">Mech</option>
+                        </Select>
                       </div>
                       <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">

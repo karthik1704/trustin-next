@@ -73,6 +73,12 @@ async function getData(id: string) {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
+  const res6 = await fetch(`${SERVER_API_URL}/front-desks/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
 
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -92,6 +98,7 @@ async function getData(id: string) {
   if (res4.status === 401) redirect("/signin");
   // if (res6.status === 401) redirect("/signin");
   if (res5.status === 401) redirect("/signin");
+  if (res6.status === 401) redirect("/signin");
 
   const registration:RegistrationType = await res.json();
   // const trf:TestReportForm[] = await res1.json();
@@ -99,6 +106,7 @@ async function getData(id: string) {
   const branches = await res3.json();
   const products = await res4.json();
   const parameters:FullParametersType[] = await res5.json();
+  const frontDesks = await res6.json();
   // const samplesData = await res6.json();
  
   const mechParameters = parameters.filter(para=>para.test_type_id === 2)
@@ -111,7 +119,8 @@ async function getData(id: string) {
     products,
     parameters,
     mechParameters,
-    microParameters
+    microParameters,
+    frontDesks
   };
 }
 

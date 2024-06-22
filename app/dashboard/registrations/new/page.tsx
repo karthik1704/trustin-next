@@ -66,6 +66,13 @@ async function getData() {
     },
 
   })
+  const res8 = await fetch(`${SERVER_API_URL}/front-desks/`,{
+    headers:{
+      "Content-Type" : "application/json",
+      Authorization :`Bearer ${access_token?.value}`,
+    },
+
+  })
 
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -85,6 +92,7 @@ async function getData() {
   if (res6.status === 401) redirect("/signin");
   if (res5.status === 401) redirect("/signin");
   if (res7.status === 401) redirect("/signin");
+  if (res8.status === 401) redirect("/signin");
 
   const trf:TestReportForm[] = await res.json();
   const customers:Customer[] = await res2.json();
@@ -93,6 +101,7 @@ async function getData() {
   const samples = await res6.json();
   const parameters:FullParametersType[] = await res5.json();
   const registration = await res7.json(); 
+  const frontDesks = await res8.json(); 
   console.log(parameters)
 
   const microParameters = parameters.filter(para=>para.test_type_id ==1)
@@ -101,7 +110,7 @@ async function getData() {
   // const trflist = trf.map((t) => ({ label: t.trf_code, value: t.id.toString() })) ;
   // return { trf: trf, trflist, customers, branches, products, parameters, microParameters, mechParameters };
   // return { trf: trf, trflist, customers, branches, products, parameters, microParameters, mechParameters };
-  return {  customers, branches, products, samples,parameters, microParameters, mechParameters};
+  return {  customers, branches, products, samples,parameters, microParameters, mechParameters, frontDesks};
 }
 
 const NewRegistrationPage = async () => {

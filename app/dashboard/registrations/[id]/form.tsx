@@ -61,6 +61,7 @@ const RegistrationEditForm = ({
       branch_id: data?.registration?.branch_id,
       product_id: data?.registration?.product_id,
       company_id: data?.registration?.company_id,
+      front_desk_id: data?.registration?.front_desk_id,
       company_name: data?.registration?.company_name,
       customer_address_line1: data?.registration?.customer_address_line1,
       customer_address_line2: data?.registration?.customer_address_line2,
@@ -130,6 +131,10 @@ const RegistrationEditForm = ({
     control: form.control,
     name: "company_id",
   });
+  const watchFrontDesk = useWatch({
+    control: form.control,
+    name: "front_desk_id",
+  });
 
   // const watchTestTypeId = useWatch({
   //   control: form.control,
@@ -183,6 +188,42 @@ const RegistrationEditForm = ({
   //   // const ids = sampleWatch.map((field, idx) => field.test_type_id);
   //   if (watchTestTypeId) setFilterId(watchTestTypeId.toString());
   // }, [watchTestTypeId]);
+
+
+  useEffect(() => {
+
+    if (
+      watchFrontDesk.toString() ===
+      data?.registration?.front_desk_id.toString()
+    )
+      return;
+
+    if (!watchFrontDesk) return;
+
+    const frontDesk = data?.frontDesks?.find(
+      (desk) => desk.id.toString() === watchFrontDesk.toString(),
+    );
+    form.setValue("company_id", frontDesk?.customer_id.toString() ?? "");
+    const customer = data.customers.find(
+      (customer) =>
+        customer.id.toString() === frontDesk?.customer_id.toString(),
+    );
+    form.setValue("company_name", customer?.company_name ?? "");
+    form.setValue("city", customer?.city ?? "");
+    form.setValue("state", customer?.state ?? "");
+    form.setValue("pincode_no", customer?.pincode_no ?? "");
+    form.setValue(
+      "customer_address_line1",
+      customer?.customer_address_line1 ?? "",
+    );
+    form.setValue(
+      "customer_address_line2",
+      customer?.customer_address_line2 ?? "",
+    );
+    form.setValue("gst", customer?.gst ?? "");
+  }, [data.customers, data?.frontDesks, form, watchFrontDesk]);
+
+
   useEffect(() => {
     if (
       data.registration.controlled_quantity.toString() ===
@@ -478,6 +519,23 @@ const RegistrationEditForm = ({
           </div>
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <Select
+              name="front_desk_id"
+              register={form.register}
+              label={"Front Desk"}
+            >
+              {" "}
+              <option value="">------------</option>
+              {data.frontDesks.map((t) => (
+                <option value={t.id} key={t.id}>
+                  {t.customer.company_name} -{" "}
+                  {new Date(t.date_of_received).toDateString()}
+                </option>
+              ))}
+            </Select>
+          </div>
+
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full xl:w-9/12">
               <label className="mb-2.5 block text-black dark:text-white">
                 Company ID
@@ -612,6 +670,7 @@ const RegistrationEditForm = ({
               </label>
               <input
                 type="date"
+                readOnly={true}
                 {...form.register("date_of_received")}
                 placeholder="Enter Date Of Recived"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"

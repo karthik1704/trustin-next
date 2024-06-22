@@ -15,7 +15,7 @@ type UpdateBatchType = BatchCreate & { id: string | null };
 type TestParam = {
   test_params_id: number | string;
   quantity: number;
-  order: number|string;
+  order: number | string;
 };
 type RegistrationSamples = {
   sample_name: string;
@@ -29,8 +29,10 @@ type RegistrationSamples = {
 export type TestType = string[] | number[];
 export type CreateData = {
   branch_id: number | string;
-  trf_code:  string;
+
+  trf_code: string;
   company_id: number | string;
+  front_desk_id: number | string;
   company_name: string;
   customer_address_line1: string;
   customer_address_line2: string;
@@ -52,16 +54,16 @@ export type CreateData = {
   expiry_date: string;
   batch_size: number;
   received_quantity: number;
-  controlled_quantity:number;
+  controlled_quantity: number;
   no_of_samples: number;
   reports_send_by: string;
   micro_params: TestParam[];
   mech_params: TestParam[];
-  samples: RegistrationSamples[]; 
+  samples: RegistrationSamples[];
 };
 
-type RegistrationUpdateSamples =  {
-  id: number | null,
+type RegistrationUpdateSamples = {
+  id: number | null;
   sample_name: string;
   batch_or_lot_no: string;
   manufactured_date: string;
@@ -73,6 +75,7 @@ type RegistrationUpdateSamples =  {
 export type UpdateData = {
   branch_id: number | string;
   trf_code: string;
+  front_desk_id: number|string;
   company_id: number | string;
   company_name: string;
   customer_address_line1: string;
@@ -85,7 +88,7 @@ export type UpdateData = {
   product_id: number;
   test_type_id: number | string;
   license_no: string;
-  nabl_logo: boolean|string;
+  nabl_logo: boolean | string;
   testing_process: string;
   sampled_by: string;
   sample_disposal_process: string;
@@ -96,12 +99,11 @@ export type UpdateData = {
   batch_size: number;
   received_quantity: number;
   no_of_samples: number;
-  controlled_quantity:number;
+  controlled_quantity: number;
   reports_send_by: string;
   micro_params: TestParam[];
   mech_params: TestParam[];
-  samples: RegistrationUpdateSamples[]; 
-
+  samples: RegistrationUpdateSamples[];
 };
 
 export type ParametersType = {
@@ -158,11 +160,11 @@ type Batch = {
   id: number;
   batch_no: string;
   manufactured_date: string; // using string to represent ISO date-time
-  expiry_date: string;       // using string to represent ISO date-time
+  expiry_date: string; // using string to represent ISO date-time
   batch_size: number;
   received_quantity: number;
-  created_at: string;        // using string to represent ISO date-time
-  updated_at: string;        // using string to represent ISO date-time
+  created_at: string; // using string to represent ISO date-time
+  updated_at: string; // using string to represent ISO date-time
   created_by: number;
   updated_by: number;
   product_id: number;
@@ -190,7 +192,26 @@ export type SampleRecord = {
   created_by: number;
   updated_by: number;
   registration: Registration;
-  batch: Batch
+  batch: Batch;
+};
+
+export type FrontDesks = {
+  customer_id: number;
+  courier_name: string;
+  date_of_received: string;
+  received_condition: string;
+  temperature: string;
+  department_id: number;
+  status: string;
+  id: number;
+  customer: {
+    id: number;
+    company_name: string;
+  };
+  user_received_by: {
+    first_name: string;
+    last_name: string;
+  };
 };
 
 export type Data = {
@@ -203,6 +224,7 @@ export type Data = {
   branches: BranchType;
   products: ProductsArray;
   samples?: SampleRecord[];
+  frontDesks: FrontDesks[];
 };
 
 type TestTypeData = {
@@ -241,10 +263,10 @@ export interface TestParameter {
   };
 }
 
-type RegSample={
+type RegSample = {
   status_id: number;
   test_type_id: number | string;
-  id:number;
+  id: number;
   sample_name: string;
   sample_id: string;
   batch_or_lot_no: string;
@@ -252,7 +274,7 @@ type RegSample={
   expiry_date: string;
   batch_size: number;
   received_quantity: number;
-}
+};
 
 export type RegistrationType = {
   id: number;
@@ -260,6 +282,7 @@ export type RegistrationType = {
   branch_id: number;
   // trf_id: number;
   company_id: number;
+  front_desk_id: number;
   company_name: string;
   customer_address_line1: string;
   customer_address_line2: string;
@@ -276,7 +299,7 @@ export type RegistrationType = {
   product_id: number;
   test_type_id: number | string;
   license_no: string;
-  nabl_logo:  string;
+  nabl_logo: string;
   testing_process: string;
   sampled_by: string;
   sample_disposal_process: string;
@@ -289,7 +312,7 @@ export type RegistrationType = {
   no_of_samples: number;
   controlled_quantity: number;
   reports_send_by: string;
-  
+
   samples: RegSample[];
 
   // trf: TestReportForm;
