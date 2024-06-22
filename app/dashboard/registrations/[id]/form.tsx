@@ -331,7 +331,7 @@ const RegistrationEditForm = ({
         const extraSamples = watchNoOfSamplesValue - fields.length;
         console.log(extraSamples);
         if (extraSamples < 0) {
-          toast.error("No of samples can't be lower then previous value", {
+          toast.error("No of samples can't be lower than previous value", {
             duration: 5000,
             closeButton: true,
           });
