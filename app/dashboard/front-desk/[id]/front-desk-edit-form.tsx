@@ -129,7 +129,7 @@ const FrontDeskEditForm = ({
 
         <div className="mb-4.5">
           <Select
-            label="Department"
+            label="Forward to department"
             name="deparment_id"
             defaultValue={data.frontDesk.deparment_id}
           >

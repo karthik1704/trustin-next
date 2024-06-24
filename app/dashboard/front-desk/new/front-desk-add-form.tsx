@@ -129,7 +129,7 @@ const FrontDeskAddForm = ({ data }: props) => {
         </div>
 
         <div className="mb-4.5">
-          <Select label="Department" name="deparment_id" defaultValue={"6"}>
+          <Select label="Forward to department" name="deparment_id" defaultValue={"6"}>
             <option value={6}>Registration</option>
           </Select>
         </div>
