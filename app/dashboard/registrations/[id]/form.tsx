@@ -61,7 +61,7 @@ const RegistrationEditForm = ({
       branch_id: data?.registration?.branch_id,
       product_id: data?.registration?.product_id,
       company_id: data?.registration?.company_id,
-      front_desk_id: data?.registration?.front_desk_id,
+      front_desk_id: data?.registration?.front_desk_id ?? "",
       company_name: data?.registration?.company_name,
       customer_address_line1: data?.registration?.customer_address_line1,
       customer_address_line2: data?.registration?.customer_address_line2,
