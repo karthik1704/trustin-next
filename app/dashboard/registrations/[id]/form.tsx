@@ -189,12 +189,9 @@ const RegistrationEditForm = ({
   //   if (watchTestTypeId) setFilterId(watchTestTypeId.toString());
   // }, [watchTestTypeId]);
 
-
   useEffect(() => {
-
     if (
-      watchFrontDesk.toString() ===
-      data?.registration?.front_desk_id.toString()
+      watchFrontDesk.toString() === data?.registration?.front_desk_id.toString()
     )
       return;
 
@@ -223,13 +220,12 @@ const RegistrationEditForm = ({
     form.setValue("gst", customer?.gst ?? "");
   }, [data.customers, data?.frontDesks, form, watchFrontDesk]);
 
-
   useEffect(() => {
-    if (
-      data.registration.controlled_quantity.toString() ===
-      watchControlledQuantity.toString()
-    )
-      return;
+    // if (
+    //   data.registration.controlled_quantity.toString() ===
+    //   watchControlledQuantity.toString()
+    // )
+    //   return;
     const usedMechQuantity = watchMechParams.reduce(
       (acc, field, idx) => acc + +field.quantity,
       0,
@@ -257,7 +253,7 @@ const RegistrationEditForm = ({
   }, [
     data.registration.controlled_quantity,
     form,
-    watchControlledQuantity,
+    // watchControlledQuantity,
     watchMechParams,
     watchMicroParams,
     watchReceivedQuantiy,
@@ -333,21 +329,21 @@ const RegistrationEditForm = ({
       const statusIds: (number | null)[] = [];
       const sampleIds: (string | null)[] = [];
 
-      ids.forEach((id: number|null) => {
+      ids.forEach((id: number | null) => {
         const statusId =
           data?.registration?.samples?.find((t) => t.id === id)?.status_id ??
           null;
-          statusIds.push(statusId);
+        statusIds.push(statusId);
       });
 
       console.log(statusIds);
       setSampleStatus(statusIds);
-      
-      ids.forEach((id: number|null) => {
+
+      ids.forEach((id: number | null) => {
         const sampleID =
           data?.registration?.samples?.find((t) => t.id === id)?.sample_id ??
           null;
-          sampleIds.push(sampleID);
+        sampleIds.push(sampleID);
       });
 
       console.log(sampleIds);
@@ -934,12 +930,18 @@ const RegistrationEditForm = ({
               </TabsTrigger>
             </TabsList>
             <TabsContent value="samples">
-              <div className="mb-4">
+              <div className="mb-4 pb-4">
                 {fields.map((item, index) => (
                   <div key={item.id} className="mb-4 mt-2">
                     <div className="mb-2 flex justify-between border-b-2">
                       <p>
-                        Sample <strong>#{index + 1}: {sampleCode[index]?sampleCode[index]: 'Code generate after submission'} </strong>
+                        Sample{" "}
+                        <strong>
+                          #{index + 1}:{" "}
+                          {sampleCode[index]
+                            ? sampleCode[index]
+                            : "Code generate after submission"}{" "}
+                        </strong>
                       </p>
                       <div>
                         {sampleStatus[index] === null ||
@@ -1070,7 +1072,7 @@ const RegistrationEditForm = ({
                 }
                 filterId={2}
                 arrayFieldName="mech_params"
-                parameters={data.mechParameters ?? []}
+                parameters={parameters ?? []}
                 allData={data}
               />
             </TabsContent>
@@ -1093,7 +1095,7 @@ const RegistrationEditForm = ({
 
           <button
             type="submit"
-            className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray disabled:bg-slate-500"
+            className="mt-10 flex w-full justify-center rounded bg-primary p-3 font-medium text-gray disabled:bg-slate-500"
             disabled={form.formState.isSubmitting}
           >
             {form.formState.isSubmitting ? "Loading..." : "Submit"}
@@ -1201,6 +1203,7 @@ const TestParamsForm = ({
       setMethods(methods);
     }
   }, [data, test_watch, parameters]);
+  
   const addAllTestParameters = () => {
     if (data.length) {
       replace([]);
@@ -1312,7 +1315,12 @@ const TestParamsForm = ({
                   />
                 </td>
                 <td className="border-b border-[#eee] px-2 py-5 pl-6 dark:border-strokedark xl:pl-6">
-                  <button type="button" onClick={() => remove(idx)}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      remove(idx);
+                    }}
+                  >
                     <Trash2 />
                   </button>
                 </td>
