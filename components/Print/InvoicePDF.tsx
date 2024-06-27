@@ -269,7 +269,7 @@ const MyDocument = ({ data }: { data: any }) => {
               <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}>
                 Test Method
               </Text>
-              <Text style={{padding:2}} >{data.sample.registration.test_type_id === 2 ? "Mech" : "Micro"}</Text>
+              <Text style={{padding:2}} >{data.sample.test_type_id === 2 ? "Mech" : "Micro"}</Text>
             </View>
             <View
               style={{
