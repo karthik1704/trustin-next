@@ -69,7 +69,7 @@ export async function createRegistration(jsonObject: any) {
 
 export async function updateRegistration(id: string, data: any) {
   let jsonObject = data;
-
+  console.log(data)
   // jsonObject.test_types = jsonObject.test_types.map((type: any) => ({
   //   test_type_id: type,
   // }));

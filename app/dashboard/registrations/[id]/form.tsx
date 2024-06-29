@@ -205,6 +205,8 @@ const RegistrationEditForm = ({
       (customer) =>
         customer.id.toString() === frontDesk?.customer_id.toString(),
     );
+    const addresss =       customer?.customer_address_line1.split(',') ?? "";
+    console.log(addresss)
     form.setValue("company_name", customer?.company_name ?? "");
     form.setValue("city", customer?.city ?? "");
     form.setValue("state", customer?.state ?? "");
@@ -386,7 +388,7 @@ const RegistrationEditForm = ({
             manufactured_date,
             expiry_date,
             batch_size,
-            received_quantity,
+            received_quantity: received_quantity,
           });
         }
       }
@@ -461,13 +463,15 @@ const RegistrationEditForm = ({
     <UiForm {...form}>
       <form onSubmit={form.handleSubmit(handleForm)}>
         <div className="p-6.5">
-          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+          <input type="hidden" {...form.register("trf_code")} />
+          <input type="hidden" {...form.register("branch_id")} />
+          {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-row ">
             <div className="w-full xl:w-9/12">
               <label className="mb-2.5 block text-black dark:text-white">
                 TRF Code
               </label>
               <input
-                type="text"
+                type="hidden"
                 {...form.register("trf_code")}
                 placeholder="Enter TRF Code"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -478,6 +482,8 @@ const RegistrationEditForm = ({
               <label className="mb-2.5 block text-black dark:text-white">
                 Branch
               </label>
+
+            
 
               <div className="relative z-20 bg-transparent dark:bg-form-input">
                 <select
@@ -512,7 +518,7 @@ const RegistrationEditForm = ({
                 </span>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <Select
@@ -715,7 +721,7 @@ const RegistrationEditForm = ({
             </div>
           </div>
 
-          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+          {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Test type
@@ -750,12 +756,12 @@ const RegistrationEditForm = ({
                 </span>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full xl:w-1/2">
               <label className="mb-2.5 block text-black dark:text-white">
-                License No
+              Manufacture License No
               </label>
               <input
                 {...form.register("license_no")}
@@ -887,19 +893,19 @@ const RegistrationEditForm = ({
             </div>
           </div>
 
-          <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
+          {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Controlled Quantity
-              </label>
+              </label> */}
               <input
-                required
+                type="hidden"
                 {...form.register("controlled_quantity")}
                 placeholder="Enter Controlled quantity"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
-            </div>
-          </div>
+            {/* </div>
+          </div> */}
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -1203,7 +1209,7 @@ const TestParamsForm = ({
       setMethods(methods);
     }
   }, [data, test_watch, parameters]);
-  
+
   const addAllTestParameters = () => {
     if (data.length) {
       replace([]);

@@ -52,7 +52,7 @@ const TestParameterPage = async () => {
           New Test Parameter
         </Link>
       </div>
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-4">
         <ParametersTable data={data} />
       </div>
     </>
