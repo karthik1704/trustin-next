@@ -594,7 +594,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full xl:w-1/2">
               <label className="mb-2.5 block text-black dark:text-white">
-              Manufacturer  License No
+              Manufacturing  License No
               </label>
               <input
                 {...form.register("license_no")}
