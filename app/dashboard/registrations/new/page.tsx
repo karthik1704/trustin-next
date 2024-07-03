@@ -66,7 +66,7 @@ async function getData() {
     },
 
   })
-  const res8 = await fetch(`${SERVER_API_URL}/front-desks/`,{
+  const res8 = await fetch(`${SERVER_API_URL}/front-desks/under-registrations`,{
     headers:{
       "Content-Type" : "application/json",
       Authorization :`Bearer ${access_token?.value}`,

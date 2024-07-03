@@ -57,41 +57,43 @@ const RegistrationEditForm = ({
 }) => {
   const form = useForm<UpdateData>({
     defaultValues: {
-      trf_code: data?.registration?.trf_code,
-      branch_id: data?.registration?.branch_id,
+      // trf_code: data?.registration?.trf_code,
+      // branch_id: data?.registration?.branch_id,
+      front_desk_id: data?.registration?.front_desk_id ?? "",
       product_id: data?.registration?.product_id,
       company_id: data?.registration?.company_id,
-      front_desk_id: data?.registration?.front_desk_id ?? "",
+      full_address: data?.registration?.full_address,
       company_name: data?.registration?.company_name,
-      customer_address_line1: data?.registration?.customer_address_line1,
-      customer_address_line2: data?.registration?.customer_address_line2,
-      city: data?.registration?.city,
-      state: data?.registration?.state,
-      pincode_no: data?.registration?.pincode_no,
+      // customer_address_line2: data?.registration?.customer_address_line2,
+      // city: data?.registration?.city,
+      // state: data?.registration?.state,
+      // pincode_no: data?.registration?.pincode_no,
       gst: data?.registration?.gst,
       date_of_received: new Date(data?.registration?.date_of_received)
         .toISOString()
         .split("T")[0],
       // test_type_id: data?.registration?.test_type_id,
-      nabl_logo: data?.registration?.nabl_logo ? "1" : "0",
+      // nabl_logo: data?.registration?.nabl_logo ? "1" : "0",
       license_no: data?.registration?.license_no,
       testing_process: data?.registration?.testing_process,
       sampled_by: data?.registration?.sampled_by,
       sample_disposal_process: data?.registration?.sample_disposal_process,
       reports_send_by: data?.registration?.reports_send_by,
 
-      sample_name: data?.registration?.sample_name,
-      batch_or_lot_no: data?.registration?.batch_or_lot_no,
-      manufactured_date: new Date(data?.registration?.manufactured_date)
-        .toISOString()
-        .split("T")[0],
-      expiry_date: new Date(data?.registration?.expiry_date)
-        .toISOString()
-        .split("T")[0],
+      // sample_name: data?.registration?.sample_name,
+      // batch_or_lot_no: data?.registration?.batch_or_lot_no,
+      // manufactured_date: new Date(data?.registration?.manufactured_date)
+      //   .toISOString()
+      //   .split("T")[0],
+      // expiry_date: new Date(data?.registration?.expiry_date)
+      //   .toISOString()
+      //   .split("T")[0],
       batch_size: data?.registration?.batch_size,
-      received_quantity: data?.registration?.received_quantity,
-      no_of_samples: data?.registration?.no_of_samples,
-      controlled_quantity: data?.registration?.controlled_quantity,
+      // received_quantity: data?.registration?.received_quantity,
+      // no_of_samples: data?.registration?.no_of_samples,
+      no_of_batches: data?.registration?.no_of_batches,
+      status: data?.registration?.status,
+      // controlled_quantity: data?.registration?.controlled_quantity,
       samples:
         data?.registration?.samples?.map((sample) => ({
           id: sample.id,
@@ -105,20 +107,20 @@ const RegistrationEditForm = ({
           received_quantity: sample.received_quantity,
           test_type_id: sample.test_type_id.toString(),
         })) ?? [],
-      micro_params: data?.registration?.test_params
-        ?.filter((para) => para.test_parameter.test_type_id === 1)
-        .map((test) => ({
-          test_params_id: test.test_params_id,
-          order: test.order,
-          quantity: test.quantity,
-        })),
-      mech_params: data?.registration?.test_params
-        ?.filter((para) => para.test_parameter.test_type_id === 2)
-        .map((test) => ({
-          test_params_id: test.test_params_id,
-          order: test.order,
-          quantity: test.quantity,
-        })),
+      // micro_params: data?.registration?.test_params
+      //   ?.filter((para) => para.test_parameter.test_type_id === 1)
+      //   .map((test) => ({
+      //     test_params_id: test.test_params_id,
+      //     order: test.order,
+      //     quantity: test.quantity,
+      //   })),
+      // mech_params: data?.registration?.test_params
+      //   ?.filter((para) => para.test_parameter.test_type_id === 2)
+      //   .map((test) => ({
+      //     test_params_id: test.test_params_id,
+      //     order: test.order,
+      //     quantity: test.quantity,
+      //   })),
     },
   });
 
@@ -127,10 +129,10 @@ const RegistrationEditForm = ({
     name: "samples", // Name of the array in your schema
   });
 
-  const watchCompanyFieldValue = useWatch({
-    control: form.control,
-    name: "company_id",
-  });
+  // const watchCompanyFieldValue = useWatch({
+  //   control: form.control,
+  //   name: "company_id",
+  // });
   const watchFrontDesk = useWatch({
     control: form.control,
     name: "front_desk_id",
@@ -145,27 +147,27 @@ const RegistrationEditForm = ({
     name: "product_id",
   });
 
-  const watchNoOfSamplesValue = useWatch({
-    control: form.control,
-    name: "no_of_samples",
-  });
+  // const watchNoOfSamplesValue = useWatch({
+  //   control: form.control,
+  //   name: "no_of_samples",
+  // });
 
-  const watchMicroParams = useWatch({
-    control: form.control,
-    name: "micro_params",
-  });
-  const watchMechParams = useWatch({
-    control: form.control,
-    name: "mech_params",
-  });
-  const watchReceivedQuantiy = useWatch({
-    control: form.control,
-    name: "received_quantity",
-  });
-  const watchControlledQuantity = useWatch({
-    control: form.control,
-    name: "controlled_quantity",
-  });
+  // const watchMicroParams = useWatch({
+  //   control: form.control,
+  //   name: "micro_params",
+  // });
+  // const watchMechParams = useWatch({
+  //   control: form.control,
+  //   name: "mech_params",
+  // });
+  // const watchReceivedQuantiy = useWatch({
+  //   control: form.control,
+  //   name: "received_quantity",
+  // });
+  // const watchControlledQuantity = useWatch({
+  //   control: form.control,
+  //   name: "controlled_quantity",
+  // });
   const watchSamples = useWatch({
     control: form.control,
     name: "samples",
@@ -205,76 +207,82 @@ const RegistrationEditForm = ({
       (customer) =>
         customer.id.toString() === frontDesk?.customer_id.toString(),
     );
-    const addresss =       customer?.customer_address_line1.split(',') ?? "";
-    console.log(addresss)
+    const addresss = customer?.customer_address_line1.split(",") ?? "";
+    console.log(addresss);
     form.setValue("company_name", customer?.company_name ?? "");
-    form.setValue("city", customer?.city ?? "");
-    form.setValue("state", customer?.state ?? "");
-    form.setValue("pincode_no", customer?.pincode_no ?? "");
-    form.setValue(
-      "customer_address_line1",
-      customer?.customer_address_line1 ?? "",
-    );
-    form.setValue(
-      "customer_address_line2",
-      customer?.customer_address_line2 ?? "",
-    );
+    form.setValue("full_address", customer?.customer_address_line1 ?? "");
+    // form.setValue("city", customer?.city ?? "");
+    // form.setValue("state", customer?.state ?? "");
+    // form.setValue("pincode_no", customer?.pincode_no ?? "");
+    // form.setValue(
+    //   "customer_address_line1",
+    //   customer?.customer_address_line1 ?? "",
+    // );
+    // form.setValue(
+    //   "customer_address_line2",
+    //   customer?.customer_address_line2 ?? "",
+    // );
     form.setValue("gst", customer?.gst ?? "");
-  }, [data.customers, data?.frontDesks, form, watchFrontDesk]);
-
-  useEffect(() => {
-    // if (
-    //   data.registration.controlled_quantity.toString() ===
-    //   watchControlledQuantity.toString()
-    // )
-    //   return;
-    const usedMechQuantity = watchMechParams.reduce(
-      (acc, field, idx) => acc + +field.quantity,
-      0,
-    );
-    const usedMicroQuantity = watchMicroParams.reduce(
-      (acc, field, idx) => acc + +field.quantity,
-      0,
-    );
-
-    const totalUsedQuantity = usedMechQuantity + usedMicroQuantity;
-
-    const receivedQuantity = +form.getValues("received_quantity") ?? 0;
-    const constrolledQuantiy = receivedQuantity - totalUsedQuantity;
-    console.log("HI");
-    form.setValue("controlled_quantity", constrolledQuantiy);
-    if (constrolledQuantiy < 0) {
-      toast.error(
-        "Assinged Quantities higher than recieved quantity, Please Check test params quantity ",
-        {
-          duration: 5000,
-          closeButton: true,
-        },
-      );
-    }
   }, [
-    data.registration.controlled_quantity,
+    data.customers,
+    data?.frontDesks,
+    data?.registration?.front_desk_id,
     form,
-    // watchControlledQuantity,
-    watchMechParams,
-    watchMicroParams,
-    watchReceivedQuantiy,
+    watchFrontDesk,
   ]);
-  useEffect(() => {
-    async function fetchTestParameters(query: string, product: string) {
-      let res = await fetch(
-        `${SERVER_API_URL}/parameters/product/${product}?${query}`,
-      );
-      const response: any = await res.json();
-      setParameters(response);
-    }
 
-    if (watchProductId) {
-      const query = `test_type=${encodeURIComponent(2)}`;
+  // useEffect(() => {
+  //   // if (
+  //   //   data.registration.controlled_quantity.toString() ===
+  //   //   watchControlledQuantity.toString()
+  //   // )
+  //   //   return;
+  //   const usedMechQuantity = watchMechParams.reduce(
+  //     (acc, field, idx) => acc + +field.quantity,
+  //     0,
+  //   );
+  //   const usedMicroQuantity = watchMicroParams.reduce(
+  //     (acc, field, idx) => acc + +field.quantity,
+  //     0,
+  //   );
 
-      fetchTestParameters(query, watchProductId.toString());
-    }
-  }, [data?.parameters, watchProductId]);
+  //   const totalUsedQuantity = usedMechQuantity + usedMicroQuantity;
+
+  //   const receivedQuantity = +form.getValues("received_quantity") ?? 0;
+  //   const constrolledQuantiy = receivedQuantity - totalUsedQuantity;
+  //   console.log("HI");
+  //   form.setValue("controlled_quantity", constrolledQuantiy);
+  //   if (constrolledQuantiy < 0) {
+  //     toast.error(
+  //       "Assinged Quantities higher than recieved quantity, Please Check test params quantity ",
+  //       {
+  //         duration: 5000,
+  //         closeButton: true,
+  //       },
+  //     );
+  //   }
+  // }, [
+  //   data.registration.controlled_quantity,
+  //   form,
+  //   // watchControlledQuantity,
+  //   watchMechParams,
+  //   watchMicroParams,
+  //   watchReceivedQuantiy,
+  // ]);
+  // useEffect(() => {
+  //   async function fetchTestParameters(query: string, product: string) {
+  //     console.log("here");
+  //     let res = await fetch(`/api/registrations/parameters/?${query}`);
+  //     const response: any = await res.json();
+  //     setParameters(response);
+  //   }
+
+  //   if (watchProductId) {
+  //     const query = `product=${encodeURIComponent(watchProductId.toString())}&test_type=${encodeURIComponent("2")}`;
+
+  //     fetchTestParameters(query, watchProductId.toString());
+  //   }
+  // }, [data?.parameters, watchProductId]);
 
   // useEffect(() => {
   //   const {
@@ -331,7 +339,7 @@ const RegistrationEditForm = ({
       const statusIds: (number | null)[] = [];
       const sampleIds: (string | null)[] = [];
 
-      ids.forEach((id: number | null) => {
+      ids.forEach((id: number | string) => {
         const statusId =
           data?.registration?.samples?.find((t) => t.id === id)?.status_id ??
           null;
@@ -341,7 +349,7 @@ const RegistrationEditForm = ({
       console.log(statusIds);
       setSampleStatus(statusIds);
 
-      ids.forEach((id: number | null) => {
+      ids.forEach((id: number | string) => {
         const sampleID =
           data?.registration?.samples?.find((t) => t.id === id)?.sample_id ??
           null;
@@ -353,87 +361,87 @@ const RegistrationEditForm = ({
     }
   }, [data?.registration?.samples, watchSamples]);
 
-  const createSamples = () => {
-    const {
-      sample_name,
-      batch_or_lot_no,
-      manufactured_date,
-      expiry_date,
-      batch_size,
-      received_quantity,
-    } = form.getValues();
+  // const createSamples = () => {
+  //   const {
+  //     sample_name,
+  //     batch_or_lot_no,
+  //     manufactured_date,
+  //     expiry_date,
+  //     batch_size,
+  //     received_quantity,
+  //   } = form.getValues();
 
-    if (watchNoOfSamplesValue !== data?.registration.no_of_samples) {
-      if (watchNoOfSamplesValue === 0) {
-        replace([]);
-      } else if (watchNoOfSamplesValue > 0) {
-        const extraSamples = watchNoOfSamplesValue - fields.length;
-        console.log(extraSamples);
-        if (extraSamples < 0) {
-          toast.error("No of samples can't be lower than previous value", {
-            duration: 5000,
-            closeButton: true,
-          });
-          form.setValue("no_of_samples", fields.length);
-          return;
-        }
-        let fieldsLength = fields.length;
+  //   if (watchNoOfSamplesValue !== data?.registration.no_of_samples) {
+  //     if (watchNoOfSamplesValue === 0) {
+  //       replace([]);
+  //     } else if (watchNoOfSamplesValue > 0) {
+  //       const extraSamples = watchNoOfSamplesValue - fields.length;
+  //       console.log(extraSamples);
+  //       if (extraSamples < 0) {
+  //         toast.error("No of samples can't be lower than previous value", {
+  //           duration: 5000,
+  //           closeButton: true,
+  //         });
+  //         form.setValue("no_of_samples", fields.length);
+  //         return;
+  //       }
+  //       let fieldsLength = fields.length;
 
-        for (let i = 0; i < extraSamples; i++) {
-          if (fieldsLength === watchNoOfSamplesValue) break;
-          append({
-            id: null,
-            sample_name: `${sample_name} - ${fieldsLength + 1}`,
-            batch_or_lot_no,
-            manufactured_date,
-            expiry_date,
-            batch_size,
-            received_quantity: received_quantity,
-          });
-        }
-      }
-    }
-  };
+  //       for (let i = 0; i < extraSamples; i++) {
+  //         if (fieldsLength === watchNoOfSamplesValue) break;
+  //         append({
+  //           id: null,
+  //           sample_name: `${sample_name} - ${fieldsLength + 1}`,
+  //           batch_or_lot_no,
+  //           manufactured_date,
+  //           expiry_date,
+  //           batch_size,
+  //           received_quantity: received_quantity,
+  //         });
+  //       }
+  //     }
+  //   }
+  // };
 
-  useEffect(() => {
-    // Make API call when the watched field value changes
-    if (
-      watchCompanyFieldValue.toString() ===
-      data?.registration?.company_id.toString()
-    )
-      return;
+  // useEffect(() => {
+  //   // Make API call when the watched field value changes
+  //   if (
+  //     watchCompanyFieldValue.toString() ===
+  //     data?.registration?.company_id.toString()
+  //   )
+  //     return;
 
-    const getCompanyDetail = (company_id: any) => {
-      const customer = data.customers.find(
-        (customer) => customer.id.toString() === company_id,
-      );
-      form.setValue("company_name", customer?.company_name ?? "");
-      form.setValue("city", customer?.city ?? "");
-      form.setValue("state", customer?.state ?? "");
-      form.setValue("pincode_no", customer?.pincode_no ?? "");
-      form.setValue(
-        "customer_address_line1",
-        customer?.customer_address_line1 ?? "",
-      );
-      form.setValue(
-        "customer_address_line2",
-        customer?.customer_address_line2 ?? "",
-      );
-      form.setValue("gst", customer?.gst ?? "");
-    };
+  //   const getCompanyDetail = (company_id: any) => {
+  //     const customer = data.customers.find(
+  //       (customer) => customer.id.toString() === company_id,
+  //     );
+  //     form.setValue("company_name", customer?.company_name ?? "");
+  //     form.setValue("city", customer?.city ?? "");
+  //     form.setValue("state", customer?.state ?? "");
+  //     form.setValue("pincode_no", customer?.pincode_no ?? "");
+  //     form.setValue(
+  //       "customer_address_line1",
+  //       customer?.customer_address_line1 ?? "",
+  //     );
+  //     form.setValue(
+  //       "customer_address_line2",
+  //       customer?.customer_address_line2 ?? "",
+  //     );
+  //     form.setValue("gst", customer?.gst ?? "");
+  //   };
 
-    // Check if the field value is not empty before making the API call
-    if (watchCompanyFieldValue) {
-      const company_id = watchCompanyFieldValue;
-      if (company_id) getCompanyDetail(company_id);
-    }
-  }, [
-    watchCompanyFieldValue,
-    form.setValue,
-    form,
-    data.customers,
-    data?.registration?.company_id,
-  ]);
+  //   // Check if the field value is not empty before making the API call
+  //   if (watchCompanyFieldValue) {
+  //     const company_id = watchCompanyFieldValue;
+  //     if (company_id) getCompanyDetail(company_id);
+  //   }
+  // }, [
+  //   watchCompanyFieldValue,
+  //   form.setValue,
+  //   form,
+  //   data.customers,
+  //   data?.registration?.company_id,
+  // ]);
 
   useEffect(() => {
     if (state?.type === null) return;
@@ -463,8 +471,6 @@ const RegistrationEditForm = ({
     <UiForm {...form}>
       <form onSubmit={form.handleSubmit(handleForm)}>
         <div className="p-6.5">
-          <input type="hidden" {...form.register("trf_code")} />
-          <input type="hidden" {...form.register("branch_id")} />
           {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-row ">
             <div className="w-full xl:w-9/12">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -538,19 +544,13 @@ const RegistrationEditForm = ({
           </div>
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-            <div className="w-full xl:w-9/12">
+            {/* <div className="w-full xl:w-9/12">
               <label className="mb-2.5 block text-black dark:text-white">
                 Company ID
               </label>
 
               <div className="relative z-20 bg-transparent dark:bg-form-input">
-                {/* <Combobox
-                  data={data?.customers.map((customer)=>({label: `${customer.customer_code} - ${customer.company_name}`, value: customer.id.toString()}))}
-                  name="company_id"
-                  form={form}
-                  label="Company ID"
-                  emptyMessage="NO Customer Found"
-                /> */}
+             
                 <select
                   {...form.register("company_id")}
                   className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -582,21 +582,37 @@ const RegistrationEditForm = ({
                   </svg>
                 </span>
               </div>
-            </div>
-            <div className="w-full xl:w-9/12">
+            </div> */}
+            <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Company Name
               </label>
+              <input type="hidden" {...form.register("company_id")} />
+
               <input
                 type="text"
+                readOnly={true}
                 {...form.register("company_name")}
                 placeholder="Enter Company Name"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
           </div>
-
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Full Address
+              </label>
+
+              <textarea
+                readOnly={true}
+                {...form.register("full_address")}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+          </div>
+
+          {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full xl:w-1/2">
               <label className="mb-2.5 block text-black dark:text-white">
                 Address Line 1
@@ -663,8 +679,20 @@ const RegistrationEditForm = ({
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
-          </div>
+          </div> */}
 
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Gst No
+              </label>
+              <input
+                {...form.register("gst")}
+                placeholder="Enter Gst No"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+          </div>
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -759,9 +787,9 @@ const RegistrationEditForm = ({
           </div> */}
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-            <div className="w-full xl:w-1/2">
+            <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
-              Manufacturing License No
+                Manufacturer License No
               </label>
               <input
                 {...form.register("license_no")}
@@ -769,7 +797,7 @@ const RegistrationEditForm = ({
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
-            <Select
+            {/* <Select
               name="nabl_logo"
               label="NABL Logo"
               register={form.register}
@@ -777,7 +805,7 @@ const RegistrationEditForm = ({
             >
               <option value="0">No</option>
               <option value="1">Yes</option>
-            </Select>
+            </Select> */}
           </div>
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <Select
@@ -821,10 +849,11 @@ const RegistrationEditForm = ({
             >
               <option value="COURIER">COURIER</option>
               <option value="EMAIL">EMAIL</option>
+              <option value="EMAIL_COURIER">EMAIL AND COURIER</option>
             </Select>
           </div>
 
-          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+          {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full xl:w-1/2">
               <label className="mb-2.5 block text-black dark:text-white">
                 Sample Name
@@ -845,8 +874,8 @@ const RegistrationEditForm = ({
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
-          </div>
-          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+          </div> */}
+          {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full xl:w-1/2">
               <label className="mb-2.5 block text-black dark:text-white">
                 Manufactured Date
@@ -868,12 +897,12 @@ const RegistrationEditForm = ({
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-            <div className="w-full xl:w-1/2">
+            <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
-                Batch Size
+                Batch/Lot Size
               </label>
               <input
                 {...form.register("batch_size")}
@@ -881,7 +910,7 @@ const RegistrationEditForm = ({
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
-            <div className="w-full xl:w-1/2">
+            {/* <div className="w-full xl:w-1/2">
               <label className="mb-2.5 block text-black dark:text-white">
                 Received Quantity
               </label>
@@ -890,7 +919,7 @@ const RegistrationEditForm = ({
                 placeholder="Enter Received Quantity"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
-            </div>
+            </div> */}
           </div>
 
           {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
@@ -898,15 +927,15 @@ const RegistrationEditForm = ({
               <label className="mb-2.5 block text-black dark:text-white">
                 Controlled Quantity
               </label> */}
-              <input
-                type="hidden"
-                {...form.register("controlled_quantity")}
-                placeholder="Enter Controlled quantity"
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              />
-            {/* </div>
+          {/* <input
+            type="hidden"
+            {...form.register("controlled_quantity")}
+            placeholder="Enter Controlled quantity"
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          /> */}
+          {/* </div>
           </div> */}
-          <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
+          {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 No of Samples
@@ -925,15 +954,34 @@ const RegistrationEditForm = ({
             >
               Add Samples
             </button>
+          </div> */}
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                No of Batches
+              </label>
+              <input
+                required
+                {...form.register("no_of_batches")}
+                placeholder="Enter No of Batches"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+          </div>
+          <div className="mb-4.5">
+            <Select label="Status" name="status" register={form.register}>
+              <option value="UNDER_REGISTRATION">Under Registration</option>
+              <option value="REGISTERED">Registered</option>
+            </Select>
           </div>
 
           <Tabs defaultValue="samples" className="w-full">
             <TabsList>
               <TabsTrigger value="samples">Samples</TabsTrigger>
-              <TabsTrigger value="mech-parameters">Mech Parameters</TabsTrigger>
+              {/* <TabsTrigger value="mech-parameters">Mech Parameters</TabsTrigger>
               <TabsTrigger value="micro-parameters">
                 Micro Parameters
-              </TabsTrigger>
+              </TabsTrigger> */}
             </TabsList>
             <TabsContent value="samples">
               <div className="mb-4 pb-4">
@@ -944,9 +992,7 @@ const RegistrationEditForm = ({
                         Sample{" "}
                         <strong>
                           #{index + 1}:{" "}
-                          {sampleCode[index]
-                            ? sampleCode[index]
-                            : "Code generate after submission"}{" "}
+                          {sampleCode[index] ? sampleCode[index] : "--"}{" "}
                         </strong>
                       </p>
                       <div>
@@ -957,7 +1003,7 @@ const RegistrationEditForm = ({
                             className="flex justify-center rounded-full p-2 font-medium text-black hover:bg-gray"
                             onClick={() => {
                               remove(index);
-                              form.setValue("no_of_samples", fields.length - 1);
+                              // form.setValue("no_of_samples", fields.length - 1);
                             }}
                           >
                             <Trash2 className="w-4" />
@@ -1065,9 +1111,27 @@ const RegistrationEditForm = ({
                     <hr />
                   </div>
                 ))}
+
+                <button
+                  type="button"
+                  className="relative flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
+                  onClick={() =>
+                    append({
+                      id: "",
+                      sample_name: "",
+                      batch_or_lot_no: "",
+                      expiry_date: "",
+                      manufactured_date: "",
+                      batch_size: 0,
+                      received_quantity: 0,
+                    })
+                  }
+                >
+                  Add Samples
+                </button>
               </div>
             </TabsContent>
-            <TabsContent value="mech-parameters">
+            {/* <TabsContent value="mech-parameters">
               <TestParamsForm
                 control={form.control}
                 register={form.register}
@@ -1096,7 +1160,7 @@ const RegistrationEditForm = ({
                 parameters={data.microParameters ?? []}
                 allData={data}
               />
-            </TabsContent>
+            </TabsContent> */}
           </Tabs>
 
           <button

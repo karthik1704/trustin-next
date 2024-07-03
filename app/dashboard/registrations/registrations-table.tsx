@@ -13,6 +13,8 @@ export type RegisterType = {
   id: number;
   company_name: string;
   code: string | null;
+  date_of_received:string;
+  status:string;
  
 } [];
 
@@ -28,6 +30,12 @@ const RegistrationTable = ({ data }: { data: RegisterType  }) => {
               </th>
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                 Company Name
+              </th>
+              <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                Date of received
+              </th>
+              <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                Status
               </th>
        
              
@@ -47,6 +55,16 @@ const RegistrationTable = ({ data }: { data: RegisterType  }) => {
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem.company_name}
+                  </h5>
+                </td>
+                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                  <h5 className="font-medium text-black dark:text-white">
+                    {new Date(packageItem.date_of_received).toDateString()}
+                  </h5>
+                </td>
+                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                  <h5 className="font-medium text-black dark:text-white">
+                    {packageItem?.status?.split('_').join(" ") ?? ""}
                   </h5>
                 </td>
                 
