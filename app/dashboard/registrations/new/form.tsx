@@ -7,6 +7,7 @@ import {
   useWatch,
   Form,
   FieldValues,
+  Controller,
 } from "react-hook-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trash2 } from "lucide-react";
@@ -35,6 +36,7 @@ import {
 import { TestDetail, TestReportForm } from "@/app/trf/typings";
 import Select from "@/components/select-input";
 import { FullParametersType } from "@/types/parametets";
+import ComboBox2 from "@/components/combo-box/combo-box2";
 
 const TESTTYPE = {
   1: "MICRO",
@@ -61,6 +63,8 @@ const RegistrationForm = ({ data }: { data: Data }) => {
       date_of_received: new Date().toISOString().split("T")[0],
       // no_of_samples: 0,
       no_of_batches: 0,
+      product_id: "",
+      status: "REGISTERED",
       // controlled_quantity: 0,
       // mech_params: [],
       // micro_params: [],
@@ -102,18 +106,27 @@ const RegistrationForm = ({ data }: { data: Data }) => {
   //   control: form.control,
   //   name: "received_quantity",
   // });
+  const watchSamples = useWatch({
+    control: form.control,
+    name: "samples",
+  });
 
   const [filterId, setFilterId] = useState("1");
   const [parameters, setParameters] = useState<FullParametersType[]>([]);
+  const [samplsTestType, setSampleTestType] = useState<(string|number)[]>([]);
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
 
-  // useEffect(() => {
-  //   // TODO: need some imporvement in future
-  //   // const ids = sampleWatch.map((field, idx) => field.test_type_id);
-  //   if (watchTestTypeId) setFilterId(watchTestTypeId.toString());
-  // }, [watchTestTypeId]);
+  useEffect(() => {
+   
+    const ids = watchSamples.map((field, idx) => field.test_type_id)??[];
+
+    if (ids.length){
+      setSampleTestType(ids)
+    }
+    
+  }, [watchSamples]);
   useEffect(() => {
     // TODO: need some imporvement in future
     // const ids = sampleWatch.map((field, idx) => field.test_type_id);
@@ -145,7 +158,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
     //   customer?.customer_address_line2 ?? "",
     // );
     form.setValue("gst", customer?.gst ?? "");
-    form.setValue("status", frontDesk?.status ?? "");
+    // form.setValue("status", frontDesk?.status ?? "");
   }, [data.customers, data?.frontDesks, form, watchFrontDesk]);
 
   // useEffect(() => {
@@ -175,32 +188,32 @@ const RegistrationForm = ({ data }: { data: Data }) => {
   //   }
   // }, [form, watchMechParams, watchMicroParams, watchReceivedQuantiy]);
 
-  // useEffect(() => {
-  //   async function fetchTestParameters(query: string, product: string) {
-  //     // let res = await fetch(
-  //     //   `${SERVER_API_URL}/parameters/product/${product}?${query}`,
-  //     // );
-  //     console.log('here')
-  //     let res = await fetch(
-  //       `/api/registrations/parameters/?${query}`,
-  //     );
-  //     const response: any = await res.json();
-  //     setParameters(response);
-  //   }
+  useEffect(() => {
+    async function fetchTestParameters(query: string, product: string) {
+      // let res = await fetch(
+      //   `${SERVER_API_URL}/parameters/product/${product}?${query}`,
+      // );
+      console.log('here')
+      let res = await fetch(
+        `/api/registrations/parameters/?${query}`,
+      );
+      const response: any = await res.json();
+      setParameters(response);
+    }
 
-  //   if (watchProductId) {
-  //     const query = `product=${encodeURIComponent(watchProductId.toString())}&test_type=${encodeURIComponent("2")}`;
+    if (watchProductId) {
+      const query = `product=${encodeURIComponent(watchProductId.toString())}&test_type=${encodeURIComponent("2")}`;
 
-  //     fetchTestParameters(query, watchProductId.toString());
-  //     // if (filterId === "1") {
-  //     //   const micro_params =
-  //     //     data?.parameters?.filter(
-  //     //       (test: any) => test.test_type_id.toString() === "1",
-  //     //     ) ?? [];
-  //     //   if (micro_params.length) setParameters(micro_params);
-  //     // }
-  //   }
-  // }, [data?.parameters, watchProductId]);
+      fetchTestParameters(query, watchProductId.toString());
+      if (filterId === "1") {
+        const micro_params =
+          data?.parameters?.filter(
+            (test: any) => test.test_type_id.toString() === "1",
+          ) ?? [];
+        if (micro_params.length) setParameters(micro_params);
+      }
+    }
+  }, [data?.parameters, filterId, watchProductId]);
 
   // useEffect(() => {
   //   if (defferdSampleNO) {
@@ -513,7 +526,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
-                Gst No
+                Gst No.
               </label>
               <input
                 {...form.register("gst")}
@@ -538,7 +551,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
             </div>
           </div>
 
-          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+          {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Product
@@ -578,8 +591,50 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 </span>
               </div>
             </div>
-          </div>
+          </div> */}
+          {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Product
+              </label>
 
+              <div className="relative z-20 bg-transparent dark:bg-form-input">
+                <Combobox
+                  name="product_id"
+                  label="Product"
+                  form={form}
+                  data={data.products.map((t) => ({
+                    label: t.product_name,
+                    value: t.id,
+                  }))}
+                />
+              </div>
+            </div>
+          </div> */}
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Product
+              </label>
+              <Controller
+                name="product_id"
+                control={form.control}
+                render={({ field: { onChange, value, onBlur } }) => (
+                  <ComboBox2
+                    name="product_id"
+                    register={form.register}
+                    data={data.products.map((t) => ({
+                      name: t.product_name,
+                      value: t.id,
+                    }))}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                  />
+                )}
+              />
+            </div>
+          </div>
           {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -620,7 +675,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
-                Manufacturer License No
+                Manufacturer License No.
               </label>
               <input
                 {...form.register("license_no")}
@@ -807,10 +862,16 @@ const RegistrationForm = ({ data }: { data: Data }) => {
             </div>
           </div>
           <div className="mb-4.5">
-            <Select label="Status" name="status" register={form.register}>
-              <option value="UNDER_REGISTRATION">Under Registration</option>
-              <option value="REGISTERED">Registered</option>
-            </Select>
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Status
+              </label>
+              <input
+                readOnly={true}
+                {...form.register("status")}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
           </div>
           <Tabs defaultValue="samples" className="w-full">
             <TabsList>
@@ -820,7 +881,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 Micro Parameters
               </TabsTrigger> */}
             </TabsList>
-            <TabsContent value="samples">
+            <TabsContent value="samples" className="data-[state=inactive]:hidden" forceMount>
               <div className="mb-4">
                 {fields.map((item, index) => (
                   <div key={item.id} className="mb-4 mt-2">
@@ -829,7 +890,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                         Sample <strong>#{index + 1}:</strong>
                       </p>
                       <div>
-                        {/* <button
+                        <button
                           type="button"
                           className="flex justify-center rounded-full p-2 font-medium text-black hover:bg-gray"
                           onClick={() => {
@@ -838,7 +899,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                           }}
                         >
                           <Trash2 className="w-4" />
-                        </button> */}
+                        </button>
                       </div>
                     </div>
                     <div className="mb-4.5 flex flex-col gap-3 xl:flex-row xl:flex-wrap">
@@ -867,7 +928,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                       </div>
                       <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
-                          Batch / Lot No{" "}
+                          Batch / Lot No.{" "}
                         </label>
                         <input
                           {...form.register(`samples.${index}.batch_or_lot_no`)}
@@ -926,6 +987,14 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
                       </div>
+                      <TestParamsForm
+                        control={form.control}
+                        register={form.register}
+                        data={data.parameters ?? []}
+                        filterId={samplsTestType[index]}
+                        arrayFieldName={`samples.${index}.test_params`}
+                        productId={watchProductId}
+                      />
                     </div>
                     <hr />
                     <hr />
@@ -938,6 +1007,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                     append({
                       sample_name: "",
                       batch_or_lot_no: "",
+                      test_type_id:"1",
                       manufactured_date: "",
                       expiry_date: "",
                       batch_size: 0,
@@ -949,7 +1019,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 </button>
               </div>
             </TabsContent>
-            {/* <TabsContent value="mech-parameters">
+            {/* <TabsContent value="mech-parameters" className="data-[state=inactive]:hidden" forceMount>
               <TestParamsForm
                 control={form.control}
                 register={form.register}
@@ -958,7 +1028,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 arrayFieldName="mech_params"
               />
             </TabsContent>
-            <TabsContent value="micro-parameters">
+            <TabsContent value="micro-parameters" className="data-[state=inactive]:hidden" forceMount>
               <TestParamsForm
                 control={form.control}
                 register={form.register}
@@ -988,12 +1058,14 @@ const TestParamsForm = ({
   data,
   filterId,
   arrayFieldName,
+  productId
 }: {
   control: any;
   register: any;
   data: FullParametersType[];
   filterId: [] | number | string;
   arrayFieldName: string;
+  productId?:string|number;
 }) => {
   const { fields, append, remove, replace } = useFieldArray({
     control,
@@ -1007,23 +1079,64 @@ const TestParamsForm = ({
 
   const [testTypesName, setTestTypesName] = useState<string[]>([]);
   const [methods, setMethods] = useState<string[]>([]);
+  const [parameters, setParameters] = useState<FullParametersType[]>([]);
+
+  // useEffect(() => {
+  //   if (data.length) {
+  //     if (filterId.toString() === "1"){
+        
+  //     }
+  //   }
+  // }, [data, append, replace]);
 
   useEffect(() => {
-    if (data.length) {
-      replace([]);
-      data.forEach((para, idx) =>
-        append({
-          test_params_id: para.id,
-          order: idx + 1,
-        }),
+    async function fetchTestParameters(query: string, product: string) {
+      // let res = await fetch(
+      //   `${SERVER_API_URL}/parameters/product/${product}?${query}`,
+      // );
+      console.log('here')
+      let res = await fetch(
+        `/api/registrations/parameters/?${query}`,
       );
+      const response: any = await res.json();
+      setParameters(response);
     }
-  }, [data, append, replace]);
+
+    if (!filterId){
+      return;
+    }
+
+    if (productId) {
+      if (filterId.toString() === "2") {
+      const query = `product=${encodeURIComponent(productId.toString())}&test_type=${encodeURIComponent("2")}`;
+
+      fetchTestParameters(query, productId.toString());
+      }
+      if (filterId.toString() === "1") {
+        const micro_params =
+          data?.filter(
+            (test: any) => test.test_type_id.toString() === "1",
+          ) ?? [];
+        if (micro_params.length) setParameters(micro_params);
+      }
+    }
+  }, [data, filterId, productId]);
+  // useEffect(() => {
+  //   if (data.length) {
+  //     replace([]);
+  //     data.forEach((para, idx) =>
+  //       append({
+  //         test_params_id: para.id,
+  //         order: idx + 1,
+  //       }),
+  //     );
+  //   }
+  // }, [data, append, replace]);
 
   useEffect(() => {
     const ids =
       test_watch?.map((field: any) => {
-        if (field.test_params_id !== "") return field.test_params_id.toString();
+        if (field.test_parameter_id !== "") return field.test_parameter_id.toString();
       }) ?? [];
     console.log(ids);
     const tests = data.filter((para) => ids.includes(para.id.toString()));
@@ -1052,11 +1165,11 @@ const TestParamsForm = ({
   }, [data, test_watch]);
 
   const addAllTestParameters = () => {
-    if (data.length) {
+    if (parameters.length) {
       replace([]);
-      data.forEach((para, idx) =>
+      parameters.forEach((para, idx) =>
         append({
-          test_params_id: para.id,
+          test_parameter_id: para.id,
           order: idx + 1,
         }),
       );
@@ -1084,9 +1197,9 @@ const TestParamsForm = ({
               <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 Test Parameter Name
               </th>
-              <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+              {/* <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 QTY
-              </th>
+              </th> */}
               <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 Test Type
               </th>
@@ -1124,7 +1237,7 @@ const TestParamsForm = ({
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                 /> */}
 
-                  <Select
+                  {/* <Select
                     name={`${arrayFieldName}.${idx}.test_params_id`}
                     register={register}
                   >
@@ -1134,15 +1247,31 @@ const TestParamsForm = ({
                         {parameter.testing_parameters}
                       </option>
                     ))}
-                  </Select>
+                  </Select> */}
+                  <Controller
+                    name={`${arrayFieldName}.${idx}.test_parameter_id`}
+                    control={control}
+                    render={({ field: { onChange, value, onBlur } }) => (
+                      <ComboBox2
+                        name={`${arrayFieldName}.${idx}.test_parameter_id`}
+                        data={parameters.map((t) => ({
+                          name: t.testing_parameters,
+                          value: t.id,
+                        }))}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                      />
+                    )}
+                  />
                 </td>
-                <td className="border-b border-[#eee] px-1 py-3 pl-9 dark:border-strokedark xl:pl-11">
+                {/* <td className="border-b border-[#eee] px-1 py-3 pl-9 dark:border-strokedark xl:pl-11">
                   <input
                     type="text"
                     {...register(`${arrayFieldName}.${idx}.quantity`)}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 pl-1 pr-2 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
-                </td>
+                </td> */}
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {testTypesName[idx]}
@@ -1175,7 +1304,7 @@ const TestParamsForm = ({
             className="mt-2 flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
             onClick={() =>
               append({
-                test_params_id: "",
+                test_parameter_id: "",
                 order: fields.length + 1,
               })
             }

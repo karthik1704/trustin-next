@@ -41,7 +41,7 @@ const languages = [
 
 type Data = {
   label: string;
-  value: string ;
+  value: string | number | undefined;
 }[];
 
 type Props = {
@@ -63,7 +63,7 @@ const Combobox = ({
   const d1 = [...data] as const;
 
   return (
-    <Form {...form}>
+    // <Form {...form}>
       <FormField
         name={name}
         control={form.control}
@@ -82,7 +82,7 @@ const Combobox = ({
                     )}
                   >
                     {field.value
-                      ? d1.find((d) => d?.value === field.value)?.label
+                      ? d1.find((d) => d?.value?.toString() === field.value.toString())?.label
                       : "---Select---"}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
@@ -90,15 +90,15 @@ const Combobox = ({
               </PopoverTrigger>
               <PopoverContent className="w-[470px] p-0 z-99999">
                 <Command className="w-full">
-                  <CommandInput placeholder="Search Trf..." />
+                  <CommandInput placeholder="Search..." />
                   <CommandEmpty>{emptyMessage}</CommandEmpty>
                   <CommandGroup>
                     {d1.map((d) => (
                       <CommandItem
-                        value={d?.value}
+                        value={d?.value?.toString()}
                         key={d?.value}
                         onSelect={() => {
-                          form.setValue("trf_id", d?.value ?? "");
+                          form.setValue(name, d?.value ?? "");
                         }}
                       >
                         <Check
@@ -120,7 +120,7 @@ const Combobox = ({
           </FormItem>
         )}
       />
-    </Form>
+    // </Form>
   );
 };
 

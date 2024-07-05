@@ -20,6 +20,7 @@ type TestParam = {
 type RegistrationSamples = {
   sample_name: string;
   batch_or_lot_no: string;
+  test_type_id: string|number;
   manufactured_date: string;
   expiry_date: string;
   batch_size: number;
@@ -42,7 +43,7 @@ export type CreateData = {
   // pincode_no: string;
   gst: string;
   date_of_received: string;
-  product_id: number;
+  product_id: number | string;
   // test_type_id: number | string;
   license_no: string;
   // nabl_logo: boolean;
@@ -73,6 +74,11 @@ type RegistrationUpdateSamples = {
   expiry_date: string;
   batch_size: number;
   received_quantity: number;
+  test_type_id:number | string;
+  test_params: {
+    test_params_id: number | string;
+    order: number;
+  }[]
 };
 
 export type UpdateData = {
@@ -280,6 +286,15 @@ type RegSample = {
   expiry_date: string;
   batch_size: number;
   received_quantity: number;
+  sample_test_parameters: {
+    id: number;
+    sample_id: number;
+    order: number; 
+    test_parameter_id: number;
+ 
+    test_parameter:FullParametersType
+  }[]
+
 };
 
 export type RegistrationType = {

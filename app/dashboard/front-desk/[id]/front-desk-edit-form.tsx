@@ -41,6 +41,7 @@ const FrontDeskEditForm = ({
 }) => {
   const [state, formAction] = useFormState(actionFn, initialState);
   const router = useRouter();
+  const readOnly=true;
   useEffect(() => {
     if (state?.type === null) return;
 
@@ -67,6 +68,7 @@ const FrontDeskEditForm = ({
             label="Customer"
             name="customer_id"
             defaultValue={data.frontDesk.customer_id}
+
           >
             {data.customers.map((customer) => (
               <option value={customer.id} key={customer.id}>
@@ -82,6 +84,7 @@ const FrontDeskEditForm = ({
           </label>
           <input
             type="text"
+            readOnly={readOnly}
             name="courier_name"
             placeholder="Mode of Received"
             defaultValue={data.frontDesk.courier_name}
@@ -94,6 +97,8 @@ const FrontDeskEditForm = ({
             Date Received
           </label>
           <input
+                      readOnly={readOnly}
+
             type="datetime-local"
             name="date_of_received"
             placeholder="Date Received"
@@ -108,6 +113,8 @@ const FrontDeskEditForm = ({
             Storage Condition
           </label>
           <input
+                      readOnly={readOnly}
+
             type="text"
             name="temperature"
             placeholder="Storage Condition"
@@ -136,6 +143,19 @@ const FrontDeskEditForm = ({
             <option value={6}>Registration</option>
           </Select>
         </div>
+        {readOnly ?    <div className="mb-4.5">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Status
+              </label>
+              <input
+                readOnly={true}
+                name="status"
+                defaultValue={data.frontDesk.status}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+          </div> :
         <div className="mb-4.5">
           <Select
             label="Status"
@@ -145,7 +165,7 @@ const FrontDeskEditForm = ({
             <option value="UNDER_REGISTRATION">Under Registration</option>
             <option value="REGISTERED">Registered</option>
           </Select>
-        </div>
+        </div>}
 
         <SubmitButton />
       </div>
