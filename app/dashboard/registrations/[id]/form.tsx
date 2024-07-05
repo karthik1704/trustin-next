@@ -547,6 +547,7 @@ const RegistrationEditForm = ({
               name="front_desk_id"
               register={form.register}
               label={"Front Desk"}
+              disabled
             >
               {" "}
               <option value="">------------</option>

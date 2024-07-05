@@ -41,7 +41,7 @@ const FrontDeskEditForm = ({
 }) => {
   const [state, formAction] = useFormState(actionFn, initialState);
   const router = useRouter();
-  const readOnly=true;
+  const readOnly=data.user?.role_id ===1 ? false : true;
   useEffect(() => {
     if (state?.type === null) return;
 
@@ -68,7 +68,7 @@ const FrontDeskEditForm = ({
             label="Customer"
             name="customer_id"
             defaultValue={data.frontDesk.customer_id}
-
+             disabled={readOnly}
           >
             {data.customers.map((customer) => (
               <option value={customer.id} key={customer.id}>
@@ -128,6 +128,8 @@ const FrontDeskEditForm = ({
             label="Received Condition"
             name="received_condition"
             defaultValue={data.frontDesk.received_condition}
+            disabled={readOnly}
+
           >
             <option value="GOOD">Good</option>
             <option value="DAMAGED">Damaged</option>
@@ -139,6 +141,8 @@ const FrontDeskEditForm = ({
             label="Forward to department"
             name="deparment_id"
             defaultValue={data.frontDesk.deparment_id}
+            disabled={readOnly}
+
           >
             <option value={6}>Registration</option>
           </Select>
@@ -161,13 +165,16 @@ const FrontDeskEditForm = ({
             label="Status"
             name="status"
             defaultValue={data.frontDesk.status}
+            disabled
+
           >
             <option value="UNDER_REGISTRATION">Under Registration</option>
             <option value="REGISTERED">Registered</option>
           </Select>
         </div>}
 
-        <SubmitButton />
+      {!readOnly && 
+        <SubmitButton /> }
       </div>
     </form>
   );

@@ -35,6 +35,12 @@ async function getData(id: string) {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
+  const res3 = await fetch(`${SERVER_API_URL}/users/me`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
 
@@ -51,11 +57,15 @@ async function getData(id: string) {
   if (!res1.ok) {
     console.log("error");
   }
+  if (!res3.ok) {
+    console.log("error");
+  }
 
   const customers = await res.json();
   const frontDesk = await res1.json();
   const departments = await res2.json();
-  return { customers, frontDesk, departments };
+  const user = await res3.json();
+  return { customers, frontDesk, departments, user };
 }
 
 const FrontDeskForm = async ({
