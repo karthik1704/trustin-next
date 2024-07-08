@@ -987,6 +987,19 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
                       </div>
+                      
+                      <div className="w-full xl:w-1/4">
+                        <label className="mb-2.5 block text-black dark:text-white">
+                          TAT
+                        </label>
+                        <input
+                          {...form.register(`samples.${index}.tat`)}
+                          type="date"
+                          placeholder="Enter Turn Around Time"
+                          className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        />
+                      </div>
+                      </div>
                       <TestParamsForm
                         control={form.control}
                         register={form.register}
@@ -995,7 +1008,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                         arrayFieldName={`samples.${index}.test_params`}
                         productId={watchProductId}
                       />
-                    </div>
+                    
                     <hr />
                     <hr />
                   </div>
@@ -1008,8 +1021,9 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                       sample_name: "",
                       batch_or_lot_no: "",
                       test_type_id:"1",
-                      manufactured_date: "",
-                      expiry_date: "",
+                      manufactured_date:null,
+                      expiry_date: null,
+                      tat:null,
                       batch_size: 0,
                       received_quantity: 0,
                     })

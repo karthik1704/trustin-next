@@ -54,7 +54,7 @@ const RegistrationTable = ({ data }: { data: RegisterType }) => {
                 onClick={() => handleSort("code")}
                 className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11"
               >
-                Sample Id
+                Sample ID
               </th>
               <th
                 onClick={() => handleSort("company_name")}

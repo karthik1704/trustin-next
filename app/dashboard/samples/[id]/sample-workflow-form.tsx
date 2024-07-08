@@ -422,10 +422,10 @@ const SampleWorkflowForm = ({
                     Manufactured Date:
                   </p>
                   <p>
-                    {
+                    { data.sample.manufactured_date?
                       new Date(data.sample.manufactured_date)
                         .toISOString()
-                        .split("T")[0]
+                        .split("T")[0] :"---"
                     }
                   </p>
                 </div>
@@ -435,10 +435,10 @@ const SampleWorkflowForm = ({
                     Expiry Date:
                   </p>
                   <p>
-                    {
+                    {data.sample.expiry_date?
                       new Date(data.sample.expiry_date)
                         .toISOString()
-                        .split("T")[0]
+                        .split("T")[0]:"---"
                     }
                   </p>
                 </div>

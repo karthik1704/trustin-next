@@ -1,7 +1,13 @@
 "use client";
 import { SERVER_API_URL } from "@/app/constant";
 import { useEffect, useState } from "react";
-import { useFieldArray, useForm, useWatch, Form, Controller } from "react-hook-form";
+import {
+  useFieldArray,
+  useForm,
+  useWatch,
+  Form,
+  Controller,
+} from "react-hook-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trash2 } from "lucide-react";
 import Combobox from "@/components/combo-box";
@@ -27,6 +33,7 @@ import {
 import { FullParametersType } from "@/types/parametets";
 import Select from "@/components/select-input";
 import ComboBox2 from "@/components/combo-box/combo-box2";
+import Link from "next/link";
 
 const TESTTYPE = {
   1: "MICRO",
@@ -100,10 +107,15 @@ const RegistrationEditForm = ({
           id: sample.id,
           sample_name: sample.sample_name,
           batch_or_lot_no: sample.batch_or_lot_no,
-          manufactured_date: new Date(sample.manufactured_date)
-            .toISOString()
-            .split("T")[0],
-          expiry_date: new Date(sample.expiry_date).toISOString().split("T")[0],
+          manufactured_date: sample.manufactured_date
+            ? new Date(sample.manufactured_date).toISOString().split("T")[0]
+            : "",
+          expiry_date: sample.expiry_date
+            ? new Date(sample.expiry_date).toISOString().split("T")[0]
+            : "",
+          tat: sample.tat
+            ? new Date(sample.tat).toISOString().split("T")[0]
+            : "",
           batch_size: sample.batch_size,
           received_quantity: sample.received_quantity,
           test_type_id: sample.test_type_id.toString(),
@@ -186,7 +198,8 @@ const RegistrationEditForm = ({
   );
   const [sampleStatus, setSampleStatus] = useState<(number | null)[]>([]);
   const [sampleCode, setSampleCode] = useState<(string | null)[]>([]);
-  const [samplsTestType, setSampleTestType] = useState<(string|number)[]>([]);
+  const [sampleIds, setSampleIds] = useState<(number | null)[]>([]);
+  const [samplsTestType, setSampleTestType] = useState<(string | number)[]>([]);
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
@@ -335,15 +348,13 @@ const RegistrationEditForm = ({
   //   watchNoOfSamplesValue,
   // ]);
   useEffect(() => {
-   
-    const ids = watchSamples.map((field, idx) => field.test_type_id)??[];
+    const ids = watchSamples.map((field, idx) => field.test_type_id) ?? [];
 
-    if (ids.length){
-      setSampleTestType(ids)
+    if (ids.length) {
+      setSampleTestType(ids);
     }
-    
   }, [watchSamples]);
- 
+
   useEffect(() => {
     const ids = watchSamples.map((field) => field.id) ?? [];
     if (ids.length) {
@@ -354,6 +365,7 @@ const RegistrationEditForm = ({
       // });
       const statusIds: (number | null)[] = [];
       const sampleIds: (string | null)[] = [];
+      const sIds: (number | null)[] = [];
 
       ids.forEach((id: number | string) => {
         const statusId =
@@ -366,14 +378,15 @@ const RegistrationEditForm = ({
       setSampleStatus(statusIds);
 
       ids.forEach((id: number | string) => {
-        const sampleID =
-          data?.registration?.samples?.find((t) => t.id === id)?.sample_id ??
-          null;
-        sampleIds.push(sampleID);
+        const sample =
+          data?.registration?.samples?.find((t) => t.id === id) ?? null;
+        sampleIds.push(sample?.sample_id ?? null);
+        sIds.push(sample?.id ?? null);
       });
 
       console.log(sampleIds);
       setSampleCode(sampleIds);
+      setSampleIds(sIds);
     }
   }, [data?.registration?.samples, watchSamples]);
 
@@ -765,7 +778,7 @@ const RegistrationEditForm = ({
               </div>
             </div>
           </div> */}
-            <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Product
@@ -1038,7 +1051,15 @@ const RegistrationEditForm = ({
                         Sample{" "}
                         <strong>
                           #{index + 1}:{" "}
-                          {sampleCode[index] ? sampleCode[index] : "--"}{" "}
+                          {sampleCode[index] ? (
+                            <Link
+                              href={`/dashboard/samples/${sampleIds[index]}/`}
+                            >
+                              {sampleCode[index]}
+                            </Link>
+                          ) : (
+                            "--"
+                          )}{" "}
                         </strong>
                       </p>
                       <div>
@@ -1154,15 +1175,26 @@ const RegistrationEditForm = ({
                         />
                       </div>
 
+                      <div className="w-full xl:w-1/4">
+                        <label className="mb-2.5 block text-black dark:text-white">
+                          TAT
+                        </label>
+                        <input
+                          {...form.register(`samples.${index}.tat`)}
+                          type="date"
+                          placeholder="Enter Turn Around Time"
+                          className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        />
+                      </div>
                     </div>
                     <TestParamsForm
-                        control={form.control}
-                        register={form.register}
-                        data={data.parameters ?? []}
-                        filterId={samplsTestType[index]}
-                        arrayFieldName={`samples.${index}.test_params`}
-                        productId={watchProductId}
-                      />
+                      control={form.control}
+                      register={form.register}
+                      data={data.parameters ?? []}
+                      filterId={samplsTestType[index]}
+                      arrayFieldName={`samples.${index}.test_params`}
+                      productId={watchProductId}
+                    />
                     <hr />
                   </div>
                 ))}
@@ -1177,9 +1209,10 @@ const RegistrationEditForm = ({
                       batch_or_lot_no: "",
                       expiry_date: "",
                       manufactured_date: "",
+                      tat: "",
                       batch_size: 0,
                       received_quantity: 0,
-                      test_type_id:"1",
+                      test_type_id: "1",
                       test_params: [],
                     })
                   }
@@ -1487,14 +1520,14 @@ const TestParamsForm = ({
   data,
   filterId,
   arrayFieldName,
-  productId
+  productId,
 }: {
   control: any;
   register: any;
   data: FullParametersType[];
   filterId: [] | number | string;
   arrayFieldName: string;
-  productId?:string|number;
+  productId?: string | number;
 }) => {
   const { fields, append, remove, replace } = useFieldArray({
     control,
@@ -1513,7 +1546,7 @@ const TestParamsForm = ({
   // useEffect(() => {
   //   if (data.length) {
   //     if (filterId.toString() === "1"){
-        
+
   //     }
   //   }
   // }, [data, append, replace]);
@@ -1523,29 +1556,26 @@ const TestParamsForm = ({
       // let res = await fetch(
       //   `${SERVER_API_URL}/parameters/product/${product}?${query}`,
       // );
-      console.log('here')
-      let res = await fetch(
-        `/api/registrations/parameters/?${query}`,
-      );
+      console.log("here");
+      let res = await fetch(`/api/registrations/parameters/?${query}`);
       const response: any = await res.json();
       setParameters(response);
     }
 
-    if (!filterId){
+    if (!filterId) {
       return;
     }
 
     if (productId) {
       if (filterId.toString() === "2") {
-      const query = `product=${encodeURIComponent(productId.toString())}&test_type=${encodeURIComponent("2")}`;
+        const query = `product=${encodeURIComponent(productId.toString())}&test_type=${encodeURIComponent("2")}`;
 
-      fetchTestParameters(query, productId.toString());
+        fetchTestParameters(query, productId.toString());
       }
       if (filterId.toString() === "1") {
         const micro_params =
-          data?.filter(
-            (test: any) => test.test_type_id.toString() === "1",
-          ) ?? [];
+          data?.filter((test: any) => test.test_type_id.toString() === "1") ??
+          [];
         if (micro_params.length) setParameters(micro_params);
       }
     }

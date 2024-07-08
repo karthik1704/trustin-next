@@ -21,8 +21,9 @@ type RegistrationSamples = {
   sample_name: string;
   batch_or_lot_no: string;
   test_type_id: string|number;
-  manufactured_date: string;
-  expiry_date: string;
+  manufactured_date: string | null ;
+  tat: string | null;
+  expiry_date: string | null;
   batch_size: number;
   received_quantity: number;
 };
@@ -71,6 +72,7 @@ type RegistrationUpdateSamples = {
   sample_name: string;
   batch_or_lot_no: string;
   manufactured_date: string;
+  tat:string;
   expiry_date: string;
   batch_size: number;
   received_quantity: number;
@@ -283,6 +285,7 @@ type RegSample = {
   sample_id: string;
   batch_or_lot_no: string;
   manufactured_date: string;
+  tat: string;
   expiry_date: string;
   batch_size: number;
   received_quantity: number;
