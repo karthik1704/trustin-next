@@ -53,7 +53,7 @@ async function getData(
   const size = parseInt((params?.size as string) || "10");
   const search = params?.search || "";
   const sortBy = params?.sort_by || "id";
-  const sortOrder = params?.sort_order || "asc";
+  const sortOrder = params?.sort_order || "desc";
 
   const response = await axios.get(`${SERVER_API_URL}/registrations/`, {
     params: {
