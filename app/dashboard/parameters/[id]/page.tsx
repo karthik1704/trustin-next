@@ -38,7 +38,7 @@ async function getData(id: string) {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res5 = await fetch(`${SERVER_API_URL}/customers/`, {
+  const res5 = await fetch(`${SERVER_API_URL}/customers/all/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

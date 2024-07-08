@@ -147,6 +147,20 @@ const FrontDeskEditForm = ({
             <option value={6}>Registration</option>
           </Select>
         </div>
+
+       
+         <div className="mb-4.5">
+         <label className="mb-2.5 block text-black dark:text-white">
+           Reason for Change
+         </label>
+         <textarea
+            readOnly={readOnly}
+           name="reason"
+           defaultValue={data.frontDesk.reason}
+           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+         />
+       </div>
+
         {readOnly ?    <div className="mb-4.5">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">

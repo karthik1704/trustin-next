@@ -11,11 +11,7 @@ import { Metadata } from "next";
 import { SERVER_API_URL } from "@/app/constant";
 import { useSearchParams } from 'next/navigation'
 
-// import React from 'react';
-// import axios from 'axios';
-// import CustomerTable from './components/CustomerTable';
-// import Pagination from './components/Pagination';
-// import Search from './components/Search';
+
 
 export type Data = {
   id: number;
@@ -34,8 +30,8 @@ const fetchCustomers = async (params: { [key: string]: string | string[] | undef
   // if (!params){
   //    params = {}
   // }
-  const page = parseInt(params?.page || '1');
-  const size = parseInt(params?.size || '10');
+  const page = parseInt(params?.page as string || '1');
+  const size = parseInt(params?.size as string || '10');
   const search = params?.search || '';
   const sortBy = params?.sort_by || 'id';
   const sortOrder = params?.sort_order || 'asc';
@@ -54,6 +50,8 @@ const fetchCustomers = async (params: { [key: string]: string | string[] | undef
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
+
+  if (response.status===401) redirect('/login');
 
   return response.data;
 };

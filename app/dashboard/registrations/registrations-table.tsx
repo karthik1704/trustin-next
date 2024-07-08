@@ -1,75 +1,107 @@
+"use client";
 import { Package } from "@/types/package";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export enum RoleType {
-    HOD = 'HOD',
-    MARKETING = 'MARKETING',
-    ADMIN = 'ADMIN',
-    MANAGEMENT = 'MANAGEMENT',
-    ANALYST = 'ANALYST',
+  HOD = "HOD",
+  MARKETING = "MARKETING",
+  ADMIN = "ADMIN",
+  MANAGEMENT = "MANAGEMENT",
+  ANALYST = "ANALYST",
 }
 
 export type RegisterType = {
-  id: number;
-  company_name: string;
-  code: string | null;
-  date_of_received:string;
-  status:string;
- 
-} [];
+  data: {
+    id: number;
+    company_name: string;
+    code: string | null;
+    date_of_received: string;
+    status: string;
+  }[];
+  total: number;
+  page: number;
+  size: number;
+};
 
-const RegistrationTable = ({ data }: { data: RegisterType  }) => {
+const params = new URLSearchParams(window.location.search);
+const SortBy = params.get("sort_by") || "id";
+const SortOrder = params.get("sort_order") || "asc";
+
+const RegistrationTable = ({ data }: { data: RegisterType }) => {
+  const router = useRouter();
+
+  const handleSort = (column: string) => {
+    const params = new URLSearchParams(window.location.search);
+    const currentSortBy = params.get("sort_by") || "id";
+    const currentSortOrder = params.get("sort_order") || "asc";
+    const newSortOrder =
+      currentSortBy === column && currentSortOrder === "asc" ? "desc" : "asc";
+
+    params.set("sort_by", column);
+    params.set("sort_order", newSortOrder);
+    params.set("page", "1");
+    router.push(`/dashboard/registrations?${params.toString()}`);
+  };
+
   return (
-    <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+    <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+              <th
+                onClick={() => handleSort("code")}
+                className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11"
+              >
                 Sample Id
               </th>
-              <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+              <th
+                onClick={() => handleSort("company_name")}
+                className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11"
+              >
                 Company Name
               </th>
-              <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+              <th
+                onClick={() => handleSort("date_of_received")}
+                className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11"
+              >
                 Date of received
               </th>
-              <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 Status
               </th>
-       
-             
-              <th className="py-4 px-4 font-medium text-black dark:text-white">
+
+              <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody>
-            {data.map((packageItem, key) => (
+            {data.data.map((packageItem, key) => (
               <tr key={packageItem.id}>
-                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem.code ? packageItem.code : '---'}
+                    {packageItem.code ? packageItem.code : "---"}
                   </h5>
                 </td>
-                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem.company_name}
                   </h5>
                 </td>
-                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {new Date(packageItem.date_of_received).toDateString()}
                   </h5>
                 </td>
-                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem?.status?.split('_').join(" ") ?? ""}
+                    {packageItem?.status?.split("_").join(" ") ?? ""}
                   </h5>
                 </td>
-                
-                
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
                     <Link
                       className="hover:text-primary"
@@ -120,7 +152,6 @@ const RegistrationTable = ({ data }: { data: RegisterType  }) => {
                         />
                       </svg>
                     </button>
-                   
                   </div>
                 </td>
               </tr>

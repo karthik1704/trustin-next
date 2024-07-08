@@ -28,7 +28,7 @@ async function getData() {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res2 = await fetch(`${SERVER_API_URL}/customers/`, {
+  const res2 = await fetch(`${SERVER_API_URL}/customers/all/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
@@ -100,7 +100,7 @@ async function getData() {
   const products = await res4.json();
   const samples = await res6.json();
   const parameters:FullParametersType[] = await res5.json();
-  const registration = await res7.json(); 
+  const {data:registration} = await res7.json(); 
   const frontDesks = await res8.json(); 
   console.log(parameters)
 

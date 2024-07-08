@@ -23,7 +23,7 @@ const Search: React.FC = () => {
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search..."
       />
-      <button type="submit" className='inline-flex items-center justify-center rounded-md border border-black px-1 py-1 text-center font-medium text-black hover:bg-opacity-90 dark:border-white dark:text-white lg:px-2 xl:px-2'>Search</button>
+      <button type="submit" className='ml-2 inline-flex items-center justify-center rounded-md border border-black px-1 py-1 text-center font-medium text-black hover:bg-opacity-90 dark:border-white dark:text-white lg:px-2 xl:px-2'>Search</button>
     </form>
   );
 };

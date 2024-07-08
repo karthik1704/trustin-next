@@ -30,6 +30,7 @@ type FrontDesk = {
   status: string;
   id: number;
   customer: Customer;
+  reason: string;
 };
 
 export type Data = {
