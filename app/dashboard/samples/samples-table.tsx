@@ -1,5 +1,7 @@
+'use client';
 import { Package } from "@/types/package";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export enum RoleType {
   HOD = "HOD",
@@ -10,17 +12,41 @@ export enum RoleType {
 }
 
 export type RegisterType = {
-  id: number;
-  sample_id: string;
-  sample_name: string;
-  department: string;
-  status: string;
-  registration: {
-    code: string | null;
-  };
-}[];
+  data: {
+    id: number;
+    sample_id: string;
+    sample_name: string;
+    department: string;
+    status: string;
+    registration: {
+      code: string | null;
+    };
+  }[];
+  total: number;
+  page: number;
+  size: number;
+};
+
+const params = new URLSearchParams(window.location.search);
+const SortBy = params.get("sort_by") || "id";
+const SortOrder = params.get("sort_order") || "asc";
 
 const SampleTable = ({ data }: { data: RegisterType }) => {
+  const router = useRouter();
+
+  const handleSort = (column: string) => {
+    const params = new URLSearchParams(window.location.search);
+    const currentSortBy = params.get("sort_by") || "id";
+    const currentSortOrder = params.get("sort_order") || "asc";
+    const newSortOrder =
+      currentSortBy === column && currentSortOrder === "asc" ? "desc" : "asc";
+
+    params.set("sort_by", column);
+    params.set("sort_order", newSortOrder);
+    params.set("page", "1");
+    router.push(`/dashboard/registrations?${params.toString()}`);
+  };
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
@@ -46,7 +72,7 @@ const SampleTable = ({ data }: { data: RegisterType }) => {
             </tr>
           </thead>
           <tbody>
-            {data.map((packageItem, key) => (
+            {data.data.map((packageItem, key) => (
               <tr key={packageItem.id}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">

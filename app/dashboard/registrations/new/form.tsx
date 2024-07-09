@@ -113,19 +113,17 @@ const RegistrationForm = ({ data }: { data: Data }) => {
 
   const [filterId, setFilterId] = useState("1");
   const [parameters, setParameters] = useState<FullParametersType[]>([]);
-  const [samplsTestType, setSampleTestType] = useState<(string|number)[]>([]);
+  const [samplsTestType, setSampleTestType] = useState<(string | number)[]>([]);
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
 
   useEffect(() => {
-   
-    const ids = watchSamples.map((field, idx) => field.test_type_id)??[];
+    const ids = watchSamples.map((field, idx) => field.test_type_id) ?? [];
 
-    if (ids.length){
-      setSampleTestType(ids)
+    if (ids.length) {
+      setSampleTestType(ids);
     }
-    
   }, [watchSamples]);
   useEffect(() => {
     // TODO: need some imporvement in future
@@ -193,10 +191,8 @@ const RegistrationForm = ({ data }: { data: Data }) => {
       // let res = await fetch(
       //   `${SERVER_API_URL}/parameters/product/${product}?${query}`,
       // );
-      console.log('here')
-      let res = await fetch(
-        `/api/registrations/parameters/?${query}`,
-      );
+      console.log("here");
+      let res = await fetch(`/api/registrations/parameters/?${query}`);
       const response: any = await res.json();
       setParameters(response);
     }
@@ -790,8 +786,8 @@ const RegistrationForm = ({ data }: { data: Data }) => {
             </div>
           </div> */}
 
-          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-            <div className="w-full">
+          {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-row"> */}
+          {/* <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Batch/Lot Size
               </label>
@@ -813,7 +809,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div> */}
-          </div>
+          {/* </div>  */}
 
           {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
             <div className="w-full">
@@ -851,7 +847,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
-                No of batches
+                No. of batches
               </label>
               <input
                 required
@@ -881,7 +877,11 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 Micro Parameters
               </TabsTrigger> */}
             </TabsList>
-            <TabsContent value="samples" className="data-[state=inactive]:hidden" forceMount>
+            <TabsContent
+              value="samples"
+              className="data-[state=inactive]:hidden"
+              forceMount
+            >
               <div className="mb-4">
                 {fields.map((item, index) => (
                   <div key={item.id} className="mb-4 mt-2">
@@ -908,6 +908,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                           Sample Name <span className="text-meta-1">*</span>
                         </label>
                         <input
+                          required
                           {...form.register(`samples.${index}.sample_name`)}
                           placeholder="Enter Sample Name"
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -931,6 +932,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                           Batch / Lot No.{" "}
                         </label>
                         <input
+                          required
                           {...form.register(`samples.${index}.batch_or_lot_no`)}
                           placeholder="Enter Batch or Lot No"
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -968,6 +970,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                           Batch Size{" "}
                         </label>
                         <input
+                          required
                           {...form.register(`samples.${index}.batch_size`)}
                           type="number"
                           placeholder="Enter Batch Size"
@@ -983,11 +986,12 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                             `samples.${index}.received_quantity`,
                           )}
                           type="number"
+                          required
                           placeholder="Enter Received Quantity"
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
                       </div>
-                      
+
                       <div className="w-full xl:w-1/4">
                         <label className="mb-2.5 block text-black dark:text-white">
                           TAT
@@ -995,20 +999,21 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                         <input
                           {...form.register(`samples.${index}.tat`)}
                           type="date"
+                          required
                           placeholder="Enter Turn Around Time"
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
                       </div>
-                      </div>
-                      <TestParamsForm
-                        control={form.control}
-                        register={form.register}
-                        data={data.parameters ?? []}
-                        filterId={samplsTestType[index]}
-                        arrayFieldName={`samples.${index}.test_params`}
-                        productId={watchProductId}
-                      />
-                    
+                    </div>
+                    <TestParamsForm
+                      control={form.control}
+                      register={form.register}
+                      data={data.parameters ?? []}
+                      filterId={samplsTestType[index]}
+                      arrayFieldName={`samples.${index}.test_params`}
+                      productId={watchProductId}
+                    />
+
                     <hr />
                     <hr />
                   </div>
@@ -1020,10 +1025,10 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                     append({
                       sample_name: "",
                       batch_or_lot_no: "",
-                      test_type_id:"1",
-                      manufactured_date:null,
+                      test_type_id: "1",
+                      manufactured_date: null,
                       expiry_date: null,
-                      tat:null,
+                      tat: null,
                       batch_size: 0,
                       received_quantity: 0,
                     })
@@ -1072,14 +1077,14 @@ const TestParamsForm = ({
   data,
   filterId,
   arrayFieldName,
-  productId
+  productId,
 }: {
   control: any;
   register: any;
   data: FullParametersType[];
   filterId: [] | number | string;
   arrayFieldName: string;
-  productId?:string|number;
+  productId?: string | number;
 }) => {
   const { fields, append, remove, replace } = useFieldArray({
     control,
@@ -1098,7 +1103,7 @@ const TestParamsForm = ({
   // useEffect(() => {
   //   if (data.length) {
   //     if (filterId.toString() === "1"){
-        
+
   //     }
   //   }
   // }, [data, append, replace]);
@@ -1108,29 +1113,26 @@ const TestParamsForm = ({
       // let res = await fetch(
       //   `${SERVER_API_URL}/parameters/product/${product}?${query}`,
       // );
-      console.log('here')
-      let res = await fetch(
-        `/api/registrations/parameters/?${query}`,
-      );
+      console.log("here");
+      let res = await fetch(`/api/registrations/parameters/?${query}`);
       const response: any = await res.json();
       setParameters(response);
     }
 
-    if (!filterId){
+    if (!filterId) {
       return;
     }
 
     if (productId) {
       if (filterId.toString() === "2") {
-      const query = `product=${encodeURIComponent(productId.toString())}&test_type=${encodeURIComponent("2")}`;
+        const query = `product=${encodeURIComponent(productId.toString())}&test_type=${encodeURIComponent("2")}`;
 
-      fetchTestParameters(query, productId.toString());
+        fetchTestParameters(query, productId.toString());
       }
       if (filterId.toString() === "1") {
         const micro_params =
-          data?.filter(
-            (test: any) => test.test_type_id.toString() === "1",
-          ) ?? [];
+          data?.filter((test: any) => test.test_type_id.toString() === "1") ??
+          [];
         if (micro_params.length) setParameters(micro_params);
       }
     }
@@ -1150,7 +1152,8 @@ const TestParamsForm = ({
   useEffect(() => {
     const ids =
       test_watch?.map((field: any) => {
-        if (field.test_parameter_id !== "") return field.test_parameter_id.toString();
+        if (field.test_parameter_id !== "")
+          return field.test_parameter_id.toString();
       }) ?? [];
     console.log(ids);
     const tests = data.filter((para) => ids.includes(para.id.toString()));

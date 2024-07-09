@@ -96,7 +96,7 @@ const RegistrationEditForm = ({
       // expiry_date: new Date(data?.registration?.expiry_date)
       //   .toISOString()
       //   .split("T")[0],
-      batch_size: data?.registration?.batch_size,
+      // batch_size: data?.registration?.batch_size,
       // received_quantity: data?.registration?.received_quantity,
       // no_of_samples: data?.registration?.no_of_samples,
       no_of_batches: data?.registration?.no_of_batches,
@@ -952,7 +952,7 @@ const RegistrationEditForm = ({
             </div>
           </div> */}
 
-          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+          {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Batch/Lot Size
@@ -962,7 +962,7 @@ const RegistrationEditForm = ({
                 placeholder="Enter Batch Size"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
-            </div>
+            </div> */}
             {/* <div className="w-full xl:w-1/2">
               <label className="mb-2.5 block text-black dark:text-white">
                 Received Quantity
@@ -973,7 +973,7 @@ const RegistrationEditForm = ({
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div> */}
-          </div>
+          {/* </div> */}
 
           {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
             <div className="w-full">
@@ -1011,7 +1011,7 @@ const RegistrationEditForm = ({
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
-                No of Batches
+                No. of Batches
               </label>
               <input
                 required
@@ -1092,7 +1092,8 @@ const RegistrationEditForm = ({
                           {...form.register(`samples.${index}.id`)}
                           type="hidden"
                         />
-                        <input
+                        <input 
+                        required
                           {...form.register(`samples.${index}.sample_name`)}
                           placeholder="Enter Sample Name"
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -1118,6 +1119,8 @@ const RegistrationEditForm = ({
                           Batch / Lot No.{" "}
                         </label>
                         <input
+
+                        required
                           {...form.register(`samples.${index}.batch_or_lot_no`)}
                           placeholder="Enter Batch or Lot No"
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
