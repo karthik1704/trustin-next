@@ -26,6 +26,10 @@ type RegistrationSamples = {
   expiry_date: string | null;
   batch_size: number;
   received_quantity: number;
+  test_params: {
+    test_params_id: number | string;
+    order: number;
+  }[]
 };
 
 export type TestType = string[] | number[];

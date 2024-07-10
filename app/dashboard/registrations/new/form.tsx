@@ -10,7 +10,7 @@ import {
   Controller,
 } from "react-hook-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Trash2 } from "lucide-react";
+import { Smartphone, Trash2 } from "lucide-react";
 import { createRegistration } from "../actions";
 import Combobox from "@/components/combo-box";
 import { toast } from "sonner";
@@ -305,6 +305,30 @@ const RegistrationForm = ({ data }: { data: Data }) => {
 
   const handleForm = async (data: CreateData) => {
     console.log(data);
+    if (data.samples.length === 0) {
+      toast.error("Registratin must contain at least 1 sample", {
+        duration: 10000,
+        closeButton: true,
+      });
+      return;
+    }
+    let isError = false;
+    data.samples.forEach((sample) => {
+      if (sample.test_params.length === 0) {
+        toast.error(
+          `${sample.sample_name} must contain Test Parameter, Please check.`,
+          {
+            duration: 10000,
+            closeButton: true,
+          },
+        );
+        isError = true;
+        return;
+      }
+    });
+
+    if (isError) return;
+
     const res = await createRegistration(data);
     console.log(res);
     setState(res);
@@ -1031,6 +1055,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                       tat: null,
                       batch_size: 0,
                       received_quantity: 0,
+                      test_params: [],
                     })
                   }
                 >

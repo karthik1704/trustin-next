@@ -492,6 +492,31 @@ const RegistrationEditForm = ({
 
   const handleForm = async (data: UpdateData) => {
     console.log(data);
+    if (data.samples.length === 0) {
+      toast.error("Registratin must contain at least 1 sample", {
+        duration: 10000,
+        closeButton: true,
+      });
+      return;
+    }
+    let isError = false;
+    data.samples.forEach((sample) => {
+      if (sample.test_params.length === 0) {
+        toast.error(
+          `${sample.sample_name} must contain Test Parameter, Please check.`,
+          {
+            duration: 10000,
+            closeButton: true,
+          },
+        );
+        isError = true;
+        return;
+      }
+    });
+
+    if (isError) return;
+
+
     const res = await updateFn(data);
     console.log(res);
     setState(res);
