@@ -33,7 +33,7 @@ const UserTable = ({ data }: { data: UserType  }) => {
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                 E-mail
               </th>
-              <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="w-[100px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                 Role
               </th>
              

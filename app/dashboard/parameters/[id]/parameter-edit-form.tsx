@@ -35,9 +35,9 @@ const ParameterEditForm = ({ data, actionFn }: Props) => {
 
   const { register, control, setValue, formState:{isSubmitting} } = useForm({
     defaultValues: {
-      branch_id: parameter.branch_id,
+      // branch_id: parameter.branch_id,
       test_type_id: "" + parameter.test_type_id,
-      customer_id: "" + parameter.customer_id,
+      // customer_id: "" + parameter.customer_id,
       product_id: "" + parameter.product_id,
       testing_parameters: parameter.testing_parameters,
       method_or_spec: parameter.method_or_spec,
@@ -98,13 +98,13 @@ const ParameterEditForm = ({ data, actionFn }: Props) => {
     // <Form control={control} onSubmit={handleSubmit}>
     <form action={formAction}>
       <div className="p-6.5">
-        <Select name="branch_id" label="Branch" register={register}>
+        {/* <Select name="branch_id" label="Branch" register={register}>
           {data?.branch.map((b) => (
             <option value={b.id} key={b.id}>
               {b.branch_name}
             </option>
           ))}
-        </Select>
+        </Select> */}
 
         <Select name="test_type_id" label="Test Type" register={register}>
           {data?.test_types.map((test) => (
@@ -128,14 +128,14 @@ const ParameterEditForm = ({ data, actionFn }: Props) => {
           ))}
         </Select>
 
-        <Select name="customer_id" label="Customer" register={register}>
+        {/* <Select name="customer_id" label="Customer" register={register}>
           <option value="null">----</option>
           {data?.customers.map((customer) => (
             <option value={customer.id} key={customer.id}>
               {customer.company_name}
             </option>
           ))}
-        </Select>
+        </Select> */}
 
         
         <div className="mb-4.5">

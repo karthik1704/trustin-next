@@ -15,12 +15,12 @@ async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}/branch/`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token?.value}`,
-    },
-  });
+  // const res = await fetch(`${SERVER_API_URL}/branch/`, {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Authorization: `Bearer ${access_token?.value}`,
+  //   },
+  // });
   const res2 = await fetch(`${SERVER_API_URL}/products/`, {
     headers: {
       "Content-Type": "application/json",
@@ -33,16 +33,16 @@ async function getData() {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res4 = await fetch(`${SERVER_API_URL}/customers/all/`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token?.value}`,
-    },
-  });
+  // const res4 = await fetch(`${SERVER_API_URL}/customers/all/`, {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Authorization: `Bearer ${access_token?.value}`,
+  //   },
+  // });
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
 
-  if (!res.ok) {
+  if (!res2.ok || !res3.ok) {
     // This will activate the closest `error.js` Error Boundary
     // console.log(res)
     // throw new Error("Failed to fetch data");
@@ -50,20 +50,20 @@ async function getData() {
     redirect("/signin");
   }
 
-  const branch = await res.json();
+  // const branch = await res.json();
   const products = await res2.json();
   const test_types = await res3.json();
-  const customers = await res4.json();
+  // const customers = await res4.json();
   return {
-    branch,
+    // branch,
     products,
     test_types,
-    customers,
+    // customers,
   };
 }
 
 export type Data = {
-  branch: {
+  branch?: {
     id: number;
     branch_name: string;
   }[];
@@ -75,7 +75,7 @@ export type Data = {
     id: number;
     name: string;
   }[];
-  customers: {
+  customers?: {
     id: number;
     company_name: string;
   }[];

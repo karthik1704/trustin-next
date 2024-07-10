@@ -14,12 +14,12 @@ async function getData(id: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}/branch/`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token?.value}`,
-    },
-  });
+  // const res = await fetch(`${SERVER_API_URL}/branch/`, {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Authorization: `Bearer ${access_token?.value}`,
+  //   },
+  // });
   const res2 = await fetch(`${SERVER_API_URL}/products/`, {
     headers: {
       "Content-Type": "application/json",
@@ -38,16 +38,16 @@ async function getData(id: string) {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res5 = await fetch(`${SERVER_API_URL}/customers/all/`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token?.value}`,
-    },
-  });
+  // const res5 = await fetch(`${SERVER_API_URL}/customers/all/`, {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Authorization: `Bearer ${access_token?.value}`,
+  //   },
+  // });
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
 
-  if (!res.ok) {
+  if (!res2.ok || !res3.ok || !res4.ok) {
     // This will activate the closest `error.js` Error Boundary
     // console.log(res)
     // throw new Error("Failed to fetch data");
@@ -55,22 +55,22 @@ async function getData(id: string) {
     redirect("/signin");
   }
 
-  const branch = await res.json();
+  // const branch = await res.json();
   const products = await res2.json();
   const test_types = await res3.json();
   const parameter = await res4.json();
-  const customers = await res5.json();
+  // const customers = await res5.json();
   return {
-    branch,
+    // branch,
     products,
     test_types,
     parameter,
-    customers,
+    // customers,
   };
 }
 
 export type Data = {
-  branch: {
+  branch?: {
     id: number;
     branch_name: string;
   }[];
@@ -82,7 +82,7 @@ export type Data = {
     id: number;
     name: string;
   }[];
-  customers: {
+  customers?: {
     id: number;
     company_name: string;
   }[];

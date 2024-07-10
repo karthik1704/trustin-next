@@ -84,13 +84,13 @@ const ParameterNewForm = ({ data }: Props) => {
     // <Form control={control} onSubmit={handleSubmit}>
     <form action={formAction}>
       <div className="p-6.5">
-        <Select name="branch_id" label="Branch" register={register}>
+        {/* <Select name="branch_id" label="Branch" register={register}>
           {data?.branch.map((b) => (
             <option value={b.id} key={b.id}>
               {b.branch_name}
             </option>
           ))}
-        </Select>
+        </Select> */}
 
         <Select name="test_type_id" label="Test Type" register={register}>
           {data?.test_types.map((test) => (
@@ -113,7 +113,7 @@ const ParameterNewForm = ({ data }: Props) => {
             </option>
           ))}
         </Select>
-
+{/* 
         <Select name="customer_id" label="Customer" register={register}>
           <option value="null">----</option>
           {data?.customers.map((customer) => (
@@ -121,7 +121,7 @@ const ParameterNewForm = ({ data }: Props) => {
               {customer.company_name}
             </option>
           ))}
-        </Select>
+        </Select> */}
         <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
             Test Parameters
