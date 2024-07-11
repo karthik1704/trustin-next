@@ -50,12 +50,12 @@ const RegistrationTable = ({ data }: { data: RegisterType }) => {
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              <th
+              {/* <th
                 onClick={() => handleSort("code")}
                 className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11"
               >
                 Sample ID
-              </th>
+              </th> */}
               <th
                 onClick={() => handleSort("company_name")}
                 className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11"
@@ -80,11 +80,11 @@ const RegistrationTable = ({ data }: { data: RegisterType }) => {
           <tbody>
             {data.data.map((packageItem, key) => (
               <tr key={packageItem.id}>
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                {/* <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem.code ? packageItem.code : "---"}
                   </h5>
-                </td>
+                </td> */}
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem.company_name}

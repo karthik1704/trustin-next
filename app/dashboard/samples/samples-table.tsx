@@ -20,6 +20,7 @@ export type RegisterType = {
     status: string;
     registration: {
       code: string | null;
+      company_name: string;
     };
   }[];
   total: number;
@@ -60,7 +61,7 @@ const SampleTable = ({ data }: { data: RegisterType }) => {
                 Sample Name
               </th>
               <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                Registration Code
+                Customer Name
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
                 Status
@@ -86,7 +87,7 @@ const SampleTable = ({ data }: { data: RegisterType }) => {
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem?.registration?.code ?? "---"}
+                    {packageItem?.registration?.company_name ?? "---"}
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">

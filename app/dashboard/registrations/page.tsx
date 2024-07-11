@@ -70,6 +70,9 @@ async function getData(
   });
 
   if (response.status === 401) redirect("/login");
+  if (response.status !==200){
+    console.log("hi",response)
+  }
   return response.data;
 }
 

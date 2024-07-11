@@ -118,6 +118,7 @@ const RegistrationEditForm = ({
             : "",
           batch_size: sample.batch_size,
           received_quantity: sample.received_quantity,
+          description: sample?.description ?? "",
           test_type_id: sample.test_type_id.toString(),
           test_params: sample.sample_test_parameters.map((test) => ({
             test_params_id: test.test_parameter_id,
@@ -490,6 +491,41 @@ const RegistrationEditForm = ({
     }
   }, [state, router]);
 
+  const addSample = () => {
+    if (fields.length !== 0) {
+      const sample = form.getValues("samples").at(-1);
+      if (sample) {
+        append({
+          id: "",
+          sample_name: `${sample.sample_name} -${fields.length + 1}`,
+          batch_or_lot_no: sample.batch_or_lot_no,
+          test_type_id: "1",
+          manufactured_date: sample.manufactured_date,
+          expiry_date: sample.expiry_date,
+          tat: sample.tat,
+          batch_size: sample.batch_size,
+          received_quantity: sample.received_quantity,
+          description: sample.description,
+          test_params: [],
+        });
+      }
+      return;
+    }
+    append({
+      id: "",
+      sample_name: "",
+      batch_or_lot_no: "",
+      test_type_id: "1",
+      manufactured_date: null,
+      expiry_date: null,
+      tat: null,
+      batch_size: undefined,
+      received_quantity: 0,
+      description: "",
+      test_params: [],
+    });
+  };
+
   const handleForm = async (data: UpdateData) => {
     console.log(data);
     if (data.samples.length === 0) {
@@ -515,7 +551,6 @@ const RegistrationEditForm = ({
     });
 
     if (isError) return;
-
 
     const res = await updateFn(data);
     console.log(res);
@@ -988,7 +1023,7 @@ const RegistrationEditForm = ({
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div> */}
-            {/* <div className="w-full xl:w-1/2">
+          {/* <div className="w-full xl:w-1/2">
               <label className="mb-2.5 block text-black dark:text-white">
                 Received Quantity
               </label>
@@ -1117,8 +1152,8 @@ const RegistrationEditForm = ({
                           {...form.register(`samples.${index}.id`)}
                           type="hidden"
                         />
-                        <input 
-                        required
+                        <input
+                          required
                           {...form.register(`samples.${index}.sample_name`)}
                           placeholder="Enter Sample Name"
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -1144,8 +1179,7 @@ const RegistrationEditForm = ({
                           Batch / Lot No.{" "}
                         </label>
                         <input
-
-                        required
+                          required
                           {...form.register(`samples.${index}.batch_or_lot_no`)}
                           placeholder="Enter Batch or Lot No"
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -1215,6 +1249,17 @@ const RegistrationEditForm = ({
                         />
                       </div>
                     </div>
+                    <div className="mb-4.5">
+                      <div className="w-full">
+                        <label className="mb-2.5 block text-black dark:text-white">
+                          Description
+                        </label>
+                        <textarea
+                          {...form.register(`samples.${index}.description`)}
+                          className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        />
+                      </div>
+                    </div>
                     <TestParamsForm
                       control={form.control}
                       register={form.register}
@@ -1230,20 +1275,7 @@ const RegistrationEditForm = ({
                 <button
                   type="button"
                   className="relative flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
-                  onClick={() =>
-                    append({
-                      id: "",
-                      sample_name: "",
-                      batch_or_lot_no: "",
-                      expiry_date: "",
-                      manufactured_date: "",
-                      tat: "",
-                      batch_size: 0,
-                      received_quantity: 0,
-                      test_type_id: "1",
-                      test_params: [],
-                    })
-                  }
+                  onClick={addSample}
                 >
                   Add Samples
                 </button>

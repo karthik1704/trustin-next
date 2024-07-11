@@ -20,11 +20,12 @@ type TestParam = {
 type RegistrationSamples = {
   sample_name: string;
   batch_or_lot_no: string;
+  description: string;
   test_type_id: string|number;
   manufactured_date: string | null ;
   tat: string | null;
   expiry_date: string | null;
-  batch_size: number;
+  batch_size: number | undefined;
   received_quantity: number;
   test_params: {
     test_params_id: number | string;
@@ -75,10 +76,11 @@ type RegistrationUpdateSamples = {
   id: number | string;
   sample_name: string;
   batch_or_lot_no: string;
-  manufactured_date: string;
-  tat:string;
-  expiry_date: string;
-  batch_size: number;
+  manufactured_date: string|null;
+  tat:string|null;
+  expiry_date:  string|null;
+  description: string;
+  batch_size: number | undefined;
   received_quantity: number;
   test_type_id:number | string;
   test_params: {
@@ -288,6 +290,7 @@ type RegSample = {
   sample_name: string;
   sample_id: string;
   batch_or_lot_no: string;
+  description: string;
   manufactured_date: string;
   tat: string;
   expiry_date: string;
