@@ -25,7 +25,7 @@ type RegistrationSamples = {
   manufactured_date: string | null ;
   tat: string | null;
   expiry_date: string | null;
-  batch_size: number | undefined;
+  batch_size: string;
   received_quantity: number;
   test_params: {
     test_params_id: number | string;
@@ -65,7 +65,7 @@ export type CreateData = {
   // controlled_quantity: number;
   // no_of_samples: number;
   no_of_batches: number;
-  reports_send_by: string;
+  reports_send: string;
   status: string;
   // micro_params: TestParam[];
   // mech_params: TestParam[];
@@ -80,7 +80,7 @@ type RegistrationUpdateSamples = {
   tat:string|null;
   expiry_date:  string|null;
   description: string;
-  batch_size: number | undefined;
+  batch_size: string;
   received_quantity: number;
   test_type_id:number | string;
   test_params: {
@@ -114,12 +114,12 @@ export type UpdateData = {
   // batch_or_lot_no: string;
   // manufactured_date: string;
   // expiry_date: string;
-  batch_size: number;
+  // batch_size: number;
   // received_quantity: number;
   // no_of_samples: number;
   // controlled_quantity: number;
   no_of_batches: number;
-  reports_send_by: string;
+  reports_send: string;
   status: string;
   // micro_params: TestParam[];
   // mech_params: TestParam[];
@@ -294,7 +294,7 @@ type RegSample = {
   manufactured_date: string;
   tat: string;
   expiry_date: string;
-  batch_size: number;
+  batch_size: string;
   received_quantity: number;
   sample_test_parameters: {
     id: number;
@@ -339,12 +339,12 @@ export type RegistrationType = {
   // batch_or_lot_no: string;
   // manufactured_date: string;
   // expiry_date: string;
-  batch_size: number;
+  // batch_size: number;
   // received_quantity: number;
   // no_of_samples: number;
   no_of_batches: number;
   // controlled_quantity: number;
-  reports_send_by: string;
+  reports_send: string;
   status: string;
   samples: RegSample[];
 

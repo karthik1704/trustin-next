@@ -89,6 +89,7 @@ const FrontDeskAddForm = ({ data }: props) => {
             name="courier_name"
             placeholder=" Mode of Received"
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            required
           />
         </div>
 

@@ -86,7 +86,7 @@ const RegistrationEditForm = ({
       testing_process: data?.registration?.testing_process,
       sampled_by: data?.registration?.sampled_by,
       sample_disposal_process: data?.registration?.sample_disposal_process,
-      reports_send_by: data?.registration?.reports_send_by,
+      reports_send: data?.registration?.reports_send,
 
       // sample_name: data?.registration?.sample_name,
       // batch_or_lot_no: data?.registration?.batch_or_lot_no,
@@ -519,7 +519,7 @@ const RegistrationEditForm = ({
       manufactured_date: null,
       expiry_date: null,
       tat: null,
-      batch_size: undefined,
+      batch_size: "",
       received_quantity: 0,
       description: "",
       test_params: [],
@@ -955,14 +955,14 @@ const RegistrationEditForm = ({
               <option value="RETURN">RETURN</option>
             </Select>
             <Select
-              name="reports_send_by"
+              name="reports_send"
               label="Report Send By"
               register={form.register}
               width={"w-full xl:w-1/2"}
             >
               <option value="COURIER">COURIER</option>
               <option value="EMAIL">EMAIL</option>
-              <option value="EMAIL_COURIER">EMAIL AND COURIER</option>
+              <option value="EMAIL_AND_COURIER">EMAIL AND COURIER</option>
             </Select>
           </div>
 
@@ -1218,7 +1218,7 @@ const RegistrationEditForm = ({
                         </label>
                         <input
                           {...form.register(`samples.${index}.batch_size`)}
-                          type="number"
+                          type="text"
                           placeholder="Enter Batch Size"
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
@@ -1252,7 +1252,7 @@ const RegistrationEditForm = ({
                     <div className="mb-4.5">
                       <div className="w-full">
                         <label className="mb-2.5 block text-black dark:text-white">
-                          Description
+                          Sample Description
                         </label>
                         <textarea
                           {...form.register(`samples.${index}.description`)}
