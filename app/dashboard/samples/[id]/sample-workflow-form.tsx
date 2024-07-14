@@ -478,6 +478,30 @@ const SampleWorkflowForm = ({
                       : "Mech"}
                   </p>
                 </div>
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                   TAT:
+                  </p>
+                  <p>
+                    {data.sample.tat?
+                      new Date(data.sample.tat)
+                        .toISOString()
+                        .split("T")[0]:"---"
+                    }
+                  </p>
+                </div>
+              </div>
+              <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
+               
+
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                   Sample Description
+                  </p>
+                  <p>
+                    {data?.sample?.description}
+                  </p>
+                </div>
               </div>
               {data.currentUser.department_id !== 3 && (
                 <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
@@ -487,20 +511,20 @@ const SampleWorkflowForm = ({
                     </p>
                     <p>{data.sample?.registration?.company_name}</p>
                   </div>
-
+{/* 
                   <div className="w-full xl:w-1/5">
                     <p className="mb-2.5 block font-semibold text-black dark:text-white">
                       Adderess Line 1:
                     </p>
                     <p>{data?.sample?.registration?.customer_address_line1}</p>
-                  </div>
+                  </div> */}
                   <div className="w-full xl:w-1/5">
                     <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                      Adderess Line 2:
+                      Adderess:
                     </p>
-                    <p>{data?.sample?.registration?.customer_address_line2}</p>
+                    <p>{data?.sample?.registration?.full_address}</p>
                   </div>
-                  <div className="w-full xl:w-1/5">
+                  {/* <div className="w-full xl:w-1/5">
                     <p className="mb-2.5 block font-semibold text-black dark:text-white">
                       City:
                     </p>
@@ -517,7 +541,7 @@ const SampleWorkflowForm = ({
                       Pincode:
                     </p>
                     <p>{data?.sample?.registration?.pincode_no}</p>
-                  </div>
+                  </div> */}
                   <div className="w-full xl:w-1/5">
                     <p className="mb-2.5 block font-semibold text-black dark:text-white">
                       GST:

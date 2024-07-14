@@ -199,9 +199,7 @@ const MyDocument = ({ data }: { data: any }) => {
                 Address
               </Text>
               <Text style={{  padding: 2 }}>
-                {data.sample.registration.customer_address_line1 +
-                  " " +
-                  data.sample.registration.customer_address_line2}
+                {data.sample.registration.full_address}
               </Text>
             </View>
             <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>

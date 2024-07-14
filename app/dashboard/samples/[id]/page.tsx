@@ -140,6 +140,9 @@ export type Data = {
     expiry_date: string;
     batch_or_lot_no: string;
     test_type_id: number;
+    tat:string;
+    description:string;
+
 
     created_by: number;
     updated_by: number;
@@ -176,12 +179,8 @@ export type Data = {
       code: string;
       id: number;
       company_name: string;
-      customer_address_line1: string;
-      customer_address_line2: string;
+      full_address: string;
       test_type_id: number;
-      city: string;
-      state: string;
-      pincode_no: string;
       gst: string;
       product_data:{
         id:number;
@@ -240,13 +239,13 @@ export type Data = {
       test_type_id: number;
       product_id: number;
       customer_id: number;
-      created_at: "2024-03-10T08:14:48.411Z";
-      updated_at: "2024-03-10T08:14:48.411Z";
+      created_at: string;
+      updated_at: string;
       parameter_code: string;
       testing_parameters: string;
       amount: number;
       method_or_spec: string;
-      group_of_test_parameters: "string";
+      group_of_test_parameters: string;
     };
   };
 
