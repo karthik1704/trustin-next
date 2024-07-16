@@ -138,6 +138,8 @@ export type Data = {
     batch_size: number;
     manufactured_date: string;
     expiry_date: string;
+    testing_start_date: string | null;
+    testing_end_date: string | null;
     batch_or_lot_no: string;
     test_type_id: number;
     tat:string;
@@ -156,7 +158,7 @@ export type Data = {
         value: string;
         result: true;
         order: number;
-
+        quantity: number|null;
         created_by: number;
         updated_by: number;
         test_parameter: {

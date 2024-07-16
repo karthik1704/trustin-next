@@ -112,6 +112,38 @@ function WorkFlowForm({
           <input type="hidden" defaultValue={assign} name="assigned_to" />
         )}
 
+        {currentStep === 2 ? (
+          <div className="flex flex-col gap-6 xl:flex-row">
+            <div className="mb-6">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Testing Start Date:
+              </label>
+              <input
+                type="date"
+                name="testing_start_date"
+                defaultValue={comments}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+            <div className="mb-6">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Testing End Date:
+              </label>
+              <input
+                type="date"
+                name="testing_end_date"
+                defaultValue={comments}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+          </div>
+        ) : (
+          <div>
+            <input type="hidden" defaultValue={""} name="testing_start_date" />
+            <input type="hidden" defaultValue={""} name="testing_end_date" />
+          </div>
+        )}
+
         {showComment ? (
           <div className="mb-6">
             <label className="mb-2.5 block text-black dark:text-white">

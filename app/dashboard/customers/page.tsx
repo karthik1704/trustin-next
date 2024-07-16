@@ -11,6 +11,11 @@ import { Metadata } from "next";
 import { SERVER_API_URL } from "@/app/constant";
 import { useSearchParams } from 'next/navigation'
 
+export const metadata: Metadata = {
+  title: "Customers | Trustin",
+  description: "This is Customers page ",
+  // other metadata
+};
 
 
 export type Data = {

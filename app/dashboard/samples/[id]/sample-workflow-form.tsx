@@ -397,7 +397,7 @@ const SampleWorkflowForm = ({
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Department:
                   </p>
-                  <p>{data.sample.department}</p>
+                  <p>{data.sample.test_type_id  === 1 ? "Micro" :"Mech"}</p>
                 </div>
 
                 <div className="w-full xl:w-1/5">
@@ -485,6 +485,30 @@ const SampleWorkflowForm = ({
                   <p>
                     {data.sample.tat?
                       new Date(data.sample.tat)
+                        .toISOString()
+                        .split("T")[0]:"---"
+                    }
+                  </p>
+                </div>
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                   Testing Start Date:
+                  </p>
+                  <p>
+                    {data.sample.testing_start_date?
+                      new Date(data.sample.testing_start_date)
+                        .toISOString()
+                        .split("T")[0]:"---"
+                    }
+                  </p>
+                </div>
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                   Testing End Date:
+                  </p>
+                  <p>
+                  {data.sample.testing_end_date?
+                      new Date(data.sample.testing_end_date)
                         .toISOString()
                         .split("T")[0]:"---"
                     }

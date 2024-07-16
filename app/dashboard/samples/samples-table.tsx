@@ -22,6 +22,10 @@ export type RegisterType = {
       code: string | null;
       company_name: string;
     };
+    status_data: {
+      id: number
+    name: string;
+    }
   }[];
   total: number;
   page: number;
@@ -92,7 +96,7 @@ const SampleTable = ({ data }: { data: RegisterType }) => {
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem?.status ?? "---"}
+                    {packageItem?.status_data.name ?? "---"}
                   </h5>
                 </td>
 
