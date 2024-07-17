@@ -303,7 +303,7 @@ const SampleWorkflowForm = ({
                   )}
                   {data?.sample?.status_id === 2 && (
                     <>
-                      <WorkFlowForm
+                      {/* <WorkFlowForm
                         showRejectButton={true}
                         rejectActionData={actionFnReject}
                         currentStep={data?.sample?.status_id}
@@ -311,7 +311,18 @@ const SampleWorkflowForm = ({
                         assign={data.sample.assigned_to}
                         status_id={3}
                         buttonName="Approve"
-                      />
+                      /> */}
+                      <UnderTestingForm
+                      data={data}
+                      showRejectButton={true}
+                      rejectActionData={actionFnReject}
+                      currentStep={data?.sample?.status_id}
+                      assigned_to={data.sample.assigned_to}
+                      parameters={data.sample.sample_test_parameters}
+                      assigneeData={data.users}
+                      patchFn={actionFnResult}
+                      step={3}
+                    />
                     </>
                   )}
 
@@ -329,21 +340,31 @@ const SampleWorkflowForm = ({
                   )}
 
                   {data.sample.status_id === 4 && (
-                    <WorkFlowForm
+                    // <WorkFlowForm
+                    //   showRejectButton={true}
+                    //   rejectActionData={actionFnReject}
+                    //   currentStep={data?.sample?.status_id}
+                    //   actionData={formAction}
+                    //   assign={data.sample.assigned_to}
+                    //   status_id={5}
+                    //   buttonName="Assign"
+                    //   showComment={true}
+                    // />
+                    <UnderTestingForm
+                    data={data}
                       showRejectButton={true}
                       rejectActionData={actionFnReject}
                       currentStep={data?.sample?.status_id}
-                      actionData={formAction}
-                      assign={data.sample.assigned_to}
-                      status_id={5}
-                      buttonName="Assign"
-                      assigneeData={data.users}
-                      showComment={true}
+                      assigned_to={data.sample.assigned_to}
+                      parameters={data.sample.sample_test_parameters}
+                      patchFn={actionFnResult}
+                      step={5}
                     />
                   )}
 
                   {data.sample.status_id === 5 && (
                     <UnderTestingForm
+                    data={data}
                       showRejectButton={true}
                       rejectActionData={actionFnReject}
                       currentStep={data?.sample?.status_id}
@@ -355,6 +376,7 @@ const SampleWorkflowForm = ({
                   )}
                   {data.sample.status_id === 6 && (
                     <UnderTestingForm
+                    data={data}
                       showRejectButton={true}
                       rejectActionData={actionFnReject}
                       currentStep={data?.sample?.status_id}
@@ -365,6 +387,30 @@ const SampleWorkflowForm = ({
                     />
                   )}
                   {data.sample.status_id === 7 && (
+                    <UnderTestingForm
+                    data={data}
+                      showRejectButton={true}
+                      rejectActionData={actionFnReject}
+                      currentStep={data?.sample?.status_id}
+                      assigned_to={data.sample.assigned_to}
+                      parameters={data.sample.sample_test_parameters}
+                      patchFn={actionFnResult}
+                      step={8}
+                    />
+                  )}
+                  {data.sample.status_id === 8 && (
+                    <UnderTestingForm
+                    data={data}
+                      showRejectButton={true}
+                      rejectActionData={actionFnReject}
+                      currentStep={data?.sample?.status_id}
+                      assigned_to={data.sample.assigned_to}
+                      parameters={data.sample.sample_test_parameters}
+                      patchFn={actionFnResult}
+                      step={9}
+                    />
+                  )}
+                  {data.sample.status_id === 9 && (
                     <div className="text-center text-title-xl2 font-bold">
                       <h4>Sample WorkFlow Completed</h4>
                     </div>
@@ -515,6 +561,29 @@ const SampleWorkflowForm = ({
                   </p>
                 </div>
               </div>
+              <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Under NABL Logo:
+                  </p>
+                  <p>
+                    {data?.sample?.nabl_logo ? "Yes" : "No" }
+                  </p>
+                </div>
+
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                   Under CDSCO:
+                  </p>
+                  <p>
+                  {data?.sample?.under_cdsco ? "Yes" : "No" }
+
+                  </p>
+                </div>
+                
+              </div>
+
+
               <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
                
 

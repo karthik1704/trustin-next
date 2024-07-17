@@ -91,6 +91,8 @@ function WorkFlowForm({
       assigned_to: assign,
       comments: comments,
       test_params: [],
+      testing_start_date: "",
+      testing_end_date: "",
     });
     setRejectState(res);
   };
@@ -100,49 +102,36 @@ function WorkFlowForm({
       <div className="p-2.5">
         <input type="hidden" value={status} name="status" />
         <input type="hidden" value={status_id} name="status_id" />
-        {currentStep === 4 ? (
-          <Select name="assigned_to" label="assignee">
-            {assigneeData?.map((assignee) => (
-              <option value={assignee.id} key={assignee.id}>
-                {assignee.first_name + assignee.last_name}
-              </option>
-            ))}
-          </Select>
-        ) : (
-          <input type="hidden" defaultValue={assign} name="assigned_to" />
-        )}
-
-        {currentStep === 2 ? (
-          <div className="flex flex-col gap-6 xl:flex-row">
+        <input type="hidden" defaultValue={assign} name="assigned_to" />
+        {/* {currentStep === 4 ? (
+          <>
             <div className="mb-6">
               <label className="mb-2.5 block text-black dark:text-white">
-                Testing Start Date:
+                Comments
               </label>
               <input
                 type="date"
                 name="testing_start_date"
-                defaultValue={comments}
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              />
+              />{" "}
             </div>
             <div className="mb-6">
               <label className="mb-2.5 block text-black dark:text-white">
-                Testing End Date:
+                Comments
               </label>
               <input
                 type="date"
                 name="testing_end_date"
-                defaultValue={comments}
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              />
+              />{" "}
             </div>
-          </div>
+          </>
         ) : (
           <div>
             <input type="hidden" defaultValue={""} name="testing_start_date" />
             <input type="hidden" defaultValue={""} name="testing_end_date" />
           </div>
-        )}
+        )} */}
 
         {showComment ? (
           <div className="mb-6">

@@ -134,6 +134,8 @@ export type Data = {
     status_id: number;
     department: string;
     assigned_to: number;
+    nabl_logo: boolean;
+    under_cdsco: boolean;
     received_quantity: number;
     batch_size: number;
     manufactured_date: string;

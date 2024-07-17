@@ -149,7 +149,7 @@ export async function patchSampleWorkflow(
 
   if (res.status === 401) redirect("/signin");
 
-  if (res.status !== 200) {
+  if (res.status !== 204) {
     const error = await res.json();
     return {
       fieldErrors: null,
@@ -160,7 +160,7 @@ export async function patchSampleWorkflow(
 
   revalidateTag("Samples");
 
-  if (res.status === 200) {
+  if (res.status === 204) {
     return {
       fieldErrors: null,
       type: "Success",
@@ -168,7 +168,7 @@ export async function patchSampleWorkflow(
     };
   }
 
-  if (res.status === 200) redirect("/dashboard/samples");
+  if (res.status === 204) redirect("/dashboard/samples");
 }
 
 export async function patchSampleWorkflowTestResult(id: string, data: any) {
@@ -195,7 +195,7 @@ export async function patchSampleWorkflowTestResult(id: string, data: any) {
 
   if (res.status === 401) redirect("/signin");
 
-  if (res.status !== 200) {
+  if (res.status !== 204) {
     const error = await res.json();
     return {
       fieldErrors: null,
@@ -206,7 +206,7 @@ export async function patchSampleWorkflowTestResult(id: string, data: any) {
 
   revalidateTag("Samples");
 
-  if (res.status === 200) {
+  if (res.status === 204) {
     return {
       fieldErrors: null,
       type: "Success",
@@ -239,7 +239,7 @@ export async function rejectSampleWorkflow(id: string, data: any) {
   }
   if (res.status === 401) redirect("/signin");
 
-  if (res.status !== 200) {
+  if (res.status !== 204) {
     const error = await res.json();
     return {
       fieldErrors: null,
@@ -250,7 +250,7 @@ export async function rejectSampleWorkflow(id: string, data: any) {
 
   revalidateTag("Samples");
 
-  if (res.status === 200) {
+  if (res.status === 204) {
     return {
       fieldErrors: null,
       type: "Success",
