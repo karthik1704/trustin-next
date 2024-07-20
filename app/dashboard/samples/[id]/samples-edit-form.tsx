@@ -51,7 +51,13 @@ const SamplesEditForm = ({
     handleSubmit,
   } = useForm<Sample>({
     defaultValues: {
-      test_params: [{ test_parameter_id: "", order: 0 }],
+      sample_name:data.sample.sample_name,
+      batch_or_lot_no:data.sample.batch_or_lot_no,
+      manufactured_date:data.sample.manufactured_date,
+      expiry_date:data.sample.expiry_date,
+      batch_size:data.sample.batch_size,
+      received_quantity:data.sample.received_quantity,
+
     },
   });
 
@@ -106,6 +112,7 @@ const SamplesEditForm = ({
   // }, [batchWatch, data.batches, data.test_params, data, filterId]);
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
+  const [showForm, setShowForm] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -126,87 +133,102 @@ const SamplesEditForm = ({
     }
   }, [state, router]);
 
+  const toggleShowForm = () => {
+    setShowForm((prev) => !prev);
+  };
+
   const handleForm = async (data: Sample) => {
-    const res = await actionFn(data);
-    setState(res);
+    // const res = await actionFn(data);
+    // setState(res);
     console.log(data);
   };
 
   return (
-    <form onSubmit={handleSubmit(handleForm)}>
-      <div className="p-6.5">
-        <div>
-          <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-              <div className="">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Sample Name
-                </label>
-                <input
-                  type="text"
-                  {...register(`sample_name`)}
-                  placeholder="Enter Sample Name"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                />
-              </div>
-              <div className="">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Batch No
-                </label>
-                <input
-                  type="text"
-                  {...register(`batch_or_lot_no`)}
-                  placeholder="Enter Batch No"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                />
-              </div>
-              <div className="">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Manufactured Date
-                </label>
-                <input
-                  type="date"
-                  {...register(`manufactured_date`)}
-                  placeholder="Enter Manufactured Date"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                />
-              </div>
-              <div className="">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Expiry Date
-                </label>
-                <input
-                  type="date"
-                  {...register(`expiry_date`)}
-                  placeholder="Enter Expiry Date"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                />
-              </div>
-              <div className="">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Batch Size
-                </label>
-                <input
-                  type="text"
-                  {...register(`batch_size`)}
-                  placeholder="Enter Batch Size"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                />
-              </div>
-              <div className="">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Received Quantity
-                </label>
-                <input
-                  type="text"
-                  {...register(`received_quantity`)}
-                  placeholder="Enter Received Quantity"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                />
-              </div>
-            </div>
+    <div>
+      <div className="flex justify-end">
+        <button
+          type="button"
+          className="flex w-1/5 justify-center rounded bg-primary p-3 font-medium text-gray"
+          onClick={toggleShowForm}
+        >
+          {showForm ? "Close" : "Edit"}
+        </button>
+      </div>
+      {showForm && (
+        <form onSubmit={handleSubmit(handleForm)}>
+          <div className="p-6.5">
+            <div>
+              <div className="mb-4.5 flex flex-col gap-6 xl:flex-col">
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                  <div className="">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Sample Name
+                    </label>
+                    <input
+                      type="text"
+                      {...register(`sample_name`)}
+                      placeholder="Enter Sample Name"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </div>
+                  <div className="">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Batch No
+                    </label>
+                    <input
+                      type="text"
+                      {...register(`batch_or_lot_no`)}
+                      placeholder="Enter Batch No"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </div>
+                  <div className="">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Manufactured Date
+                    </label>
+                    <input
+                      type="date"
+                      {...register(`manufactured_date`)}
+                      placeholder="Enter Manufactured Date"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </div>
+                  <div className="">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Expiry Date
+                    </label>
+                    <input
+                      type="date"
+                      {...register(`expiry_date`)}
+                      placeholder="Enter Expiry Date"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </div>
+                  <div className="">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Batch Size
+                    </label>
+                    <input
+                      type="text"
+                      {...register(`batch_size`)}
+                      placeholder="Enter Batch Size"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </div>
+                  <div className="">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Received Quantity
+                    </label>
+                    <input
+                      type="text"
+                      {...register(`received_quantity`)}
+                      placeholder="Enter Received Quantity"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </div>
+                </div>
 
-            {/* <div className="w-full xl:w-1/4">
+                {/* <div className="w-full xl:w-1/4">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Department
                 </label>
@@ -218,7 +240,7 @@ const SamplesEditForm = ({
                 />
               </div>*/}
 
-            {/* <div className="w-full xl:w-full">
+                {/* <div className="w-full xl:w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Test Type
               </label>
@@ -252,25 +274,27 @@ const SamplesEditForm = ({
                 </span>
               </div>
             </div> */}
-          </div>
-          {/* // Test Params */}
-          <TestParamsForm
+              </div>
+              {/* // Test Params */}
+              {/* <TestParamsForm
             filterId={"1"}
             parameters={[]}
             data={data}
             {...{ control, register }}
-          />
-        </div>
+          /> */}
+            </div>
 
-        <button
-          type="submit"
-          className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Loading" : "Submit"}
-        </button>
-      </div>
-    </form>
+            <button
+              type="submit"
+              className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Loading" : "Submit"}
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
   );
 };
 

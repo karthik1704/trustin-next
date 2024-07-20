@@ -177,7 +177,7 @@ const UnderTestingForm = ({
   return (
     <form onSubmit={handleSubmit(handleForm)} className="p-2">
       <input type="hidden" {...register("status")} />
-      <input type="hidden" {...register("status_id")} />
+
       {currentStep === 4 && (
         <>
           <div className="mb-6">
@@ -202,6 +202,25 @@ const UnderTestingForm = ({
           </div>
         </>
       )}
+      {currentStep === 6 ? (
+        <>
+          <Select
+            label={"Status"}
+            name={`status_id`}
+            register={register}
+          >
+            <option value={step}> Move to Next </option>
+            <option value={1}> Registered </option>
+            <option value={2}>Under review and Sample requested (HOD) </option>
+            <option value={3}>Sample Received </option>
+            <option value={4}>Under Testing </option>
+            <option value={5}>Under QC Review </option>
+          </Select>
+        </>
+      ) : (
+        <input type="hidden" {...register("status_id")} />
+
+      )}
       {currentStep === 2 && (
         <>
           <Select
@@ -220,7 +239,7 @@ const UnderTestingForm = ({
             <option value={0}>No</option>
             <option value={1}>Yes</option>
           </Select>
-          <Select name="assigned_to" label="assignee">
+          <Select name="assigned_to" label="assignee" register={register}>
             {assigneeData?.map((assignee) => (
               <option value={assignee.id} key={assignee.id}>
                 {assignee.first_name + assignee.last_name}

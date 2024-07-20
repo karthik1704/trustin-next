@@ -94,12 +94,14 @@ const initialState: InitialState = {
 };
 
 const status = [
-  "Draft",
-  "Review Pending",
-  "Requested",
-  "Received",
+  "Registered",
+  "Under review and Sample requested (HOD)",
+  "Sample Received",
   "Under Testing",
-  "Verification Pending",
+  "Under QC Review",
+  "Under QA Review",
+  "Under Report preparation",
+  "Draft report/ Report released",
   "Done",
 ];
 
@@ -247,6 +249,20 @@ const SampleWorkflowForm = ({
     }
   }, [state, router]);
 
+  const getNextStatus = (nextStep: number) => {
+    const { sample_history } = data.sample;
+    if (!sample_history.length) return nextStep;
+
+    const last_history = sample_history[0];
+    if (
+      last_history.from_status_id === 6 &&
+      nextStep < last_history.from_status_id
+    )
+      return 6;
+
+    return nextStep;
+  };
+
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="align-items:flex-end flex flex-col items-end gap-3 sm:flex-row sm:justify-end">
@@ -297,7 +313,7 @@ const SampleWorkflowForm = ({
                       status={
                         data?.sample?.status != "Submitted" ? "Submitted" : ""
                       }
-                      status_id={2}
+                      status_id={getNextStatus(2)}
                       buttonName="Submit for Review"
                     />
                   )}
@@ -313,16 +329,16 @@ const SampleWorkflowForm = ({
                         buttonName="Approve"
                       /> */}
                       <UnderTestingForm
-                      data={data}
-                      showRejectButton={true}
-                      rejectActionData={actionFnReject}
-                      currentStep={data?.sample?.status_id}
-                      assigned_to={data.sample.assigned_to}
-                      parameters={data.sample.sample_test_parameters}
-                      assigneeData={data.users}
-                      patchFn={actionFnResult}
-                      step={3}
-                    />
+                        data={data}
+                        showRejectButton={true}
+                        rejectActionData={actionFnReject}
+                        currentStep={data?.sample?.status_id}
+                        assigned_to={data.sample.assigned_to}
+                        parameters={data.sample.sample_test_parameters}
+                        assigneeData={data.users}
+                        patchFn={actionFnResult}
+                        step={getNextStatus(3)}
+                      />
                     </>
                   )}
 
@@ -333,7 +349,7 @@ const SampleWorkflowForm = ({
                       currentStep={data?.sample?.status_id}
                       actionData={formAction}
                       assign={data.sample.assigned_to}
-                      status_id={4}
+                      status_id={getNextStatus(4)}
                       buttonName="Sample Received"
                       showComment={true}
                     />
@@ -351,32 +367,32 @@ const SampleWorkflowForm = ({
                     //   showComment={true}
                     // />
                     <UnderTestingForm
-                    data={data}
+                      data={data}
                       showRejectButton={true}
                       rejectActionData={actionFnReject}
                       currentStep={data?.sample?.status_id}
                       assigned_to={data.sample.assigned_to}
                       parameters={data.sample.sample_test_parameters}
                       patchFn={actionFnResult}
-                      step={5}
+                      step={getNextStatus(5)}
                     />
                   )}
 
                   {data.sample.status_id === 5 && (
                     <UnderTestingForm
-                    data={data}
+                      data={data}
                       showRejectButton={true}
                       rejectActionData={actionFnReject}
                       currentStep={data?.sample?.status_id}
                       assigned_to={data.sample.assigned_to}
                       parameters={data.sample.sample_test_parameters}
                       patchFn={actionFnResult}
-                      step={6}
+                      step={getNextStatus(6)}
                     />
                   )}
                   {data.sample.status_id === 6 && (
                     <UnderTestingForm
-                    data={data}
+                      data={data}
                       showRejectButton={true}
                       rejectActionData={actionFnReject}
                       currentStep={data?.sample?.status_id}
@@ -387,27 +403,53 @@ const SampleWorkflowForm = ({
                     />
                   )}
                   {data.sample.status_id === 7 && (
-                    <UnderTestingForm
-                    data={data}
-                      showRejectButton={true}
+                    // <UnderTestingForm
+                    // data={data}
+                    //   showRejectButton={true}
+                    //   rejectActionData={actionFnReject}
+                    //   currentStep={data?.sample?.status_id}
+                    //   assigned_to={data.sample.assigned_to}
+                    //   parameters={data.sample.sample_test_parameters}
+                    //   patchFn={actionFnResult}
+                    //   step={8}
+                    // />
+                    <WorkFlowForm
                       rejectActionData={actionFnReject}
                       currentStep={data?.sample?.status_id}
-                      assigned_to={data.sample.assigned_to}
-                      parameters={data.sample.sample_test_parameters}
-                      patchFn={actionFnResult}
-                      step={8}
+                      actionData={formAction}
+                      assign={data?.sample?.assigned_to}
+                      status={
+                        data?.sample?.status != "Submitted" ? "Submitted" : ""
+                      }
+                      status_id={8}
+                      buttonName="Prepartion Complete"
+                      showRejectButton
+                      showComment
                     />
                   )}
                   {data.sample.status_id === 8 && (
-                    <UnderTestingForm
-                    data={data}
-                      showRejectButton={true}
+                    // <UnderTestingForm
+                    // data={data}
+                    //   showRejectButton={true}
+                    //   rejectActionData={actionFnReject}
+                    //   currentStep={data?.sample?.status_id}
+                    //   assigned_to={data.sample.assigned_to}
+                    //   parameters={data.sample.sample_test_parameters}
+                    //   patchFn={actionFnResult}
+                    //   step={9}
+                    // />
+                    <WorkFlowForm
                       rejectActionData={actionFnReject}
                       currentStep={data?.sample?.status_id}
-                      assigned_to={data.sample.assigned_to}
-                      parameters={data.sample.sample_test_parameters}
-                      patchFn={actionFnResult}
-                      step={9}
+                      actionData={formAction}
+                      assign={data?.sample?.assigned_to}
+                      status={
+                        data?.sample?.status != "Submitted" ? "Submitted" : ""
+                      }
+                      status_id={9}
+                      buttonName="Submit"
+                      showComment
+                      showRejectButton
                     />
                   )}
                   {data.sample.status_id === 9 && (
@@ -416,6 +458,9 @@ const SampleWorkflowForm = ({
                     </div>
                   )}
                 </div>
+              </div>
+              <div className="mb-3 w-full flex-col">
+                <SamplesEditForm data={data} actionFn={actionUpdateSample} />
               </div>
 
               <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
@@ -443,7 +488,7 @@ const SampleWorkflowForm = ({
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Department:
                   </p>
-                  <p>{data.sample.test_type_id  === 1 ? "Micro" :"Mech"}</p>
+                  <p>{data.sample.test_type_id === 1 ? "Micro" : "Mech"}</p>
                 </div>
 
                 <div className="w-full xl:w-1/5">
@@ -468,11 +513,11 @@ const SampleWorkflowForm = ({
                     Manufactured Date:
                   </p>
                   <p>
-                    { data.sample.manufactured_date?
-                      new Date(data.sample.manufactured_date)
-                        .toISOString()
-                        .split("T")[0] :"---"
-                    }
+                    {data.sample.manufactured_date
+                      ? new Date(data.sample.manufactured_date)
+                          .toISOString()
+                          .split("T")[0]
+                      : "---"}
                   </p>
                 </div>
 
@@ -481,11 +526,11 @@ const SampleWorkflowForm = ({
                     Expiry Date:
                   </p>
                   <p>
-                    {data.sample.expiry_date?
-                      new Date(data.sample.expiry_date)
-                        .toISOString()
-                        .split("T")[0]:"---"
-                    }
+                    {data.sample.expiry_date
+                      ? new Date(data.sample.expiry_date)
+                          .toISOString()
+                          .split("T")[0]
+                      : "---"}
                   </p>
                 </div>
                 <div className="w-full xl:w-1/5">
@@ -496,7 +541,7 @@ const SampleWorkflowForm = ({
                 </div>
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                    Receiverd Quantity:
+                    Received Quantity:
                   </p>
                   <p>{data.sample.received_quantity}</p>
                 </div>
@@ -518,46 +563,40 @@ const SampleWorkflowForm = ({
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Test Type:
                   </p>
+                  <p>{data?.sample?.test_type_id === 1 ? "Micro " : "Mech"}</p>
+                </div>
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    TAT:
+                  </p>
                   <p>
-                    {data?.sample?.test_type_id === 1
-                      ? "Micro "
-                      : "Mech"}
+                    {data.sample.tat
+                      ? new Date(data.sample.tat).toISOString().split("T")[0]
+                      : "---"}
                   </p>
                 </div>
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                   TAT:
+                    Testing Start Date:
                   </p>
                   <p>
-                    {data.sample.tat?
-                      new Date(data.sample.tat)
-                        .toISOString()
-                        .split("T")[0]:"---"
-                    }
+                    {data.sample.testing_start_date
+                      ? new Date(data.sample.testing_start_date)
+                          .toISOString()
+                          .split("T")[0]
+                      : "---"}
                   </p>
                 </div>
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                   Testing Start Date:
+                    Testing End Date:
                   </p>
                   <p>
-                    {data.sample.testing_start_date?
-                      new Date(data.sample.testing_start_date)
-                        .toISOString()
-                        .split("T")[0]:"---"
-                    }
-                  </p>
-                </div>
-                <div className="w-full xl:w-1/5">
-                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                   Testing End Date:
-                  </p>
-                  <p>
-                  {data.sample.testing_end_date?
-                      new Date(data.sample.testing_end_date)
-                        .toISOString()
-                        .split("T")[0]:"---"
-                    }
+                    {data.sample.testing_end_date
+                      ? new Date(data.sample.testing_end_date)
+                          .toISOString()
+                          .split("T")[0]
+                      : "---"}
                   </p>
                 </div>
               </div>
@@ -566,34 +605,23 @@ const SampleWorkflowForm = ({
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Under NABL Logo:
                   </p>
-                  <p>
-                    {data?.sample?.nabl_logo ? "Yes" : "No" }
-                  </p>
+                  <p>{data?.sample?.nabl_logo ? "Yes" : "No"}</p>
                 </div>
 
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                   Under CDSCO:
+                    Under CDSCO:
                   </p>
-                  <p>
-                  {data?.sample?.under_cdsco ? "Yes" : "No" }
-
-                  </p>
+                  <p>{data?.sample?.under_cdsco ? "Yes" : "No"}</p>
                 </div>
-                
               </div>
 
-
               <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
-               
-
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                   Sample Description
+                    Sample Description
                   </p>
-                  <p>
-                    {data?.sample?.description}
-                  </p>
+                  <p>{data?.sample?.description}</p>
                 </div>
               </div>
               {data.currentUser.department_id !== 3 && (
@@ -604,7 +632,7 @@ const SampleWorkflowForm = ({
                     </p>
                     <p>{data.sample?.registration?.company_name}</p>
                   </div>
-{/* 
+                  {/* 
                   <div className="w-full xl:w-1/5">
                     <p className="mb-2.5 block font-semibold text-black dark:text-white">
                       Adderess Line 1:
