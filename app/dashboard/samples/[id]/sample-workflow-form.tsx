@@ -259,7 +259,7 @@ const SampleWorkflowForm = ({
       last_history.from_status_id === 7 &&
       nextStep < last_history.from_status_id
     )
-      return 6;
+      return 7;
 
     return nextStep;
   };
