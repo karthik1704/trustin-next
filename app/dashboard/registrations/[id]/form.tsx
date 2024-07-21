@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  ContactPerson,
   SampleRecord,
   TestParameter,
   UpdateData,
@@ -76,6 +77,10 @@ const RegistrationEditForm = ({
       // city: data?.registration?.city,
       // state: data?.registration?.state,
       // pincode_no: data?.registration?.pincode_no,
+      customer_reference_no: data?.registration?.customer_reference_no,
+      contact_person_name: data?.registration?.contact_person_name,
+      contact_email: data?.registration?.contact_email,
+      contact_number: data?.registration?.contact_number,
       gst: data?.registration?.gst,
       date_of_received: new Date(data?.registration?.date_of_received)
         .toISOString()
@@ -119,6 +124,8 @@ const RegistrationEditForm = ({
           batch_size: sample.batch_size,
           received_quantity: sample.received_quantity,
           description: sample?.description ?? "",
+          sample_condition: sample?.sample_condition ?? "",
+          sterilization_batch_no: sample?.sterilization_batch_no ?? "",
           test_type_id: sample.test_type_id.toString(),
           test_params: sample.sample_test_parameters.map((test) => ({
             test_params_id: test.test_parameter_id,
@@ -164,7 +171,10 @@ const RegistrationEditForm = ({
     control: form.control,
     name: "product_id",
   });
-
+  // const watchContactPerson = useWatch({
+  //   control: form.control,
+  //   name: "contact_person_id",
+  // });
   // const watchNoOfSamplesValue = useWatch({
   //   control: form.control,
   //   name: "no_of_samples",
@@ -201,6 +211,8 @@ const RegistrationEditForm = ({
   const [sampleCode, setSampleCode] = useState<(string | null)[]>([]);
   const [sampleIds, setSampleIds] = useState<(number | null)[]>([]);
   const [samplsTestType, setSampleTestType] = useState<(string | number)[]>([]);
+  // const [contactPersons, setContactPersons] = useState<ContactPerson[]>([]);
+
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
@@ -250,6 +262,30 @@ const RegistrationEditForm = ({
     form,
     watchFrontDesk,
   ]);
+
+  // useEffect(() => {
+
+  //   if (
+  //     watchFrontDesk.toString() === data?.registration?.front_desk_id.toString()
+  //   )
+  //     return;
+    
+  //   if (!watchContactPerson) return;
+
+  //   const contactPerson = contactPersons?.find(
+  //     (contact) => contact.id.toString() === watchContactPerson.toString(),
+  //   );
+  //   form.setValue(
+  //     "contact_person_name",
+  //     contactPerson?.person_name.toString() ?? "",
+  //   );
+
+  //   form.setValue("contact_number", contactPerson?.mobile_number ?? "");
+  //   form.setValue("contact_email", contactPerson?.contact_email ?? "");
+
+  //   // form.setValue("gst", contactPerson?.gst ?? "");
+  //   // form.setValue("status", frontDesk?.status ?? "");
+  // }, [contactPersons, form, watchContactPerson]);
 
   // useEffect(() => {
   //   // if (
@@ -506,6 +542,8 @@ const RegistrationEditForm = ({
           batch_size: sample.batch_size,
           received_quantity: sample.received_quantity,
           description: sample.description,
+          sample_condition: sample.sample_condition,
+          sterilization_batch_no: sample.sterilization_batch_no,
           test_params: [],
         });
       }
@@ -522,6 +560,8 @@ const RegistrationEditForm = ({
       batch_size: "",
       received_quantity: 0,
       description: "",
+      sample_condition: "",
+      sterilization_batch_no: "",
       test_params: [],
     });
   };
@@ -770,6 +810,71 @@ const RegistrationEditForm = ({
               />
             </div>
           </div> */}
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Customer Reference No.
+              </label>
+              <input
+                {...form.register("customer_reference_no")}
+                placeholder="Enter Customer Reference No."
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+          </div>
+
+          {/* <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <Select
+              name="contact_person_id"
+              register={form.register}
+              label={"Contact Person"}
+              
+            >
+              {" "}
+              <option value="">------------</option>
+              {contactPersons.map((t) => (
+                <option value={t.id} key={t.id}>
+                  {t.person_name} 
+                </option>
+              ))}
+            </Select>
+          </div> */}
+
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full xl:w-1/2">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Contact Person Name
+              </label>
+              <input
+                {...form.register("contact_person_name")}
+                placeholder="Enter Contact Person Name"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+            <div className="w-full xl:w-1/2">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Contact Number
+              </label>
+              <input
+                {...form.register("contact_number")}
+                placeholder="Enter Contact Number"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+          </div>
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Contact Email
+              </label>
+              <input
+                {...form.register("contact_email")}
+                type='email'
+                placeholder="Enter Contact Email"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+          </div>
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
@@ -1245,6 +1350,36 @@ const RegistrationEditForm = ({
                           {...form.register(`samples.${index}.tat`)}
                           type="date"
                           placeholder="Enter Turn Around Time"
+                          className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        />
+                      </div>
+
+                      <div className="w-full xl:w-1/4">
+                        <label className="mb-2.5 block text-black dark:text-white">
+                          Sample Condition{" "}
+                        </label>
+                        <input
+                          {...form.register(
+                            `samples.${index}.sample_condition`,
+                          )}
+                          type="text"
+                          required
+                          placeholder="Enter sample condition"
+                          className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        />
+                      </div>
+
+                      <div className="w-full xl:w-1/4">
+                        <label className="mb-2.5 block text-black dark:text-white">
+                          Sterilization Batch No.
+                        </label>
+                        <input
+                          {...form.register(
+                            `samples.${index}.sterilization_batch_no`,
+                          )}
+                          type="text"
+                          required
+                          placeholder="Enter sterilization batch no."
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
                       </div>

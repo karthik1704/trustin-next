@@ -18,11 +18,12 @@ const StatusStepper = ({ step }: { step: number }) => {
       {/* <Step label="Review Pending" /> */}
       <Step label="Under review and Sample requested (HOD)" />
       {/* <Step label="Requested" /> */}
+      <Step label="Under Registration team (Sample issue)" />
       <Step label="Sample Received" />
       <Step label="Under Testing" />
       <Step label="Under QC Review" />
       <Step label="Under QA Review" />
-      <Step label="Under Report preparation" />
+      {/* <Step label="Under Report preparation" /> */}
       <Step label="Draft report/ Report released" />
       {/* <Step label="Verification Pending" /> */}
       <Step label="Done" />

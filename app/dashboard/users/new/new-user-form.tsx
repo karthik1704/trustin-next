@@ -19,6 +19,7 @@ const initalState = {
   fieldErrors: {
     first_name: undefined,
     last_name: undefined,
+    username: undefined,
     email: undefined,
     phone: undefined,
     password: undefined,
@@ -97,6 +98,21 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
           />
           {state?.fieldErrors?.email && (
             <p className="text-red-500">{state?.fieldErrors?.email}</p>
+          )}
+        </div>
+        <div className="mb-4.5">
+          <label className="mb-2.5 block text-black dark:text-white">
+            Username <span className="text-meta-1">*</span>
+          </label>
+          <input
+            type="text"
+            name="username"
+            placeholder="Enter your username"
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          />
+          <p className="text-slate-500">Username can only contain letters, numbers, and underscores</p>
+          {state?.fieldErrors?.username && (
+            <p className="text-red-500">{state?.fieldErrors?.username}</p>
           )}
         </div>
         <div className="mb-4.5">

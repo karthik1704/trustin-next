@@ -21,8 +21,10 @@ type RegistrationSamples = {
   sample_name: string;
   batch_or_lot_no: string;
   description: string;
-  test_type_id: string|number;
-  manufactured_date: string | null ;
+  sample_condition: string;
+  sterilization_batch_no: string;
+  test_type_id: string | number;
+  manufactured_date: string | null;
   tat: string | null;
   expiry_date: string | null;
   batch_size: string;
@@ -30,7 +32,7 @@ type RegistrationSamples = {
   test_params: {
     test_params_id: number | string;
     order: number;
-  }[]
+  }[];
 };
 
 export type TestType = string[] | number[];
@@ -47,6 +49,11 @@ export type CreateData = {
   // city: string;
   // state: string;
   // pincode_no: string;
+  contact_person_id: number | string;
+  customer_reference_no: string;
+  contact_person_name: string;
+  contact_email: string;
+  contact_number: string;
   gst: string;
   date_of_received: string;
   product_id: number | string;
@@ -76,23 +83,25 @@ type RegistrationUpdateSamples = {
   id: number | string;
   sample_name: string;
   batch_or_lot_no: string;
-  manufactured_date: string|null;
-  tat:string|null;
-  expiry_date:  string|null;
+  manufactured_date: string | null;
+  tat: string | null;
+  expiry_date: string | null;
   description: string;
+  sample_condition: string;
+  sterilization_batch_no: string;
   batch_size: string;
   received_quantity: number;
-  test_type_id:number | string;
+  test_type_id: number | string;
   test_params: {
     test_params_id: number | string;
     order: number;
-  }[]
+  }[];
 };
 
 export type UpdateData = {
   // branch_id: number | string;
   // trf_code: string;
-  front_desk_id: number|string;
+  front_desk_id: number | string;
   company_id: number | string;
   company_name: string;
   full_address: string;
@@ -101,6 +110,11 @@ export type UpdateData = {
   // city: string;
   // state: string;
   // pincode_no: string;
+  // contact_person_id:number|string;
+  customer_reference_no: string;
+  contact_person_name: string;
+  contact_email: string;
+  contact_number: string;
   gst: string;
   date_of_received: string;
   product_id: number;
@@ -157,6 +171,16 @@ type Product = {
   product_name: string;
 };
 
+export type ContactPerson={
+  person_name: string;
+  mobile_number: string;
+  contact_email: string;
+  customer_id: 293;
+  designation: string | null;
+  id: number;
+  landline_number: string;
+};
+
 type Customer = {
   id: number;
   company_name: string;
@@ -174,6 +198,7 @@ type Customer = {
   regulatory: string;
   pan: string;
   gst: string;
+  contact_persons: ContactPerson[];
 };
 
 type Batch = {
@@ -291,6 +316,8 @@ type RegSample = {
   sample_id: string;
   batch_or_lot_no: string;
   description: string;
+  sample_condition: string;
+  sterilization_batch_no: string;
   manufactured_date: string;
   tat: string;
   expiry_date: string;
@@ -299,12 +326,11 @@ type RegSample = {
   sample_test_parameters: {
     id: number;
     sample_id: number;
-    order: number; 
+    order: number;
     test_parameter_id: number;
- 
-    test_parameter:FullParametersType
-  }[]
 
+    test_parameter: FullParametersType;
+  }[];
 };
 
 export type RegistrationType = {
@@ -316,6 +342,11 @@ export type RegistrationType = {
   front_desk_id: number;
   company_name: string;
   full_address: string;
+  customer_reference_no: string;
+  contact_person_name: string;
+  contact_email: string;
+  contact_number: string;
+
   // customer_address_line1: string;
   // customer_address_line2: string;
   // city: string;

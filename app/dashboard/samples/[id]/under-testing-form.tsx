@@ -98,6 +98,8 @@ const UnderTestingForm = ({
       comments: comment,
       nabl_logo: data.sample.nabl_logo ? 1 : 0,
       under_cdsco: data.sample.under_cdsco ? 1 : 0,
+      issued_to: data.sample.issued_to,
+      sample_issued: data.sample.sample_issued,
       testing_start_date: data?.sample?.testing_start_date
         ? new Date(data?.sample?.testing_start_date).toISOString().split("T")[0]
         : "",
@@ -178,7 +180,7 @@ const UnderTestingForm = ({
     <form onSubmit={handleSubmit(handleForm)} className="p-2">
       <input type="hidden" {...register("status")} />
 
-      {currentStep === 4 && (
+      {currentStep === 5 && (
         <>
           <div className="mb-6">
             <label className="mb-2.5 block text-black dark:text-white">
@@ -202,24 +204,44 @@ const UnderTestingForm = ({
           </div>
         </>
       )}
-      {currentStep === 6 ? (
+      {currentStep === 7 ? (
         <>
-          <Select
-            label={"Status"}
-            name={`status_id`}
-            register={register}
-          >
+          <Select label={"Status"} name={`status_id`} register={register}>
             <option value={step}> Move to Next </option>
             <option value={1}> Registered </option>
             <option value={2}>Under review and Sample requested (HOD) </option>
-            <option value={3}>Sample Received </option>
-            <option value={4}>Under Testing </option>
-            <option value={5}>Under QC Review </option>
+            <option value={3}>Under Registration team (Sample issue)</option>
+            <option value={4}>Sample Received </option>
+            <option value={5}>Under Testing </option>
+            <option value={6}>Under QC Review </option>
           </Select>
         </>
       ) : (
         <input type="hidden" {...register("status_id")} />
-
+      )}
+      {currentStep === 3 && (
+        <>
+          <div className="mb-6">
+            <label className="mb-2.5 block text-black dark:text-white">
+              No. of samples issued
+            </label>
+            <input
+              type="number"
+              {...register("sample_issued")}
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            />{" "}
+          </div>
+          <div className="mb-6">
+            <label className="mb-2.5 block text-black dark:text-white">
+              Issued to
+            </label>
+            <input
+              type="text"
+              {...register("issued_to")}
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            />{" "}
+          </div>
+        </>
       )}
       {currentStep === 2 && (
         <>
@@ -275,7 +297,7 @@ const UnderTestingForm = ({
                 <th className="w-[100px] font-medium text-black dark:text-white">
                   Amount of samples
                 </th>
-                {currentStep !== 2 && (
+                {currentStep !== 2 && currentStep !== 3 &&  currentStep!==4 &&(
                   <>
                     <th className="w-1/5 font-medium text-black dark:text-white">
                       Value
@@ -317,7 +339,7 @@ const UnderTestingForm = ({
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
                   </td>
-                  {currentStep !== 2 && (
+                  {currentStep !== 2 && currentStep !== 3 && currentStep!==4 && (
                     <>
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                         <input

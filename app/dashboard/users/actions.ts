@@ -6,12 +6,20 @@ import { z } from "zod";
 import { revalidateTag } from "next/cache";
 import { getErrorMessage } from "@/lib/utils";
 
-
 const schema = z
   .object({
     first_name: z.string().min(1, "First Name Required").trim(),
     last_name: z.string().min(1, "Last Name Required").trim(),
     email: z.string().email("Invalid E-mail").trim(),
+    username: z
+      .string()
+      .min(3, { message: "Username must be at least 4 characters long" })
+      .max(20, { message: "Username must be at most 20 characters long" })
+      .regex(/^[a-zA-Z0-9_]+$/, {
+        message: "Username can only contain letters, numbers, and underscores",
+      })
+      .toLowerCase()
+      .trim(),
 
     phone: z
       .string()
@@ -29,6 +37,32 @@ const schema = z
     message: "Passwords do not match",
     path: ["password2"], // path of error
   });
+
+
+  const updateSchema = z
+  .object({
+    first_name: z.string().min(1, "First Name Required").trim(),
+    last_name: z.string().min(1, "Last Name Required").trim(),
+    email: z.string().email("Invalid E-mail").trim(),
+    username: z
+      .string()
+      .min(3, { message: "Username must be at least 4 characters long" })
+      .max(20, { message: "Username must be at most 20 characters long" })
+      .regex(/^[a-zA-Z0-9_]+$/, {
+        message: "Username can only contain letters, numbers, and underscores",
+      })
+      .toLowerCase()
+      .trim(),
+
+    phone: z
+      .string()
+      .trim()
+      .min(1, "Phone Required")
+      .max(10, "Enter valid 10 digit phone number"),
+    role_id: z.string().min(1, "Role Required"),
+    department_id: z.string().min(1, "Department Required"),
+    qa_type_id: z.string(),
+  })
 
 export async function createUser(prevState: any, formData: FormData) {
   let jsonObject = Object.fromEntries(formData.entries());
@@ -85,7 +119,6 @@ export async function createUser(prevState: any, formData: FormData) {
   }
 }
 
-
 export async function updateUser(
   id: string,
   prevState: any,
@@ -93,6 +126,19 @@ export async function updateUser(
 ) {
   console.log(formData);
   let jsonObject = Object.fromEntries(formData.entries());
+
+  const validatedFields = updateSchema.safeParse(jsonObject);
+
+  // Return early if the form data is invalid
+  if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
+    return {
+      message: null,
+      type: null,
+      fieldErrors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
 
   if (jsonObject["qa_type_id"] == "null")
     jsonObject["qa_type_id"] = null as any;

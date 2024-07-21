@@ -146,6 +146,10 @@ export type Data = {
     test_type_id: number;
     tat:string;
     description:string;
+    sample_issued:number | null;
+    issued_to: string|null;
+    sample_condition:string;
+    sterilization_batch_no:string;
 
 
     created_by: number;

@@ -7,14 +7,21 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { createSamples } from "../actions";
 import { SERVER_API_URL } from "@/app/constant";
+import SubmitButton from "@/components/submit-button/submit-button";
 
 type Sample = {
   sample_name: string;
   batch_or_lot_no: string;
-  manufactured_date: number;
-  expiry_date: number;
+  manufactured_date: string;
+  expiry_date: string;
   batch_size: 0;
   received_quantity: 0;
+  description: string;
+  sample_condition: string;
+  sterilization_batch_no: string;
+  tat: string;
+  // test_type_id: string;
+
   test_params: Array<{
     test_parameter_id: string;
     order: number | string;
@@ -51,13 +58,23 @@ const SamplesEditForm = ({
     handleSubmit,
   } = useForm<Sample>({
     defaultValues: {
-      sample_name:data.sample.sample_name,
-      batch_or_lot_no:data.sample.batch_or_lot_no,
-      manufactured_date:data.sample.manufactured_date,
-      expiry_date:data.sample.expiry_date,
-      batch_size:data.sample.batch_size,
-      received_quantity:data.sample.received_quantity,
-
+      sample_name: data.sample.sample_name,
+      batch_or_lot_no: data.sample.batch_or_lot_no,
+      manufactured_date: data.sample.manufactured_date
+        ? new Date(data.sample.manufactured_date).toISOString().split("T")[0]
+        : "",
+      expiry_date: data.sample.expiry_date
+        ? new Date(data.sample.expiry_date).toISOString().split("T")[0]
+        : "",
+      batch_size: data.sample.batch_size,
+      received_quantity: data.sample.received_quantity,
+      description: data.sample?.description ?? "",
+      sample_condition: data.sample?.sample_condition ?? "",
+      sterilization_batch_no: data.sample?.sterilization_batch_no ?? "",
+      tat: data.sample.tat
+        ? new Date(data.sample.tat).toISOString().split("T")[0]
+        : "",
+      // test_type_id: data.sample.test_type_id.toString(),
     },
   });
 
@@ -138,8 +155,8 @@ const SamplesEditForm = ({
   };
 
   const handleForm = async (data: Sample) => {
-    // const res = await actionFn(data);
-    // setState(res);
+    const res = await actionFn(data);
+    setState(res);
     console.log(data);
   };
 
@@ -226,6 +243,52 @@ const SamplesEditForm = ({
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
                   </div>
+                  <div className="">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      TAT
+                    </label>
+                    <input
+                      {...register(`tat`)}
+                      type="date"
+                      placeholder="Enter Turn Around Time"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </div>
+                  <div className="">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Sample Condition{" "}
+                    </label>
+                    <input
+                      {...register(`sample_condition`)}
+                      type="text"
+                      required
+                      placeholder="Enter sample condition"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </div>
+                  <div className="">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Sterilization Batch No.
+                    </label>
+                    <input
+                      {...register(`sterilization_batch_no`)}
+                      type="text"
+                      required
+                      placeholder="Enter sterilization batch no."
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </div>
+                </div>
+                <div className="mb-4.5">
+                  <div className="w-full">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Sample Description
+                    </label>
+                    <textarea
+                      {...register(`description`)}
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </div>
                 </div>
 
                 {/* <div className="w-full xl:w-1/4">
@@ -286,7 +349,7 @@ const SamplesEditForm = ({
 
             <button
               type="submit"
-              className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
+              className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray disabled:bg-slate-500"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Loading" : "Submit"}

@@ -10,10 +10,9 @@ const schema = z
   .object({
     username: z
       .string()
-      .email({
-        message: "Invalid Email",
-      })
-      .trim(),
+      .trim()
+      .toLowerCase()
+      .min(1, "Username Required"),
     password: z.string().trim().min(1, "Password Required"),
   })
   .required({ username: true, password: true });

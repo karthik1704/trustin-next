@@ -23,13 +23,31 @@ type Props = {
   >;
 };
 type InitialState = {
-  fieldErrors?: {} | null;
+  fieldErrors?: {
+    first_name: undefined | string;
+    last_name: undefined | string;
+    username: undefined | string;
+    email: undefined | string;
+    phone: undefined | string;
+    role_id: undefined | string[];
+    department_id: undefined | string[];
+    qa_type_id: undefined | string[];
+  } | null;
   type?: string | null;
   message?: any | string | null;
 };
 
 const initialState: InitialState = {
-  fieldErrors: {},
+  fieldErrors: {
+    first_name: undefined,
+    last_name: undefined,
+    username: undefined,
+    email: undefined,
+    phone: undefined,
+    role_id: undefined,
+    department_id: undefined,
+    qa_type_id: undefined,
+  },
   type: null,
   message: null,
 };
@@ -40,25 +58,25 @@ const EditUserForm = ({
   user,
   actionFn,
 }: Props) => {
-const [state, formAction]=useFormState(actionFn, initialState)
-const router = useRouter();
-useEffect(() => {
-  if (state?.type === null) return;
+  const [state, formAction] = useFormState(actionFn, initialState);
+  const router = useRouter();
+  useEffect(() => {
+    if (state?.type === null) return;
 
-  if (state?.type === "Error") {
-    toast.error(state?.message, {
-      duration: 10000,
-      closeButton: true,
-    });
-  }
-  if (state?.type === "Success") {
-    toast.success(state?.message, {
-      duration: 10000,
-      closeButton: true,
-    });
-    router.push("/dashboard/users");
-  }
-}, [state, router]);
+    if (state?.type === "Error") {
+      toast.error(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+    }
+    if (state?.type === "Success") {
+      toast.success(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+      router.push("/dashboard/users");
+    }
+  }, [state, router]);
 
   return (
     <form action={formAction}>
@@ -75,6 +93,9 @@ useEffect(() => {
               defaultValue={user.first_name}
               className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
+            {state?.fieldErrors?.first_name && (
+              <p className="text-red-500">{state?.fieldErrors?.first_name}</p>
+            )}
           </div>
 
           <div className="w-full xl:w-1/2">
@@ -89,6 +110,9 @@ useEffect(() => {
               className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
+          {state?.fieldErrors?.last_name && (
+            <p className="text-red-500">{state?.fieldErrors?.last_name}</p>
+          )}
         </div>
 
         <div className="mb-4.5">
@@ -102,6 +126,25 @@ useEffect(() => {
             defaultValue={user.email}
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
+          {state?.fieldErrors?.email && (
+            <p className="text-red-500">{state?.fieldErrors?.email}</p>
+          )}
+        </div>
+        <div className="mb-4.5">
+          <label className="mb-2.5 block text-black dark:text-white">
+            Username <span className="text-meta-1">*</span>
+          </label>
+          <input
+            type="text"
+            name="username"
+            placeholder="Enter your username"
+            defaultValue={user.username}
+            readOnly={true}
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          />
+          {state?.fieldErrors?.username && (
+            <p className="text-red-500">{state?.fieldErrors?.username}</p>
+          )}
         </div>
         <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
@@ -114,9 +157,17 @@ useEffect(() => {
             defaultValue={user.phone}
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
+          {state?.fieldErrors?.phone && (
+            <p className="text-red-500">{state?.fieldErrors?.phone}</p>
+          )}
         </div>
 
-        <Select label="Role" name="role_id" defaultValue={user.role_id}>
+        <Select
+          label="Role"
+          name="role_id"
+          defaultValue={user.role_id}
+          error={state?.fieldErrors?.role_id}
+        >
           {roles.map((role) => (
             <option value={role.id} key={role.id}>
               {role.name}
@@ -128,6 +179,7 @@ useEffect(() => {
           label="Deparment"
           name="department_id"
           defaultValue={user.department_id}
+          error={state?.fieldErrors?.department_id}
         >
           {departments.map((department) => (
             <option value={department.id} key={department.id}>
@@ -140,6 +192,7 @@ useEffect(() => {
           label="QA Type"
           name="qa_type_id"
           defaultValue={user.qa_type_id}
+          error={state?.fieldErrors?.qa_type_id}
         >
           <option value="null">-----</option>
 
@@ -149,9 +202,8 @@ useEffect(() => {
             </option>
           ))}
         </Select>
-
       </div>
-        <SubmitButton />
+      <SubmitButton />
     </form>
   );
 };

@@ -96,11 +96,12 @@ const initialState: InitialState = {
 const status = [
   "Registered",
   "Under review and Sample requested (HOD)",
+  "Under Registration team (Sample issue)",
   "Sample Received",
   "Under Testing",
   "Under QC Review",
   "Under QA Review",
-  "Under Report preparation",
+  // "Under Report preparation",
   "Draft report/ Report released",
   "Done",
 ];
@@ -255,7 +256,7 @@ const SampleWorkflowForm = ({
 
     const last_history = sample_history[0];
     if (
-      last_history.from_status_id === 6 &&
+      last_history.from_status_id === 7 &&
       nextStep < last_history.from_status_id
     )
       return 6;
@@ -343,15 +344,26 @@ const SampleWorkflowForm = ({
                   )}
 
                   {data.sample.status_id === 3 && (
-                    <WorkFlowForm
+                    // <WorkFlowForm
+                    //   showRejectButton={true}
+                    //   rejectActionData={actionFnReject}
+                    //   currentStep={data?.sample?.status_id}
+                    //   actionData={formAction}
+                    //   assign={data.sample.assigned_to}
+                    //   status_id={getNextStatus(4)}
+                    //   buttonName="Sample Received"
+                    //   showComment={true}
+                    // />
+                    <UnderTestingForm
+                      data={data}
                       showRejectButton={true}
                       rejectActionData={actionFnReject}
                       currentStep={data?.sample?.status_id}
-                      actionData={formAction}
-                      assign={data.sample.assigned_to}
-                      status_id={getNextStatus(4)}
-                      buttonName="Sample Received"
-                      showComment={true}
+                      assigned_to={data.sample.assigned_to}
+                      parameters={data.sample.sample_test_parameters}
+                      assigneeData={data.users}
+                      patchFn={actionFnResult}
+                      step={getNextStatus(4)}
                     />
                   )}
 
@@ -399,33 +411,33 @@ const SampleWorkflowForm = ({
                       assigned_to={data.sample.assigned_to}
                       parameters={data.sample.sample_test_parameters}
                       patchFn={actionFnResult}
-                      step={7}
+                      step={getNextStatus(7)}
                     />
                   )}
                   {data.sample.status_id === 7 && (
-                    // <UnderTestingForm
-                    // data={data}
-                    //   showRejectButton={true}
-                    //   rejectActionData={actionFnReject}
-                    //   currentStep={data?.sample?.status_id}
-                    //   assigned_to={data.sample.assigned_to}
-                    //   parameters={data.sample.sample_test_parameters}
-                    //   patchFn={actionFnResult}
-                    //   step={8}
-                    // />
-                    <WorkFlowForm
+                    <UnderTestingForm
+                      data={data}
+                      showRejectButton={true}
                       rejectActionData={actionFnReject}
                       currentStep={data?.sample?.status_id}
-                      actionData={formAction}
-                      assign={data?.sample?.assigned_to}
-                      status={
-                        data?.sample?.status != "Submitted" ? "Submitted" : ""
-                      }
-                      status_id={8}
-                      buttonName="Prepartion Complete"
-                      showRejectButton
-                      showComment
+                      assigned_to={data.sample.assigned_to}
+                      parameters={data.sample.sample_test_parameters}
+                      patchFn={actionFnResult}
+                      step={8}
                     />
+                    // <WorkFlowForm
+                    //   rejectActionData={actionFnReject}
+                    //   currentStep={data?.sample?.status_id}
+                    //   actionData={formAction}
+                    //   assign={data?.sample?.assigned_to}
+                    //   status={
+                    //     data?.sample?.status != "Submitted" ? "Submitted" : ""
+                    //   }
+                    //   status_id={8}
+                    //   buttonName="Prepartion Complete"
+                    //   showRejectButton
+                    //   showComment
+                    // />
                   )}
                   {data.sample.status_id === 8 && (
                     // <UnderTestingForm
@@ -459,9 +471,16 @@ const SampleWorkflowForm = ({
                   )}
                 </div>
               </div>
-              <div className="mb-3 w-full flex-col">
-                <SamplesEditForm data={data} actionFn={actionUpdateSample} />
-              </div>
+              {data.sample.status_id === 1 &&
+                (data.currentUser.department_id === 6 ||
+                  data.currentUser.department_id === 1) && (
+                  <div className="mb-3 w-full flex-col">
+                    <SamplesEditForm
+                      data={data}
+                      actionFn={actionUpdateSample}
+                    />
+                  </div>
+                )}
 
               <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
                 <div className="w-full xl:w-1/5">
@@ -603,6 +622,19 @@ const SampleWorkflowForm = ({
               <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Sample Condition:
+                  </p>
+                  <p>{data?.sample?.sample_condition ?? "---"}</p>
+                </div>
+
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Sterilization Batch No.:
+                  </p>
+                  <p>{data?.sample?.sterilization_batch_no ?? "---"}</p>
+                </div>
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Under NABL Logo:
                   </p>
                   <p>{data?.sample?.nabl_logo ? "Yes" : "No"}</p>
@@ -613,6 +645,21 @@ const SampleWorkflowForm = ({
                     Under CDSCO:
                   </p>
                   <p>{data?.sample?.under_cdsco ? "Yes" : "No"}</p>
+                </div>
+              </div>
+              <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    No. of Sample Issued:
+                  </p>
+                  <p>{data?.sample?.sample_issued ?? "---"}</p>
+                </div>
+
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Sample Issued To:
+                  </p>
+                  <p>{data?.sample?.issued_to ?? "---"}</p>
                 </div>
               </div>
 
