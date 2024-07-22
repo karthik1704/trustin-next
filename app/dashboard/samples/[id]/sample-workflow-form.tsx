@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useEffect } from "react";
 import SamplesEditForm from "./samples-edit-form";
+import Link from "next/link";
 
 type Props = {
   data: Data;
@@ -500,7 +501,17 @@ const SampleWorkflowForm = ({
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Registration ID:
                   </p>
-                  <p>{data.sample?.registration?.code}</p>
+                  {data.currentUser.department_id === 6 ||
+                  data.currentUser.department_id === 1 ? (
+                    <Link
+                      href={`/dashboard/registrations/${data.sample?.registration?.id}`}
+                      target="_blank"
+                    >
+                      {data.sample?.registration?.code}
+                    </Link>
+                  ) : (
+                    <p>{data.sample?.registration?.code}</p>
+                  )}
                 </div>
 
                 <div className="w-full xl:w-1/5">
