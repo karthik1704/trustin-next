@@ -139,9 +139,10 @@ const EditUserForm = ({
             name="username"
             placeholder="Enter your username"
             defaultValue={user.username}
-            readOnly={true}
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
+          <p className="text-slate-500">Username can only contain letters, numbers, and underscores</p>
+
           {state?.fieldErrors?.username && (
             <p className="text-red-500">{state?.fieldErrors?.username}</p>
           )}
