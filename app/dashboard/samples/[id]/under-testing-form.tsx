@@ -106,7 +106,7 @@ const UnderTestingForm = ({
         sample_issued: data.sample.sample_issued,
       }),
       ...(currentStep == 4 && {
-        samples_received: data.sample.samples_received,
+        samples_received: data.sample.samples_received ? 1 :0,
       }),
       ...(currentStep == 5 && {
         testing_start_date: data?.sample?.testing_start_date
