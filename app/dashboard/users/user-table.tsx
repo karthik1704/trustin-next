@@ -13,6 +13,7 @@ export type UserType = {
   id: number;
   first_name: string;
   last_name: string;
+  username: string;
   email: string;
   role: RoleType;
 } [];
@@ -21,23 +22,28 @@ const UserTable = ({ data }: { data: UserType  }) => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
-        <table className="w-full table-auto">
+        <table className="w-full table-fixed">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
+            <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+               Username
+              </th>
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                 First Name
               </th>
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                 Last Name
               </th>
+              
+{/*             
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                 E-mail
-              </th>
+              </th> */}
               <th className="w-[100px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                 Role
               </th>
              
-              <th className="py-4 px-4 font-medium text-black dark:text-white">
+              <th className="min-w-[220px]  py-4 px-4 font-medium text-black dark:text-white">
                 Actions
               </th>
             </tr>
@@ -47,23 +53,29 @@ const UserTable = ({ data }: { data: UserType  }) => {
               <tr key={packageItem.id}>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
+                    {packageItem.username ?? "---"}
+                  </h5>
+                </td>
+                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                  <h5 className="font-medium text-black dark:text-white">
                     {packageItem.first_name}
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem.last_name}
+                    {packageItem.first_name}
                   </h5>
                 </td>
+{/*              
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem.email}
                   </h5>
                 </td>
-                
+                 */}
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem.role}
+                    {packageItem.role ?? "---"}
                   </h5>
                 </td>
                 

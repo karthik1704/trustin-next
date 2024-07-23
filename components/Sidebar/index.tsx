@@ -26,21 +26,21 @@ interface SidebarProps {
 }
 
 const adminMenuList = [
-  {
-    name: "Branches",
-    pathname: "branches",
-    icon: <Split />,
-  },
+  // {
+  //   name: "Branches",
+  //   pathname: "branches",
+  //   icon: <Split />,
+  // },
   {
     name: "Users",
     pathname: "users",
     icon: <UserRound />,
   },
-  {
-    name: "Test Type",
-    pathname: "testtype",
-    icon: <Microscope />,
-  },
+  // {
+  //   name: "Test Type",
+  //   pathname: "testtype",
+  //   icon: <Microscope />,
+  // },
   {
     name: "Products",
     pathname: "products",

@@ -87,10 +87,10 @@ const SamplesEditForm = ({
   //   name: "batch_id",
   // });
 
-  // const [filterId, setFilterId] = useState(
-  //   data?.sample?.test_type_id.toString(),
-  // );
-  // const [parameters, setParameters] = useState<[]>([]);
+  const [filterId, setFilterId] = useState(
+    data?.sample?.test_type_id.toString(),
+  );
+  const [parameters, setParameters] = useState<[]>([]);
   // const [selectedBatch, setSelectBatch] = useState<{} | null>(null);
 
   // useEffect(() => {
@@ -99,34 +99,32 @@ const SamplesEditForm = ({
   //   setFilterId(sampleWatch);
   // }, [sampleWatch]);
 
-  // useEffect(() => {
-  //   async function fetchTestParameters(query: string, product: string) {
-  //     let res = await fetch(
-  //       `${SERVER_API_URL}/parameters/product/${product}?${query}`,
-  //     );
-  //     const response: any = await res.json();
-  //     setParameters(response);
-  //   }
+  useEffect(() => {
+    async function fetchTestParameters(query: string, product: string) {
+      let res = await fetch(
+        `${SERVER_API_URL}/parameters/product/${product}?${query}`,
+      );
+      const response: any = await res.json();
+      setParameters(response);
+    }
 
-  //   if (filterId && batchWatch) {
-  //     const query = `test_type=${encodeURIComponent(filterId)}`;
-  //     const batch = data.batches.find(
-  //       (batch: any) => batch.id.toString() === batchWatch.toString(),
-  //     );
-  //     setSelectBatch(batch);
-  //     if (filterId === "2") {
-  //       if (batch) {
-  //         fetchTestParameters(query, batch.product_id.toString());
-  //       }
-  //     }
-  //     if (filterId === "1") {
-  //       const micro_params = data.test_params.filter(
-  //         (test: any) => test.test_type_id.toString() === "1",
-  //       );
-  //       if (micro_params.length) setParameters(micro_params);
-  //     }
-  //   }
-  // }, [batchWatch, data.batches, data.test_params, data, filterId]);
+    if (filterId) {
+      const query = `test_type=${encodeURIComponent(filterId)}`;
+
+      if (filterId === "2") {
+        fetchTestParameters(
+          query,
+          data?.sample?.registration?.product_id.toString(),
+        );
+      }
+      if (filterId === "1") {
+        const micro_params = data.test_params.filter(
+          (test: any) => test.test_type_id.toString() === "1",
+        );
+        if (micro_params.length) setParameters(micro_params);
+      }
+    }
+  }, [data.test_params, data, filterId]);
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const [showForm, setShowForm] = useState<boolean>(false);
@@ -204,7 +202,7 @@ const SamplesEditForm = ({
                       Manufactured Date
                     </label>
                     <input
-                      type="date"
+                      type="text"
                       {...register(`manufactured_date`)}
                       placeholder="Enter Manufactured Date"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -215,7 +213,7 @@ const SamplesEditForm = ({
                       Expiry Date
                     </label>
                     <input
-                      type="date"
+                      type="text"
                       {...register(`expiry_date`)}
                       placeholder="Enter Expiry Date"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -339,12 +337,12 @@ const SamplesEditForm = ({
             </div> */}
               </div>
               {/* // Test Params */}
-              {/* <TestParamsForm
-            filterId={"1"}
-            parameters={[]}
-            data={data}
-            {...{ control, register }}
-          /> */}
+              <TestParamsForm
+                filterId={"1"}
+                parameters={parameters}
+                data={data}
+                {...{ control, register }}
+              />
             </div>
 
             <button
@@ -392,23 +390,18 @@ const TestParamsForm = ({
       replace([]);
       data?.sample?.sample_test_parameters.forEach((test) => {
         append({
-          test_parameter_id: test.test_parameter_id.toString(),
+          test_params_id: test.test_parameter_id.toString(),
           order: test.order,
         });
       });
     }
-  }, [
-    append,
-    data?.trf?.test_details,
-    parameters,
-    parameters?.length,
-    replace,
-  ]);
+  }, [append, data?.sample?.sample_test_parameters,  parameters, parameters?.length, replace]);
 
   useEffect(() => {
+    if (!test_watch) return;
     const ids = test_watch.map((field, idx) => {
-      if (field.test_parameter_id !== "")
-        return field.test_parameter_id.toString();
+      if (field.test_params_id !== "")
+        return field.test_params_id.toString();
     });
     console.log(ids);
     const tests = parameters.filter((para) => ids.includes(para.id.toString()));
@@ -456,10 +449,10 @@ const TestParamsForm = ({
           </div>
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <Select
-              name={`test_params.${index}.test_parameter_id`}
+              name={`test_params.${index}.test_params_id`}
               register={register}
               label={"Test Parameter Name"}
-              width="w-full xl:w-1/5 "
+              width="w-full xl:w-1/2 "
             >
               <option value="">------------</option>
               {parameters.map((t: any) => (
@@ -486,7 +479,7 @@ const TestParamsForm = ({
                 {methods[index]}
               </h5>
             </div>
-            <div className="w-full xl:w-1/5">
+            <div className="w-full xl:w-1/6">
               <label className="mb-2.5 block text-black dark:text-white">
                 Test Type
               </label>
@@ -501,7 +494,7 @@ const TestParamsForm = ({
       <button
         type="button"
         className="mb-4 mt-2 flex justify-center rounded bg-primary p-3 font-medium text-gray"
-        onClick={() => append({ test_parameter_id: "", order: 0 })}
+        onClick={() => append({ test_parameter_id: "", order: fields.length + 1 })}
       >
         Add Test parameter
       </button>

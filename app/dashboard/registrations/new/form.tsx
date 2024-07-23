@@ -665,7 +665,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
               </label>
               <input
                 {...form.register("contact_email")}
-                type="email"
+                type="text"
                 placeholder="Enter Contact  Email"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
@@ -1100,7 +1100,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                           {...form.register(
                             `samples.${index}.manufactured_date`,
                           )}
-                          type="date"
+                          type="text"
                           placeholder="Enter Expiry Date"
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
@@ -1112,7 +1112,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                         </label>
                         <input
                           {...form.register(`samples.${index}.expiry_date`)}
-                          type="date"
+                          type="text"
                           placeholder="Enter Expiry Date"
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
@@ -1391,22 +1391,22 @@ const TestParamsForm = ({
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              <th className="w-[30px] px-2 py-4 font-medium text-black dark:text-white xl:pl-8">
-                S.NO
+              <th className="w-[20px] px-1 py-4 font-medium text-black dark:text-white xl:pl-4">
+                S.NO.
               </th>
-              <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="min-w-[320px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4">
                 Test Parameter Name
               </th>
               {/* <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 QTY
               </th> */}
-              <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4">
                 Test Type
               </th>
-              <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="w-[220px] px-2 py-4 font-medium text-black dark:text-white xl:pl-6">
                 Method / Spec
               </th>
-              <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-6">
                 Priority Order
               </th>
               <th className="w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-6">
@@ -1417,12 +1417,12 @@ const TestParamsForm = ({
           <tbody>
             {fields.map((item, idx) => (
               <tr key={item.id}>
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-8">
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
                   <h5 className="font-medium text-black dark:text-white">
                     {idx + 1}
                   </h5>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
                   {/* <h5 className="font-medium text-black dark:text-white">
                   {
                     data.trf?.test_details?.[idx]?.parameter
@@ -1472,17 +1472,17 @@ const TestParamsForm = ({
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 pl-1 pr-2 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </td> */}
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
                   <h5 className="font-medium text-black dark:text-white">
                     {testTypesName[idx]}
                   </h5>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-6">
                   <h5 className="font-medium text-black dark:text-white">
                     {methods[idx]}
                   </h5>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-6">
                   <input
                     type="text"
                     {...register(`${arrayFieldName}.${idx}.order`)}

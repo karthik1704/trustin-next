@@ -501,8 +501,9 @@ const SampleWorkflowForm = ({
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Registration ID:
                   </p>
-                  {data.currentUser.department_id === 6 ||
-                  data.currentUser.department_id === 1 ? (
+                  {(data.currentUser.department_id === 6 ||
+                    data.currentUser.department_id === 1) &&
+                  data.sample.status_id === 1 ? (
                     <Link
                       href={`/dashboard/registrations/${data.sample?.registration?.id}`}
                       target="_blank"
@@ -794,7 +795,7 @@ const SampleWorkflowForm = ({
                         <p className="mb-2.5 block font-semibold text-black dark:text-white">
                           Result
                         </p>
-                        <p>{testParameter?.result ? "true" : "false"}</p>
+                        <p>{testParameter?.result ? "Pass" : "Fail"}</p>
                       </div>
                     </>
                   )}

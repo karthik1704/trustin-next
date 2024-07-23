@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useFormState } from "react-dom";
 import { createCustomers } from "../actions";
 import SubmitButton from "@/components/submit-button/submit-button";
+import { useForm } from "react-hook-form";
 
 type InitialState = {
   fieldErrors?: {} | null;
@@ -19,6 +20,7 @@ const initalState: InitialState = {
 };
 
 const CustomerAddForm = () => {
+  const form = useForm()
   const [state, formAction] = useFormState(createCustomers, initalState);
   const router = useRouter();
   useEffect(() => {

@@ -19,9 +19,9 @@ const ParametersTable = ({ data }: { data: ParametersType }) => {
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              <th className="min-w-[100px] py-4 px-2 font-medium text-black dark:text-white xl:pl-2">
+              {/* <th className="min-w-[100px] py-4 px-2 font-medium text-black dark:text-white xl:pl-2">
                 Parameter Code
-              </th>
+              </th> */}
               <th className="w-[120px] py-4 px-2 font-medium text-black dark:text-white">
                 Test Parameter{" "}
               </th>
@@ -42,11 +42,11 @@ const ParametersTable = ({ data }: { data: ParametersType }) => {
           <tbody>
             {data.map((packageItem, key) => (
               <tr key={packageItem.id}>
-                <td className="border-b border-[#eee] py-5 px-2 pl-4 dark:border-strokedark xl:pl-2">
+                {/* <td className="border-b border-[#eee] py-5 px-2 pl-4 dark:border-strokedark xl:pl-2">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem.parameter_code}
                   </h5>
-                </td>
+                </td> */}
                 <td className="border-b border-[#eee] py-5 px-2 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {packageItem.testing_parameters}

@@ -94,25 +94,41 @@ const UnderTestingForm = ({
     defaultValues: {
       status: "",
       status_id: step,
-      assigned_to,
+
+      ...(currentStep == 2 && {
+        assigned_to,
+        nabl_logo: data.sample.nabl_logo ? 1 : 0,
+        under_cdsco: data.sample.under_cdsco ? 1 : 0,
+      }),
       comments: comment,
-      nabl_logo: data.sample.nabl_logo ? 1 : 0,
-      under_cdsco: data.sample.under_cdsco ? 1 : 0,
-      issued_to: data.sample.issued_to,
-      sample_issued: data.sample.sample_issued,
-      testing_start_date: data?.sample?.testing_start_date
-        ? new Date(data?.sample?.testing_start_date).toISOString().split("T")[0]
-        : "",
-      testing_end_date: data?.sample?.testing_end_date
-        ? new Date(data.sample.testing_end_date).toISOString().split("T")[0]
-        : "",
+      ...(currentStep == 3 && {
+        issued_to: data.sample.issued_to,
+        sample_issued: data.sample.sample_issued,
+      }),
+      ...(currentStep == 4 && {
+        samples_received: data.sample.samples_received,
+      }),
+      ...(currentStep == 5 && {
+        testing_start_date: data?.sample?.testing_start_date
+          ? new Date(data?.sample?.testing_start_date)
+              .toISOString()
+              .split("T")[0]
+          : "",
+        testing_end_date: data?.sample?.testing_end_date
+          ? new Date(data.sample.testing_end_date).toISOString().split("T")[0]
+          : "",
+      }),
+
       test_params: parameters.map((para) => ({
         id: para.id,
-        value: para.value ?? "",
         order: para.order,
         quantity: para.quantity,
-        result: para.result ? 1 : 0,
         test_name: para.test_parameter.testing_parameters,
+
+        ...(currentStep === 5 && {
+          value: para.value ?? "",
+          result: para.result ? 1 : 0,
+        }),
       })),
     },
   });
@@ -161,7 +177,7 @@ const UnderTestingForm = ({
     const { comments, test_params } = getValues();
     const res = await rejectActionData({
       status: "",
-      status_id: currentStep === 2 ? 2 : currentStep - 1,
+      status_id: currentStep === 2 ? 1 : currentStep - 1,
       assigned_to: assigned_to,
       comments: comments,
       test_params: test_params,
@@ -179,6 +195,66 @@ const UnderTestingForm = ({
   return (
     <form onSubmit={handleSubmit(handleForm)} className="p-2">
       <input type="hidden" {...register("status")} />
+      {currentStep === 2 && (
+        <>
+          <Select
+            label={"Test parameters under NABL Scope"}
+            name={`nabl_logo`}
+            register={register}
+          >
+            <option value={0}>No</option>
+            <option value={1}>Yes</option>
+          </Select>
+          <Select
+            label={"Test parameters under CDSCO"}
+            name={`under_cdsco`}
+            register={register}
+          >
+            <option value={0}>No</option>
+            <option value={1}>Yes</option>
+          </Select>
+          <Select name="assigned_to" label="assignee" register={register}>
+            {assigneeData?.map((assignee) => (
+              <option value={assignee.id} key={assignee.id}>
+                {assignee.first_name + " " + assignee.last_name}
+              </option>
+            ))}
+          </Select>{" "}
+        </>
+      )}
+      {currentStep === 3 && (
+        <>
+          <div className="mb-6">
+            <label className="mb-2.5 block text-black dark:text-white">
+              No. of samples issued
+            </label>
+            <input
+              type="number"
+              {...register("sample_issued")}
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            />{" "}
+          </div>
+          <div className="mb-6">
+            <label className="mb-2.5 block text-black dark:text-white">
+              Issued to
+            </label>
+            <input
+              type="text"
+              {...register("issued_to")}
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            />{" "}
+          </div>
+        </>
+      )}
+      {currentStep === 4 && (
+        <>
+        <Select label={"Samples Received"} name={`samples_received`} register={register}>
+          <option value={0}> No </option>
+          <option value={1}> Yes </option>
+         
+        </Select>
+      </>
+      )}
 
       {currentStep === 5 && (
         <>
@@ -219,63 +295,15 @@ const UnderTestingForm = ({
       ) : (
         <input type="hidden" {...register("status_id")} />
       )}
-      {currentStep === 3 && (
-        <>
-          <div className="mb-6">
-            <label className="mb-2.5 block text-black dark:text-white">
-              No. of samples issued
-            </label>
-            <input
-              type="number"
-              {...register("sample_issued")}
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-            />{" "}
-          </div>
-          <div className="mb-6">
-            <label className="mb-2.5 block text-black dark:text-white">
-              Issued to
-            </label>
-            <input
-              type="text"
-              {...register("issued_to")}
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-            />{" "}
-          </div>
-        </>
-      )}
-      {currentStep === 2 && (
-        <>
-          <Select
-            label={"Test parameters under NABL Scope"}
-            name={`nabl_logo`}
-            register={register}
-          >
-            <option value={0}>No</option>
-            <option value={1}>Yes</option>
-          </Select>
-          <Select
-            label={"Test parameters under CDSCO"}
-            name={`under_cdsco`}
-            register={register}
-          >
-            <option value={0}>No</option>
-            <option value={1}>Yes</option>
-          </Select>
-          <Select name="assigned_to" label="assignee" register={register}>
-            {assigneeData?.map((assignee) => (
-              <option value={assignee.id} key={assignee.id}>
-                {assignee.first_name + assignee.last_name}
-              </option>
-            ))}
-          </Select>{" "}
-        </>
-      )}
+      
+   
       <div className="mb-6">
         <label className="mb-2.5 block text-black dark:text-white">
           Comments
         </label>
         <textarea
           rows={3}
+          required
           {...register("comments")}
           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
         ></textarea>{" "}
@@ -285,45 +313,48 @@ const UnderTestingForm = ({
           <table className="w-full table-fixed">
             <thead>
               <tr className="bg-gray-2 p-2 text-left dark:bg-meta-4">
-                <th className="w-[30px] font-medium text-black dark:text-white">
-                  S.NO
+                <th className="w-[40px] pr-2 font-medium text-black dark:text-white">
+                  S.NO.
                 </th>
-                <th className="w-1/5 font-medium text-black dark:text-white">
+                <th className="min-w-[320px] pl-2 font-medium text-black dark:text-white">
                   Test Parameter Name
                 </th>
-                <th className="w-1/5 font-medium text-black dark:text-white">
+                <th className="min-w-[100px] font-medium text-black dark:text-white">
                   Order
                 </th>
-                <th className="w-[100px] font-medium text-black dark:text-white">
+                <th className="min-w-[100px] font-medium text-black dark:text-white">
                   Amount of samples
                 </th>
-                {currentStep !== 2 && currentStep !== 3 &&  currentStep!==4 &&(
-                  <>
-                    <th className="w-1/5 font-medium text-black dark:text-white">
-                      Value
-                    </th>
-                    <th className="w-1/5 font-medium text-black dark:text-white">
-                      Result
-                    </th>
-                  </>
-                )}
+                {currentStep !== 2 &&
+                  currentStep !== 3 &&
+                  currentStep !== 4 && (
+                    <>
+                      <th className="w-1/5 font-medium text-black dark:text-white">
+                        Value
+                      </th>
+                      <th className="w-[120px] font-medium text-black dark:text-white">
+                        Result
+                      </th>
+                    </>
+                  )}
               </tr>
             </thead>
             <tbody>
               {fields.map((item, index) => (
                 <tr key={item.id}>
-                  <td className="w-[30px] border-b border-[#eee] dark:border-strokedark">
-                    <h5 className="w-[30px] font-medium text-black dark:text-white">
+                  <td className="w-[40px] border-b border-[#eee] dark:border-strokedark">
+                    <h5 className="w-[40px] font-medium text-black dark:text-white">
                       {index + 1}
                     </h5>
                   </td>
-                  <td className="border-b border-[#eee] dark:border-strokedark">
+                  <td className="border-b border-[#eee] pl-2 dark:border-strokedark">
                     <input
-                      type="text"
+                      type="hidden"
                       {...register(`test_params.${index}.test_name`)}
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                       disabled
                     />
+                    <p>{item.test_name}</p>
                   </td>
                   <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                     <input
@@ -339,27 +370,29 @@ const UnderTestingForm = ({
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
                   </td>
-                  {currentStep !== 2 && currentStep !== 3 && currentStep!==4 && (
-                    <>
-                      <td className="border-b border-[#eee] px-2 dark:border-strokedark">
-                        <input
-                          type="text"
-                          {...register(`test_params.${index}.value`)}
-                          className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                        />
-                      </td>
-                      <td className="border-b border-[#eee] px-2 dark:border-strokedark">
-                        <Select
-                          label={null}
-                          name={`test_params.${index}.result`}
-                          register={register}
-                        >
-                          <option value={1}>Pass</option>
-                          <option value={0}>Fail</option>
-                        </Select>
-                      </td>
-                    </>
-                  )}
+                  {currentStep !== 2 &&
+                    currentStep !== 3 &&
+                    currentStep !== 4 && (
+                      <>
+                        <td className="border-b border-[#eee] px-2 dark:border-strokedark">
+                          <input
+                            type="text"
+                            {...register(`test_params.${index}.value`)}
+                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                          />
+                        </td>
+                        <td className="border-b border-[#eee] px-2 dark:border-strokedark">
+                          <Select
+                            label={null}
+                            name={`test_params.${index}.result`}
+                            register={register}
+                          >
+                            <option value={1}>Pass</option>
+                            <option value={0}>Fail</option>
+                          </Select>
+                        </td>
+                      </>
+                    )}
                 </tr>
               ))}
             </tbody>
