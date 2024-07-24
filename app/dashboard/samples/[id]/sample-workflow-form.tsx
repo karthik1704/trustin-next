@@ -31,6 +31,7 @@ import { toast } from "sonner";
 import { useEffect } from "react";
 import SamplesEditForm from "./samples-edit-form";
 import Link from "next/link";
+import ConfrimDialog from "./confrim-dialog";
 
 type Props = {
   data: Data;
@@ -286,6 +287,7 @@ const SampleWorkflowForm = ({
       {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
     </PDFDownloadLink> */}
       </Modal>
+      <ConfrimDialog />
 
       <Tabs defaultValue="status" className="mt-1 w-full p-4">
         <TabsList>
@@ -543,26 +545,14 @@ const SampleWorkflowForm = ({
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Manufactured Date:
                   </p>
-                  <p>
-                    {data.sample.manufactured_date
-                      ? new Date(data.sample.manufactured_date)
-                          .toISOString()
-                          .split("T")[0]
-                      : "---"}
-                  </p>
+                  <p>{data.sample.manufactured_date ?? "---"}</p>
                 </div>
 
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Expiry Date:
                   </p>
-                  <p>
-                    {data.sample.expiry_date
-                      ? new Date(data.sample.expiry_date)
-                          .toISOString()
-                          .split("T")[0]
-                      : "---"}
-                  </p>
+                  <p>{data.sample.expiry_date ?? "---"} </p>
                 </div>
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">

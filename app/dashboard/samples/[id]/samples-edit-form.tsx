@@ -60,12 +60,8 @@ const SamplesEditForm = ({
     defaultValues: {
       sample_name: data.sample.sample_name,
       batch_or_lot_no: data.sample.batch_or_lot_no,
-      manufactured_date: data.sample.manufactured_date
-        ? new Date(data.sample.manufactured_date).toISOString().split("T")[0]
-        : "",
-      expiry_date: data.sample.expiry_date
-        ? new Date(data.sample.expiry_date).toISOString().split("T")[0]
-        : "",
+      manufactured_date: data.sample.manufactured_date ?? "",
+      expiry_date: data.sample.expiry_date ?? "",
       batch_size: data.sample.batch_size,
       received_quantity: data.sample.received_quantity,
       description: data.sample?.description ?? "",
@@ -395,13 +391,18 @@ const TestParamsForm = ({
         });
       });
     }
-  }, [append, data?.sample?.sample_test_parameters,  parameters, parameters?.length, replace]);
+  }, [
+    append,
+    data?.sample?.sample_test_parameters,
+    parameters,
+    parameters?.length,
+    replace,
+  ]);
 
   useEffect(() => {
     if (!test_watch) return;
     const ids = test_watch.map((field, idx) => {
-      if (field.test_params_id !== "")
-        return field.test_params_id.toString();
+      if (field.test_params_id !== "") return field.test_params_id.toString();
     });
     console.log(ids);
     const tests = parameters.filter((para) => ids.includes(para.id.toString()));
@@ -494,7 +495,9 @@ const TestParamsForm = ({
       <button
         type="button"
         className="mb-4 mt-2 flex justify-center rounded bg-primary p-3 font-medium text-gray"
-        onClick={() => append({ test_parameter_id: "", order: fields.length + 1 })}
+        onClick={() =>
+          append({ test_parameter_id: "", order: fields.length + 1 })
+        }
       >
         Add Test parameter
       </button>

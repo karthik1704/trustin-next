@@ -94,9 +94,9 @@ const UnderTestingForm = ({
     defaultValues: {
       status: "",
       status_id: step,
+      assigned_to,
 
       ...(currentStep == 2 && {
-        assigned_to,
         nabl_logo: data.sample.nabl_logo ? 1 : 0,
         under_cdsco: data.sample.under_cdsco ? 1 : 0,
       }),

@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export const getErrorMessage = (error: string | string[] | Object) => {
   if (typeof error === "string") return error;
-  if (Array.isArray(error)) return error.join(", ");
+  if (Array.isArray(error)) return error.map(e=>e.msg).join("/n");
   if (typeof error === "object") {
     // TODO: Need Imporement Here
     console.log(error);

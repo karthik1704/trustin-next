@@ -37,24 +37,10 @@ const customerSchema = z.object({
   contact_persons: z.array(contactPersonsSchema),
 });
 
-export async function createCustomers(prevState:any, formData: FormData) {
-  let jsonObject = Object.fromEntries(formData.entries());
-  const contact_persons = [
-    {
-      person_name: jsonObject.person_name,
-      designation: jsonObject.designation,
-      mobile_number: jsonObject.mobile_number,
-      landline_number: jsonObject.landline_number,
-      contact_email: jsonObject.contact_email,
-    },
-  ];
-  delete jsonObject["person_name"];
-  delete jsonObject["designation"];
-  delete jsonObject["mobile_number"];
-  delete jsonObject["landline_number"];
-  delete jsonObject["contact_email"];
+export async function createCustomers(prevState:any, formData: any) {
+  // let jsonObject = Object.fromEntries(formData.entries());
+  let jsonObject = formData;
 
-  jsonObject["contact_persons"] = contact_persons as any;
   // console.log(jsonObject);
   const access_token = cookies().get("access_token");
 
@@ -92,25 +78,9 @@ export async function createCustomers(prevState:any, formData: FormData) {
   // if (res.status===201) redirect("/dashboard/customers");
 }
 
-export async function updateCustomers(id:any, pervState:any, formData: FormData) {
+export async function updateCustomers(id:any, pervState:any, formData: any) {
 
-  let jsonObject = Object.fromEntries(formData.entries());
-  const contact_persons = [
-    {
-      person_name: jsonObject.person_name,
-      designation: jsonObject.designation,
-      mobile_number: jsonObject.mobile_number,
-      landline_number: jsonObject.landline_number,
-      contact_email: jsonObject.contact_email,
-    },
-  ];
-  delete jsonObject["person_name"];
-  delete jsonObject["designation"];
-  delete jsonObject["mobile_number"];
-  delete jsonObject["landline_number"];
-  delete jsonObject["contact_email"];
 
-  jsonObject["contact_persons"] = contact_persons as any;
   // console.log(jsonObject);
   const access_token = cookies().get("access_token");
   const res = await fetch(`${SERVER_API_URL}/customers/${id}`, {
@@ -121,7 +91,7 @@ export async function updateCustomers(id:any, pervState:any, formData: FormData)
       // "Content-Type": "application/x-www-form-urlencoded",
       Authorization: `Bearer ${access_token?.value}`,
     },
-    body: JSON.stringify(jsonObject),
+    body: JSON.stringify(formData),
   });
 
   if (res.status === 401) redirect("/signin");

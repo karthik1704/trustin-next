@@ -10,7 +10,7 @@ const schema = z
   .object({
     first_name: z.string().min(1, "First Name Required").trim(),
     last_name: z.string().min(1, "Last Name Required").trim(),
-    email: z.string().email("Invalid E-mail").trim(),
+    email: z.string().max(0).or(z.string().email("Invalid E-mail")),
     username: z
       .string()
       .min(3, { message: "Username must be at least 4 characters long" })
@@ -43,7 +43,7 @@ const schema = z
   .object({
     first_name: z.string().min(1, "First Name Required").trim(),
     last_name: z.string().min(1, "Last Name Required").trim(),
-    email: z.string().email("Invalid E-mail").trim(),
+    email: z.string().max(0).or(z.string().email("Invalid E-mail")),
     username: z
       .string()
       .min(3, { message: "Username must be at least 4 characters long" })
@@ -99,10 +99,11 @@ export async function createUser(prevState: any, formData: FormData) {
 
   if (res.status !== 201) {
     const error = await res.json();
+    console.log(error)
     return {
       fieldErrors: null,
       type: "Error",
-      message: error.detail,
+      message: "Something Went Wrong",
     };
   }
 
