@@ -753,12 +753,12 @@ const SampleWorkflowForm = ({
                   className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row"
                   key={testParameter.id}
                 >
-                  <div className="w-full xl:w-1/5">
+                  {/* <div className="w-full xl:w-1/5">
                     <p className="mb-2.5 block font-semibold text-black dark:text-white">
                       Test Paramenter Code:
                     </p>
                     <p>{testParameter.test_parameter.parameter_code}</p>
-                  </div>
+                  </div> */}
 
                   <div className="w-full xl:w-1/5">
                     <p className="mb-2.5 block font-semibold text-black dark:text-white">

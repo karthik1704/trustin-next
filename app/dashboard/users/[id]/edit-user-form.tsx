@@ -177,7 +177,7 @@ const EditUserForm = ({
         </Select>
 
         <Select
-          label="Deparment"
+          label="Department"
           name="department_id"
           defaultValue={user.department_id}
           error={state?.fieldErrors?.department_id}
