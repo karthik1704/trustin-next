@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useFormState } from "react-dom";
@@ -8,6 +8,8 @@ import SubmitButton from "@/components/submit-button/submit-button";
 import Select from "@/components/select-input";
 import { Data } from "./page";
 import { getCurrentLocalISOString } from "@/lib/utils";
+import ComboBox2 from "@/components/combo-box/combo-box2";
+import UncontrolledComboBox from "@/components/combo-box/uncontrolled-combo-box";
 
 const Customers = [
   { id: 1, name: "Muthu" },
@@ -32,6 +34,7 @@ const initalState: InitialState = {
   message: null,
 };
 const FrontDeskAddForm = ({ data }: props) => {
+  // const {customerId,setCustomerId} = useState<string|number>('');
   const [state, formAction] = useFormState(createFrontDesk, initalState);
   const router = useRouter();
   useEffect(() => {
@@ -59,13 +62,29 @@ const FrontDeskAddForm = ({ data }: props) => {
     <form action={formAction}>
       <div className="p-6.5">
         <div className="mb-4.5">
-          <Select label="Customer" name="customer_id">
+          {/* <Select label="Customer" name="customer_id">
             {data?.customers?.map((customer) => (
               <option value={customer.id} key={customer.id}>
                 {customer.company_name}
               </option>
             ))}
-          </Select>
+          </Select> */}
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Customer
+              </label>
+
+              <UncontrolledComboBox
+                name="customer_id"
+                data={data.customers.map((t) => ({
+                  name: t.company_name,
+                  value: t.id,
+                }))}
+                value={""}
+              />
+            </div>
+          </div>
         </div>
 
         {/* <div className="mb-4.5"> */}
@@ -130,7 +149,11 @@ const FrontDeskAddForm = ({ data }: props) => {
         </div>
 
         <div className="mb-4.5">
-          <Select label="Forward to department" name="deparment_id" defaultValue={"6"}>
+          <Select
+            label="Forward to department"
+            name="deparment_id"
+            defaultValue={"6"}
+          >
             <option value={6}>Registration</option>
           </Select>
         </div>

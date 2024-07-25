@@ -280,14 +280,13 @@ const SampleWorkflowForm = ({
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {/* <h2>This is a modal</h2>
         <p>Modal content goes here...</p> */}
-        <PDFViewer width="1000" height="600">
+        <PDFViewer width="1000" height="600" showToolbar={data.sample.status_id >7? true : false} >
           <MyDocument data={data} />
         </PDFViewer>
         {/* <PDFDownloadLink document={< MyDocument/>} fileName="somename.pdf">
       {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
     </PDFDownloadLink> */}
       </Modal>
-      <ConfrimDialog />
 
       <Tabs defaultValue="status" className="mt-1 w-full p-4">
         <TabsList>
@@ -427,6 +426,7 @@ const SampleWorkflowForm = ({
                       parameters={data.sample.sample_test_parameters}
                       patchFn={actionFnResult}
                       step={8}
+                      openModal={openModal}
                     />
                     // <WorkFlowForm
                     //   rejectActionData={actionFnReject}

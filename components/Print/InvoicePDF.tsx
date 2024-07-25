@@ -57,8 +57,10 @@ const styles = StyleSheet.create({
 // Create PDF component
 const MyDocument = ({ data }: { data: any }) => {
   console.log(data);
+
+
   return (
-    <Document>
+    <Document >
       <Page size="A4" style={styles.page}>
         <View
           style={{

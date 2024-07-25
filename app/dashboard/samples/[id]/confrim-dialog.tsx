@@ -12,17 +12,26 @@ import {
 import { CheckIcon } from "@heroicons/react/16/solid";
 import { useState } from "react";
 
-function ConfrimDialog({ isLoading = false, submitButtonName = "Submit" }) {
+function ConfrimDialog({ isLoading = false, submitButtonName = "Submit", isSubmitting, successButtonName, formName }) {
   let [isOpen, setIsOpen] = useState(false);
   const [enabled, setEnabled] = useState(false);
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>Open dialog</button>
+  <button
+          type="button"
+          className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray disabled:bg-slate-500"
+          disabled={isLoading || isSubmitting}
+          onClick={()=>setIsOpen(true)}
+        >
+          {isLoading || isSubmitting ? "Loading..." : successButtonName}
+        </button>
+
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
         className="relative z-50"
+        role="alertdialog"
       >
         <DialogBackdrop className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4 shadow-5">
@@ -64,11 +73,13 @@ function ConfrimDialog({ isLoading = false, submitButtonName = "Submit" }) {
               </button>
 
               <button
-                type="submit"
+                type='submit'
                 className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray disabled:bg-slate-500"
-                disabled={isLoading || !enabled}
+                disabled={!enabled}
+                onClick={()=>setIsOpen(false)}
+                form={formName}
               >
-                {isLoading ? "Loading..." : "Continue"}
+                {"Continue"}
               </button>
             </div>
           </DialogPanel>

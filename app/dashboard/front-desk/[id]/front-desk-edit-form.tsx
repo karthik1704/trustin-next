@@ -7,6 +7,7 @@ import { createFrontDesk } from "../actions";
 import SubmitButton from "@/components/submit-button/submit-button";
 import { Customer, Data } from "./typings";
 import Select from "@/components/select-input";
+import UncontrolledComboBox from "@/components/combo-box/uncontrolled-combo-box";
 
 const Customers = [
   { id: 1, name: "Muthu" },
@@ -41,7 +42,7 @@ const FrontDeskEditForm = ({
 }) => {
   const [state, formAction] = useFormState(actionFn, initialState);
   const router = useRouter();
-  const readOnly=data.user?.role_id ===1 ? false : true;
+  const readOnly = data.user?.role_id === 1 ? false : true;
   useEffect(() => {
     if (state?.type === null) return;
 
@@ -63,7 +64,7 @@ const FrontDeskEditForm = ({
   return (
     <form action={formAction}>
       <div className="p-6.5">
-        <div className="mb-4.5">
+        {/* <div className="mb-4.5">
           <Select
             label="Customer"
             name="customer_id"
@@ -76,6 +77,22 @@ const FrontDeskEditForm = ({
               </option>
             ))}
           </Select>
+        </div> */}
+        <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+          <div className="w-full">
+            <label className="mb-2.5 block text-black dark:text-white">
+              Customer
+            </label>
+
+            <UncontrolledComboBox
+              name="customer_id"
+              data={data.customers.map((t) => ({
+                name: t.company_name,
+                value: t.id,
+              }))}
+              value={data.frontDesk.customer_id}
+            />
+          </div>
         </div>
 
         <div className="mb-4.5">
@@ -97,8 +114,7 @@ const FrontDeskEditForm = ({
             Date Received
           </label>
           <input
-                      readOnly={readOnly}
-
+            readOnly={readOnly}
             type="datetime-local"
             name="date_of_received"
             placeholder="Date Received"
@@ -113,8 +129,7 @@ const FrontDeskEditForm = ({
             Storage Condition
           </label>
           <input
-                      readOnly={readOnly}
-
+            readOnly={readOnly}
             type="text"
             name="temperature"
             placeholder="Storage Condition"
@@ -129,7 +144,6 @@ const FrontDeskEditForm = ({
             name="received_condition"
             defaultValue={data.frontDesk.received_condition}
             disabled={readOnly}
-
           >
             <option value="GOOD">Good</option>
             <option value="DAMAGED">Damaged</option>
@@ -142,26 +156,25 @@ const FrontDeskEditForm = ({
             name="deparment_id"
             defaultValue={data.frontDesk.deparment_id}
             disabled={readOnly}
-
           >
             <option value={6}>Registration</option>
           </Select>
         </div>
 
-       
-         <div className="mb-4.5">
-         <label className="mb-2.5 block text-black dark:text-white">
-           Reason for Change
-         </label>
-         <textarea
+        <div className="mb-4.5">
+          <label className="mb-2.5 block text-black dark:text-white">
+            Reason for Change
+          </label>
+          <textarea
             readOnly={readOnly}
-           name="reason"
-           defaultValue={data.frontDesk.reason}
-           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-         />
-       </div>
+            name="reason"
+            defaultValue={data.frontDesk.reason}
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          />
+        </div>
 
-        {readOnly ?    <div className="mb-4.5">
+        {readOnly ? (
+          <div className="mb-4.5">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Status
@@ -173,22 +186,22 @@ const FrontDeskEditForm = ({
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
-          </div> :
-        <div className="mb-4.5">
-          <Select
-            label="Status"
-            name="status"
-            defaultValue={data.frontDesk.status}
-            disabled
+          </div>
+        ) : (
+          <div className="mb-4.5">
+            <Select
+              label="Status"
+              name="status"
+              defaultValue={data.frontDesk.status}
+              disabled
+            >
+              <option value="UNDER_REGISTRATION">Under Registration</option>
+              <option value="REGISTERED">Registered</option>
+            </Select>
+          </div>
+        )}
 
-          >
-            <option value="UNDER_REGISTRATION">Under Registration</option>
-            <option value="REGISTERED">Registered</option>
-          </Select>
-        </div>}
-
-      {!readOnly && 
-        <SubmitButton /> }
+        {!readOnly && <SubmitButton />}
       </div>
     </form>
   );

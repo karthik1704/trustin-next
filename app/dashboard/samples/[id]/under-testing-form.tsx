@@ -5,6 +5,8 @@ import { useFieldArray, useForm, Form } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Data } from "./page";
+import ConfrimDialog from "./confrim-dialog";
+import ConfrimDialog2 from "./confrim-dialog2";
 
 type Parameters = [
   {
@@ -57,6 +59,7 @@ type Props = {
   comment?: string;
   currentStep: number;
   assigneeData?: { id: number; first_name: string; last_name: string }[] | [];
+  openModal?:()=>void;
 };
 
 type InitialState = {
@@ -83,6 +86,7 @@ const UnderTestingForm = ({
   rejectActionData,
   assigneeData,
   data,
+  openModal
 }: Props) => {
   const {
     control,
@@ -193,7 +197,24 @@ const UnderTestingForm = ({
   //   }
 
   return (
-    <form onSubmit={handleSubmit(handleForm)} className="p-2">
+    <div>
+      {currentStep===7&&(
+         <div className="align-items:flex-end flex flex-col items-end gap-3 sm:flex-row sm:justify-end">
+         <button
+           type="button"
+           onClick={openModal}
+           className="align-items: flex-end m-1 justify-center rounded bg-primary p-2 font-medium text-gray"
+         >
+           Print
+         </button>
+       </div>
+      )}
+    
+    <form
+      id="workflow-form"
+      onSubmit={handleSubmit(handleForm)}
+      className="p-2"
+    >
       <input type="hidden" {...register("status")} />
       {currentStep === 2 && (
         <>
@@ -405,29 +426,29 @@ const UnderTestingForm = ({
                       </h5>
                     </td>
                     <td className="border-b border-[#eee] pl-2 dark:border-strokedark">
-                      <p className="  py-3  mb-2.5 block font-semibold text-black dark:text-white">
+                      <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
                         {item.test_parameter.testing_parameters}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] px-2 dark:border-strokedark">
-                      <p className="  py-3  mb-2.5 block font-semibold text-black dark:text-white">
+                      <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
                         {item.order}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] px-2 dark:border-strokedark">
-                      <p className="  py-3  mb-2.5 block font-semibold text-black dark:text-white">
+                      <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
                         {item.quantity}
                       </p>
                     </td>
 
                     <td className="border-b border-[#eee] px-2 dark:border-strokedark">
-                      <p className="  py-3  mb-2.5 block font-semibold text-black dark:text-white">
+                      <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
                         {item.value}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                       <p
-                        className={`  py-3 mb-2.5 block font-semibold ${
+                        className={`mb-2.5 block py-3 font-semibold ${
                           item.result ? "text-green-700" : "text-red-700"
                         }`}
                       >
@@ -442,15 +463,38 @@ const UnderTestingForm = ({
         </div>
       </div>
       <div className="flex gap-2">
-        <button
+        {/* <ConfrimDialog
+          successButtonName={buttonName}
+          isLoading={isLoading}
+          isSubmitting={isSubmitting}
+          formName="workflow-form"
+        /> */}
+        <ConfrimDialog2
+          successButtonName={buttonName}
+          isLoading={isLoading}
+          isSubmitting={isSubmitting}
+          rejectLoading={loading}
+        />
+        {showRejectButton && (
+          <ConfrimDialog2
+            successButtonName={buttonName}
+            isLoading={isLoading}
+            isSubmitting={isSubmitting}
+            rejectLoading={loading}
+            rejectFn={handleReject}
+            reject
+          />
+        )}
+
+        {/* <button
           type="submit"
           className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray disabled:bg-slate-500"
           disabled={isLoading || isSubmitting}
         >
           {isLoading || isSubmitting ? "Loading..." : buttonName}
-        </button>
+        </button> */}
 
-        {showRejectButton && (
+        {/* {showRejectButton && (
           <button
             onClick={handleReject}
             type="button"
@@ -459,9 +503,10 @@ const UnderTestingForm = ({
           >
             {loading ? "Loading..." : "Reject"}
           </button>
-        )}
+        )} */}
       </div>
     </form>
+    </div>
   );
 };
 
