@@ -181,7 +181,7 @@ export type ContactPerson={
   landline_number: string;
 };
 
-type Customer = {
+export type Customer = {
   id: number;
   company_name: string;
   customer_code: string;

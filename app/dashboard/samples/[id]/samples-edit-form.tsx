@@ -105,13 +105,14 @@ const SamplesEditForm = ({
     }
 
     if (filterId) {
-      const query = `test_type=${encodeURIComponent(filterId)}`;
+      const query = `product=${encodeURIComponent(data?.sample?.registration?.product_id.toString(),
+    )}&test_type=${encodeURIComponent("2")}`;
 
       if (filterId === "2") {
         fetchTestParameters(
           query,
           data?.sample?.registration?.product_id.toString(),
-        );
+        ); 
       }
       if (filterId === "1") {
         const micro_params = data.test_params.filter(

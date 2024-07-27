@@ -179,6 +179,15 @@ const UnderTestingForm = ({
     setLoading(true);
     console.log(getValues());
     const { comments, test_params } = getValues();
+
+    if (!comments ) {
+      toast.error("Comments is required", {
+        duration: 10000,
+        closeButton: true,
+      });
+      return;
+    }
+
     const res = await rejectActionData({
       status: "",
       status_id: currentStep === 2 ? 1 : currentStep - 1,
