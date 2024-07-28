@@ -8,6 +8,7 @@ import {
   Image,
   StyleSheet,
 } from "@react-pdf/renderer";
+import { Data } from "@/app/dashboard/samples/[id]/page";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
 });
 
 // Create PDF component
-const MyDocument = ({ data }: { data: any }) => {
+const MyDocument = ({ data , isDraft}: { data: Data, isDraft:boolean }) => {
   console.log(data);
 
 
@@ -73,7 +74,7 @@ const MyDocument = ({ data }: { data: any }) => {
           <Text
             style={{ fontSize: "10px", marginLeft: "10px", marginTop: "6px" }}
           >
-            {data.sample.sample_id}
+            {data.sample.sample_id} {isDraft&& "- Draft"}
           </Text>
           <Text
             style={{ fontSize: "10px", marginRight: "10px", marginTop: "6px" }}
@@ -158,7 +159,7 @@ const MyDocument = ({ data }: { data: any }) => {
                   marginTop: "5px",
                 }}
               >
-                Test Report
+                Test Report {isDraft&& "- Draft"}
               </Text>
             </View>
           </View>
@@ -455,6 +456,10 @@ const MyDocument = ({ data }: { data: any }) => {
               * The test results in this report refer only to the sample tested
               in the laboratory and the sample submitted by the party. *
             </Text>
+            {isDraft&& 
+            <Text style={{ fontWeight: "bold", textAlign: "center" }}>
+              * This is Draft report, you can&apos;t use this for certification purpose. *
+            </Text>}
           </View>
         </View>
       </Page>

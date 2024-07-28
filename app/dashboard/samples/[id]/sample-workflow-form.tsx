@@ -268,7 +268,7 @@ const SampleWorkflowForm = ({
 
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-      <div className="align-items:flex-end flex flex-col items-end gap-3 sm:flex-row sm:justify-end">
+      {/* <div className="align-items:flex-end flex flex-col items-end gap-3 sm:flex-row sm:justify-end">
         <button
           type="button"
           onClick={openModal}
@@ -276,12 +276,12 @@ const SampleWorkflowForm = ({
         >
           Print
         </button>
-      </div>
+      </div> */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {/* <h2>This is a modal</h2>
         <p>Modal content goes here...</p> */}
         <PDFViewer width="1000" height="600" showToolbar={data.sample.status_id >7? true : false} >
-          <MyDocument data={data} />
+          <MyDocument data={data} isDraft={data.sample.status_id===8 ? true:false} />
         </PDFViewer>
         {/* <PDFDownloadLink document={< MyDocument/>} fileName="somename.pdf">
       {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
@@ -443,33 +443,31 @@ const SampleWorkflowForm = ({
                     // />
                   )}
                   {data.sample.status_id === 8 && (
-                    // <UnderTestingForm
-                    // data={data}
-                    //   showRejectButton={true}
-                    //   rejectActionData={actionFnReject}
-                    //   currentStep={data?.sample?.status_id}
-                    //   assigned_to={data.sample.assigned_to}
-                    //   parameters={data.sample.sample_test_parameters}
-                    //   patchFn={actionFnResult}
-                    //   step={9}
-                    // />
-                    <WorkFlowForm
-                      rejectActionData={actionFnReject}
-                      currentStep={data?.sample?.status_id}
-                      actionData={formAction}
-                      assign={data?.sample?.assigned_to}
-                      status={
-                        data?.sample?.status != "Submitted" ? "Submitted" : ""
-                      }
-                      status_id={9}
-                      buttonName="Submit"
-                      showComment
-                      showRejectButton
-                    />
+                   <UnderTestingForm
+                   data={data}
+                   showRejectButton={true}
+                   rejectActionData={actionFnReject}
+                   currentStep={data?.sample?.status_id}
+                   assigned_to={data.sample.assigned_to}
+                   parameters={data.sample.sample_test_parameters}
+                   patchFn={actionFnResult}
+                   step={9}
+                   openModal={openModal}
+                 />
+                 
                   )}
                   {data.sample.status_id === 9 && (
-                    <div className="text-center text-title-xl2 font-bold">
-                      <h4>Sample WorkFlow Completed</h4>
+                    <div className="text-center mb-3">
+                      <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+                      <button
+                        type="button"
+                        onClick={openModal}
+                        className="flex w-1/5  justify-center rounded bg-primary p-2 font-medium text-gray "
+                      >
+                        Print
+                      </button>
+      </div> 
+                      <h4 className="text-title-xl2 font-bold">Sample WorkFlow Completed</h4>
                     </div>
                   )}
                 </div>

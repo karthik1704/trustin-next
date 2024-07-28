@@ -8,14 +8,15 @@ import { useRouter } from "next/navigation";
 import { createSamples } from "../actions";
 import { SERVER_API_URL } from "@/app/constant";
 import SubmitButton from "@/components/submit-button/submit-button";
+import { Data } from "./page";
 
 type Sample = {
   sample_name: string;
   batch_or_lot_no: string;
   manufactured_date: string;
   expiry_date: string;
-  batch_size: 0;
-  received_quantity: 0;
+  batch_size: number;
+  received_quantity: number;
   description: string;
   sample_condition: string;
   sterilization_batch_no: string;
@@ -23,7 +24,8 @@ type Sample = {
   // test_type_id: string;
 
   test_params: Array<{
-    test_parameter_id: string;
+    id?: number | null;
+    test_params_id: string;
     order: number | string;
   }>;
 };
@@ -44,7 +46,7 @@ const SamplesEditForm = ({
   data,
   actionFn,
 }: {
-  data: any;
+  data: Data;
   actionFn: (
     data: any,
   ) => Promise<
@@ -71,6 +73,7 @@ const SamplesEditForm = ({
         ? new Date(data.sample.tat).toISOString().split("T")[0]
         : "",
       // test_type_id: data.sample.test_type_id.toString(),
+      test_params: [],
     },
   });
 
@@ -97,22 +100,21 @@ const SamplesEditForm = ({
 
   useEffect(() => {
     async function fetchTestParameters(query: string, product: string) {
-      let res = await fetch(
-        `${SERVER_API_URL}/parameters/product/${product}?${query}`,
-      );
+      let res = await fetch(`/api/registrations/parameters/?${query}`);
       const response: any = await res.json();
       setParameters(response);
     }
 
     if (filterId) {
-      const query = `product=${encodeURIComponent(data?.sample?.registration?.product_id.toString(),
-    )}&test_type=${encodeURIComponent("2")}`;
+      const query = `product=${encodeURIComponent(
+        data?.sample?.registration?.product_id.toString(),
+      )}&test_type=${encodeURIComponent("2")}`;
 
       if (filterId === "2") {
         fetchTestParameters(
           query,
           data?.sample?.registration?.product_id.toString(),
-        ); 
+        );
       }
       if (filterId === "1") {
         const micro_params = data.test_params.filter(

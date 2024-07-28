@@ -138,7 +138,7 @@ export type Data = {
     samples_received: boolean;
     under_cdsco: boolean;
     received_quantity: number;
-    batch_size: number;
+    batch_size: number ;
     manufactured_date: string;
     expiry_date: string;
     testing_start_date: string | null;
@@ -190,6 +190,8 @@ export type Data = {
       company_name: string;
       full_address: string;
       test_type_id: number;
+      product_id: number;
+      date_of_received:string;
       gst: string;
       product_data:{
         id:number;
@@ -291,7 +293,7 @@ export type Data = {
     amount: number;
     method_or_spec: string;
     group_of_test_parameters: "string";
-  };
+  }[];
 };
 
 const EditSamplePage = async ({
