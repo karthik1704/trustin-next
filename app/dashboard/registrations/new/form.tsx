@@ -145,11 +145,11 @@ const RegistrationForm = ({ data }: { data: Data }) => {
         customer.id.toString() === frontDesk?.customer_id.toString(),
     );
 
-    const addresss = customer?.customer_address_line1.split(",") ?? "";
-    console.log(addresss);
+    // const addresss = customer?.customer_address_line1.split(",") ?? "";
+    // console.log(addresss);
 
     form.setValue("company_name", customer?.company_name ?? "");
-    form.setValue("full_address", customer?.customer_address_line1 ?? "");
+    form.setValue("full_address", customer?.full_address ?? "");
     // form.setValue("city", customer?.city ?? "");
     // form.setValue("state", customer?.state ?? "");
     // form.setValue("pincode_no", customer?.pincode_no ?? "");

@@ -32,6 +32,7 @@ import { useEffect } from "react";
 import SamplesEditForm from "./samples-edit-form";
 import Link from "next/link";
 import ConfrimDialog from "./confrim-dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 type Props = {
   data: Data;
@@ -280,8 +281,15 @@ const SampleWorkflowForm = ({
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {/* <h2>This is a modal</h2>
         <p>Modal content goes here...</p> */}
-        <PDFViewer width="1000" height="600" showToolbar={data.sample.status_id >7? true : false} >
-          <MyDocument data={data} isDraft={data.sample.status_id===8 ? true:false} />
+        <PDFViewer
+          width="1000"
+          height="600"
+          showToolbar={data.sample.status_id > 7 ? true : false}
+        >
+          <MyDocument
+            data={data}
+            isDraft={data.sample.status_id === 8 ? true : false}
+          />
         </PDFViewer>
         {/* <PDFDownloadLink document={< MyDocument/>} fileName="somename.pdf">
       {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
@@ -292,7 +300,10 @@ const SampleWorkflowForm = ({
         <TabsList>
           <TabsTrigger value="status">Status</TabsTrigger>
           <TabsTrigger value="workflow">Workflow</TabsTrigger>
-          <TabsTrigger value="history">History</TabsTrigger>
+          {(data.currentUser.department_id === 2 ||
+            data.currentUser.department_id === 1) && (
+            <TabsTrigger value="history">History</TabsTrigger>
+          )}
         </TabsList>
         <TabsContent value="status">
           {/* {data?.sample?.status_id === 1 && ( */}
@@ -305,6 +316,25 @@ const SampleWorkflowForm = ({
               <div className="mb-3 w-full flex-col">
                 <StatusStepper step={data?.sample?.status_id} />
                 {/* <p>{data?.sample?.status}</p> */}
+
+                {data.sample.sample_history.at(0)?.comments && (
+                  <Alert
+                    variant={
+                      data.sample.sample_history?.[0]?.from_status_id !==
+                      undefined
+                        ? data.sample.sample_history[0].from_status_id >
+                          data.sample.status_id
+                          ? "destructive"
+                          : "success"
+                        : "default"
+                    }
+                  >
+                    <AlertTitle>Comment!</AlertTitle>
+                    <AlertDescription className="font-medium pl-5">
+                      - {data.sample.sample_history.at(0)?.comments ?? "---"}
+                    </AlertDescription>
+                  </Alert>
+                )}
 
                 <div className="mt-1 flex flex-col gap-9">
                   {data?.sample?.status_id === 1 && (
@@ -443,31 +473,32 @@ const SampleWorkflowForm = ({
                     // />
                   )}
                   {data.sample.status_id === 8 && (
-                   <UnderTestingForm
-                   data={data}
-                   showRejectButton={true}
-                   rejectActionData={actionFnReject}
-                   currentStep={data?.sample?.status_id}
-                   assigned_to={data.sample.assigned_to}
-                   parameters={data.sample.sample_test_parameters}
-                   patchFn={actionFnResult}
-                   step={9}
-                   openModal={openModal}
-                 />
-                 
+                    <UnderTestingForm
+                      data={data}
+                      showRejectButton={true}
+                      rejectActionData={actionFnReject}
+                      currentStep={data?.sample?.status_id}
+                      assigned_to={data.sample.assigned_to}
+                      parameters={data.sample.sample_test_parameters}
+                      patchFn={actionFnResult}
+                      step={9}
+                      openModal={openModal}
+                    />
                   )}
                   {data.sample.status_id === 9 && (
-                    <div className="text-center mb-3">
+                    <div className="mb-3 text-center">
                       <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-                      <button
-                        type="button"
-                        onClick={openModal}
-                        className="flex w-1/5  justify-center rounded bg-primary p-2 font-medium text-gray "
-                      >
-                        Print
-                      </button>
-      </div> 
-                      <h4 className="text-title-xl2 font-bold">Sample WorkFlow Completed</h4>
+                        <button
+                          type="button"
+                          onClick={openModal}
+                          className="flex w-1/5 justify-center rounded bg-primary p-2 font-medium text-gray"
+                        >
+                          Print
+                        </button>
+                      </div>
+                      <h4 className="text-title-xl2 font-bold">
+                        Sample WorkFlow Completed
+                      </h4>
                     </div>
                   )}
                 </div>

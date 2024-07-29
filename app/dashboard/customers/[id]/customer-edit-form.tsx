@@ -35,20 +35,21 @@ const CustomerEditForm = ({
 }) => {
   const { register, control, handleSubmit, formState:{isLoading, isSubmitting} } = useForm({
     defaultValues: {
-      state: data.state,
       pan: data.pan,
-      pincode_no: data.pincode_no,
       gst: data.gst,
-      website: data.gst,
       company_name: data.company_name,
       email: data.email,
-      nature_of_business: data.nature_of_business,
-      customer_address_line1: data.customer_address_line1,
-      product_details: data.product_details,
-      customer_address_line2: data.customer_address_line2,
-      market: data.market,
-      city: data.city,
-      regulatory: data.regulatory,
+      full_address: data.full_address,
+      // state: data.state,
+      // pincode_no: data.pincode_no,
+      // website: data.gst,
+      // nature_of_business: data.nature_of_business,
+      // customer_address_line1: data.customer_address_line1,
+      // product_details: data.product_details,
+      // customer_address_line2: data.customer_address_line2,
+      // market: data.market,
+      // city: data.city,
+      // regulatory: data.regulatory,
       contact_persons: data.contact_persons.map((contact) => ({
         person_name: contact.person_name,
         mobile_number: contact.mobile_number,
@@ -104,6 +105,18 @@ const CustomerEditForm = ({
         </div>
 
         <div className="mb-4.5">
+          <label className="mb-2.5 block text-black dark:text-white">
+            Full Address
+          </label>
+          <textarea
+            {...register("full_address")}
+            rows={4}
+            placeholder="Full Address"
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          />
+        </div>
+
+        {/* <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
             Address Line 1
           </label>
@@ -161,7 +174,7 @@ const CustomerEditForm = ({
             placeholder="Enter Pincode"
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
-        </div>
+        </div> */}
 
         <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
@@ -175,7 +188,7 @@ const CustomerEditForm = ({
           />
         </div>
 
-        <div className="mb-4.5">
+        {/* <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
             Website
           </label>
@@ -231,7 +244,7 @@ const CustomerEditForm = ({
             placeholder="Enter Regulatory                    "
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
-        </div>
+        </div> */}
 
         <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
           <div className="w-full xl:w-1/2">

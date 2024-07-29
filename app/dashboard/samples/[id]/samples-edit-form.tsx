@@ -404,7 +404,7 @@ const TestParamsForm = ({
 
   useEffect(() => {
     if (!test_watch) return;
-    const ids = test_watch.map((field, idx) => {
+    const ids:[number|string] = test_watch.map((field, idx) => {
       if (field.test_params_id !== "") return field.test_params_id.toString();
     });
     console.log(ids);

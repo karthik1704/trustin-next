@@ -73,7 +73,7 @@ async function getData(id: string) {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res6 = await fetch(`${SERVER_API_URL}/front-desks/`, {
+  const res6 = await fetch(`${SERVER_API_URL}/front-desks/all`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
