@@ -1,12 +1,18 @@
 "use client";
 import { useFormState } from "react-dom";
 
-import { Data } from "./page";
+import { Data } from "./typings";
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StatusStepper from "./status-stepper1";
 import UnderTestingForm from "./under-testing-form";
 import WorkFlowForm from "@/components/WorkFlowForms/workflowform";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 // import InvoicePDF from '@/components/Print/InvoicePDF';
 import {
@@ -33,6 +39,9 @@ import SamplesEditForm from "./samples-edit-form";
 import Link from "next/link";
 import ConfrimDialog from "./confrim-dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import CombineWorkflow from "./combine-workflow";
+import { date } from "zod";
+import { current } from "tailwindcss/colors";
 
 type Props = {
   data: Data;
@@ -234,6 +243,9 @@ const SampleWorkflowForm = ({
 
   const [state, formAction] = useFormState(actionFn, initialState);
   const router = useRouter();
+  const sampleTypes = data.sample.sample_test_types.map(
+    (type) => type.test_type_id,
+  );
 
   useEffect(() => {
     if (state?.type === null) return;
@@ -252,20 +264,6 @@ const SampleWorkflowForm = ({
       router.push("/dashboard/samples");
     }
   }, [state, router]);
-
-  const getNextStatus = (nextStep: number) => {
-    const { sample_history } = data.sample;
-    if (!sample_history.length) return nextStep;
-
-    const last_history = sample_history[0];
-    if (
-      last_history.from_status_id === 7 &&
-      nextStep < last_history.from_status_id
-    )
-      return 7;
-
-    return nextStep;
-  };
 
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -312,197 +310,66 @@ const SampleWorkflowForm = ({
           </div> */}
           {/* )} */}
           {data?.sample?.registration_id && (
-            <div>
-              <div className="mb-3 w-full flex-col">
-                <StatusStepper step={data?.sample?.status_id} />
-                {/* <p>{data?.sample?.status}</p> */}
+            <div >
+              <Accordion type="multiple" defaultValue={["mech", "micro"]} className="mb-4">
+                {(data.sample.sample_test_types.length === 2 ||
+                  data.sample.sample_test_types[0].test_type_id === 1) &&
+                  ([1, 2, 6].includes(data.currentUser.department_id) ||
+                    data.currentUser.qa_type_id === 1) && (
+                    <AccordionItem value="micro">
+                      <AccordionTrigger className="px-6 font-extrabold">
+                        Micro Status
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <CombineWorkflow
+                          data={data}
+                          test_type_id={1}
+                          test_params={data.sample_micro_params}
+                          formAction={formAction}
+                          openModal={openModal}
+                          actionFn={actionFn}
+                          actionFnReject={actionFnReject}
+                          actionFnResult={actionFnResult}
+                          sample_history={data.sample_micro_history}
+                          current_step={
+                            data.sample_micro_history.length
+                              ? data.sample_micro_history[0].to_status_id
+                              : 1
+                          }
+                        />{" "}
+                      </AccordionContent>
+                    </AccordionItem>
+                  )}
+                {(data.sample.sample_test_types.length === 2 ||
+                  data.sample.sample_test_types[0].test_type_id === 2) &&
+                  ([1, 2, 6].includes(data.currentUser.department_id) ||
+                    data.currentUser.qa_type_id === 2) && (
+                    <AccordionItem value="mech">
+                      <AccordionTrigger className="px-6 font-extrabold">
+                        Mech Status
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <CombineWorkflow
+                          data={data}
+                          test_type_id={2}
+                          test_params={data.sample_mech_params}
+                          formAction={formAction}
+                          openModal={openModal}
+                          actionFn={actionFn}
+                          actionFnReject={actionFnReject}
+                          actionFnResult={actionFnResult}
+                          sample_history={data.sample_mech_history}
+                          current_step={
+                            data.sample_mech_history.length
+                              ? data.sample_mech_history[0].to_status_id
+                              : 1
+                          }
+                        />{" "}
+                      </AccordionContent>
+                    </AccordionItem>
+                  )}
+              </Accordion>
 
-                {data.sample.sample_history.at(0)?.comments && (
-                  <Alert
-                    variant={
-                      data.sample.sample_history?.[0]?.from_status_id !==
-                      undefined
-                        ? data.sample.sample_history[0].from_status_id >
-                          data.sample.status_id
-                          ? "destructive"
-                          : "success"
-                        : "default"
-                    }
-                  >
-                    <AlertTitle>Comment!</AlertTitle>
-                    <AlertDescription className="font-medium pl-5">
-                      - {data.sample.sample_history.at(0)?.comments ?? "---"}
-                    </AlertDescription>
-                  </Alert>
-                )}
-
-                <div className="mt-1 flex flex-col gap-9">
-                  {data?.sample?.status_id === 1 && (
-                    <WorkFlowForm
-                      rejectActionData={actionFnReject}
-                      currentStep={data?.sample?.status_id}
-                      actionData={formAction}
-                      assign={data?.sample?.assigned_to}
-                      status={
-                        data?.sample?.status != "Submitted" ? "Submitted" : ""
-                      }
-                      status_id={getNextStatus(2)}
-                      buttonName="Submit for Review"
-                    />
-                  )}
-                  {data?.sample?.status_id === 2 && (
-                    <>
-                      {/* <WorkFlowForm
-                        showRejectButton={true}
-                        rejectActionData={actionFnReject}
-                        currentStep={data?.sample?.status_id}
-                        actionData={formAction}
-                        assign={data.sample.assigned_to}
-                        status_id={3}
-                        buttonName="Approve"
-                      /> */}
-                      <UnderTestingForm
-                        data={data}
-                        showRejectButton={true}
-                        rejectActionData={actionFnReject}
-                        currentStep={data?.sample?.status_id}
-                        assigned_to={data.sample.assigned_to}
-                        parameters={data.sample.sample_test_parameters}
-                        assigneeData={data.users}
-                        patchFn={actionFnResult}
-                        step={getNextStatus(3)}
-                      />
-                    </>
-                  )}
-
-                  {data.sample.status_id === 3 && (
-                    // <WorkFlowForm
-                    //   showRejectButton={true}
-                    //   rejectActionData={actionFnReject}
-                    //   currentStep={data?.sample?.status_id}
-                    //   actionData={formAction}
-                    //   assign={data.sample.assigned_to}
-                    //   status_id={getNextStatus(4)}
-                    //   buttonName="Sample Received"
-                    //   showComment={true}
-                    // />
-                    <UnderTestingForm
-                      data={data}
-                      showRejectButton={true}
-                      rejectActionData={actionFnReject}
-                      currentStep={data?.sample?.status_id}
-                      assigned_to={data.sample.assigned_to}
-                      parameters={data.sample.sample_test_parameters}
-                      assigneeData={data.users}
-                      patchFn={actionFnResult}
-                      step={getNextStatus(4)}
-                    />
-                  )}
-
-                  {data.sample.status_id === 4 && (
-                    // <WorkFlowForm
-                    //   showRejectButton={true}
-                    //   rejectActionData={actionFnReject}
-                    //   currentStep={data?.sample?.status_id}
-                    //   actionData={formAction}
-                    //   assign={data.sample.assigned_to}
-                    //   status_id={5}
-                    //   buttonName="Assign"
-                    //   showComment={true}
-                    // />
-                    <UnderTestingForm
-                      data={data}
-                      showRejectButton={true}
-                      rejectActionData={actionFnReject}
-                      currentStep={data?.sample?.status_id}
-                      assigned_to={data.sample.assigned_to}
-                      parameters={data.sample.sample_test_parameters}
-                      patchFn={actionFnResult}
-                      step={getNextStatus(5)}
-                    />
-                  )}
-
-                  {data.sample.status_id === 5 && (
-                    <UnderTestingForm
-                      data={data}
-                      showRejectButton={true}
-                      rejectActionData={actionFnReject}
-                      currentStep={data?.sample?.status_id}
-                      assigned_to={data.sample.assigned_to}
-                      parameters={data.sample.sample_test_parameters}
-                      patchFn={actionFnResult}
-                      step={getNextStatus(6)}
-                    />
-                  )}
-                  {data.sample.status_id === 6 && (
-                    <UnderTestingForm
-                      data={data}
-                      showRejectButton={true}
-                      rejectActionData={actionFnReject}
-                      currentStep={data?.sample?.status_id}
-                      assigned_to={data.sample.assigned_to}
-                      parameters={data.sample.sample_test_parameters}
-                      patchFn={actionFnResult}
-                      step={getNextStatus(7)}
-                    />
-                  )}
-                  {data.sample.status_id === 7 && (
-                    <UnderTestingForm
-                      data={data}
-                      showRejectButton={true}
-                      rejectActionData={actionFnReject}
-                      currentStep={data?.sample?.status_id}
-                      assigned_to={data.sample.assigned_to}
-                      parameters={data.sample.sample_test_parameters}
-                      patchFn={actionFnResult}
-                      step={8}
-                      openModal={openModal}
-                    />
-                    // <WorkFlowForm
-                    //   rejectActionData={actionFnReject}
-                    //   currentStep={data?.sample?.status_id}
-                    //   actionData={formAction}
-                    //   assign={data?.sample?.assigned_to}
-                    //   status={
-                    //     data?.sample?.status != "Submitted" ? "Submitted" : ""
-                    //   }
-                    //   status_id={8}
-                    //   buttonName="Prepartion Complete"
-                    //   showRejectButton
-                    //   showComment
-                    // />
-                  )}
-                  {data.sample.status_id === 8 && (
-                    <UnderTestingForm
-                      data={data}
-                      showRejectButton={true}
-                      rejectActionData={actionFnReject}
-                      currentStep={data?.sample?.status_id}
-                      assigned_to={data.sample.assigned_to}
-                      parameters={data.sample.sample_test_parameters}
-                      patchFn={actionFnResult}
-                      step={9}
-                      openModal={openModal}
-                    />
-                  )}
-                  {data.sample.status_id === 9 && (
-                    <div className="mb-3 text-center">
-                      <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-                        <button
-                          type="button"
-                          onClick={openModal}
-                          className="flex w-1/5 justify-center rounded bg-primary p-2 font-medium text-gray"
-                        >
-                          Print
-                        </button>
-                      </div>
-                      <h4 className="text-title-xl2 font-bold">
-                        Sample WorkFlow Completed
-                      </h4>
-                    </div>
-                  )}
-                </div>
-              </div>
               {data.sample.status_id === 1 &&
                 (data.currentUser.department_id === 6 ||
                   data.currentUser.department_id === 1) && (
@@ -825,12 +692,38 @@ const SampleWorkflowForm = ({
         </TabsContent>
         <TabsContent value="workflow">
           <div className="min-h-28">
-            <WorkflowTable workflow={data.sample.sample_workflows} />
+            <Accordion type="multiple">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>Micro</AccordionTrigger>
+                <AccordionContent>
+                  <WorkflowTable workflow={data.sample_micro_workfolw} />
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-2">
+                <AccordionTrigger>Mech</AccordionTrigger>
+                <AccordionContent>
+                  <WorkflowTable workflow={data.sample_mech_workfolw} />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
         </TabsContent>
         <TabsContent value="history">
           <div className="min-h-28">
-            <HistoryTable history={data.sample.sample_history} />
+            <Accordion type="multiple">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>Micro</AccordionTrigger>
+                <AccordionContent>
+                  <HistoryTable history={data.sample_micro_history} />{" "}
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-2">
+                <AccordionTrigger>Mech</AccordionTrigger>
+                <AccordionContent>
+                  <HistoryTable history={data.sample_mech_history} />{" "}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
         </TabsContent>
       </Tabs>

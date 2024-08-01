@@ -4,40 +4,38 @@ import React from "react";
 import { useFieldArray, useForm, Form } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Data } from "./page";
+import { Data } from "./typings";
 import ConfrimDialog from "./confrim-dialog";
 import ConfrimDialog2 from "./confrim-dialog2";
 
-type Parameters = [
-  {
+type Parameters = {
+  id: number;
+  sample_id: number;
+  test_parameter_id: number;
+  test_type: string;
+  value: string;
+  result: boolean;
+  order: number;
+  quantity: number | null;
+
+  created_by: number;
+  updated_by: number;
+
+  test_parameter: {
     id: number;
-    sample_id: number;
-    test_parameter_id: number;
-    test_type: string;
-    value: string;
-    result: boolean;
-    order: number;
-    quantity: number | null;
-
-    created_by: number;
-    updated_by: number;
-
-    test_parameter: {
-      id: number;
-      branch_id: number;
-      test_type_id: number;
-      product_id: number;
-      customer_id: number;
-      created_at: "2024-03-10T08:14:48.411Z";
-      updated_at: "2024-03-10T08:14:48.411Z";
-      parameter_code: string;
-      testing_parameters: string;
-      amount: number;
-      method_or_spec: string;
-      group_of_test_parameters: string;
-    };
-  },
-];
+    branch_id: number;
+    test_type_id: number;
+    product_id: number;
+    customer_id: number;
+    created_at: string;
+    updated_at: string;
+    parameter_code: string;
+    testing_parameters: string;
+    amount: number;
+    method_or_spec: string;
+    group_of_test_parameters: string;
+  };
+}[];
 
 type Props = {
   showRejectButton?: boolean;
@@ -54,6 +52,7 @@ type Props = {
     { fieldErrors: null; type: string; message: string | undefined } | undefined
   >;
   assigned_to: number;
+  test_type_id: number;
   step: number;
   buttonName?: string;
   comment?: string;
@@ -75,6 +74,7 @@ const initialState: InitialState = {
 };
 
 const UnderTestingForm = ({
+  test_type_id,
   parameters,
   patchFn,
   assigned_to,
@@ -99,7 +99,7 @@ const UnderTestingForm = ({
       status: "",
       status_id: step,
       assigned_to,
-
+      test_type_id: test_type_id,
       ...(currentStep == 2 && {
         nabl_logo: data.sample.nabl_logo ? 1 : 0,
         under_cdsco: data.sample.under_cdsco ? 1 : 0,
@@ -191,6 +191,7 @@ const UnderTestingForm = ({
     const res = await rejectActionData({
       status: "",
       status_id: currentStep === 2 ? 1 : currentStep - 1,
+      test_type_id: test_type_id,
       assigned_to: assigned_to,
       comments: comments,
       test_params: test_params,
@@ -232,11 +233,12 @@ const UnderTestingForm = ({
       )}
 
       <form
-        id="workflow-form"
+        id={test_type_id === 1 ? "micro-workflow-form" : "mech-workflow-form"}
         onSubmit={handleSubmit(handleForm)}
         className="p-2"
       >
         <input type="hidden" {...register("status")} />
+        <input type="hidden" {...register("test_type_id")} />
         {currentStep === 2 && (
           <>
             <Select
@@ -493,6 +495,9 @@ const UnderTestingForm = ({
           formName="workflow-form"
         /> */}
           <ConfrimDialog2
+            formName={
+              test_type_id === 1 ? "micro-workflow-form" : "mech-workflow-form"
+            }
             successButtonName={buttonName}
             isLoading={isLoading}
             isSubmitting={isSubmitting}
@@ -500,6 +505,11 @@ const UnderTestingForm = ({
           />
           {showRejectButton && (
             <ConfrimDialog2
+              formName={
+                test_type_id === 1
+                  ? "micro-workflow-form"
+                  : "mech-workflow-form"
+              }
               successButtonName={buttonName}
               isLoading={isLoading}
               isSubmitting={isSubmitting}

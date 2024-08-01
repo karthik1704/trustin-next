@@ -179,7 +179,7 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
         </Select>
 
         <Select
-          label="QA Type"
+          label="QC Type"
           name="qa_type_id"
           error={state?.fieldErrors?.qa_type_id}
         >

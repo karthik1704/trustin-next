@@ -86,8 +86,8 @@ const SamplesEditForm = ({
   //   name: "batch_id",
   // });
 
-  const [filterId, setFilterId] = useState(
-    data?.sample?.test_type_id.toString(),
+  const [filterId, setFilterId] = useState<number[]>(
+    data?.sample?.sample_test_types.map(type=>type.test_type_id),
   );
   const [parameters, setParameters] = useState<[]>([]);
   // const [selectedBatch, setSelectBatch] = useState<{} | null>(null);
@@ -98,28 +98,72 @@ const SamplesEditForm = ({
   //   setFilterId(sampleWatch);
   // }, [sampleWatch]);
 
+  // useEffect(() => {
+  //   async function fetchTestParameters(query: string, product: string) {
+  //     let res = await fetch(`/api/registrations/parameters/?${query}`);
+  //     const response: any = await res.json();
+  //     setParameters(response);
+  //   }
+
+  //   if (filterId) {
+  //     const query = `product=${encodeURIComponent(
+  //       data?.sample?.registration?.product_id.toString(),
+  //     )}&test_type=${encodeURIComponent("2")}`;
+
+  //     if (filterId === "2") {
+  //       fetchTestParameters(
+  //         query,
+  //         data?.sample?.registration?.product_id.toString(),
+  //       );
+  //     }
+  //     if (filterId === "1") {
+  //       const micro_params = data.test_params.filter(
+  //         (test: any) => test.test_type_id.toString() === "1",
+  //       );
+  //       if (micro_params.length) setParameters(micro_params);
+  //     }
+  //   }
+  // }, [data.test_params, data, filterId]);
+
   useEffect(() => {
-    async function fetchTestParameters(query: string, product: string) {
+    async function fetchTestParameters(query: string, filterIdLength: number) {
+      // let res = await fetch(
+      //   `${SERVER_API_URL}/parameters/product/${product}?${query}`,
+      // );
+      console.log("here");
       let res = await fetch(`/api/registrations/parameters/?${query}`);
       const response: any = await res.json();
+      if (filterIdLength === 2) {
+        const micro_params =
+          data?.test_params.filter(
+            (test: any) => test.test_type_id.toString() === "1",
+          ) ?? [];
+        setParameters([...micro_params, ...response]);
+        return;
+      }
       setParameters(response);
     }
 
-    if (filterId) {
-      const query = `product=${encodeURIComponent(
-        data?.sample?.registration?.product_id.toString(),
-      )}&test_type=${encodeURIComponent("2")}`;
+    if (!filterId) {
+      return;
+    }
 
-      if (filterId === "2") {
-        fetchTestParameters(
-          query,
-          data?.sample?.registration?.product_id.toString(),
-        );
+    const query = `product=${encodeURIComponent(
+      data?.sample?.registration?.product_id.toString(),
+    )}&test_type=${encodeURIComponent("2")}`;
+
+    if (filterId.length === 2) {
+      fetchTestParameters(query, filterId.length);
+      return;
+    }
+    if (filterId.length === 1) {
+      if (filterId[0] === 2) {
+        fetchTestParameters(query, filterId.length);
       }
-      if (filterId === "1") {
-        const micro_params = data.test_params.filter(
-          (test: any) => test.test_type_id.toString() === "1",
-        );
+      if (filterId[0] === 1) {
+        const micro_params =
+          data?.test_params.filter((test: any) => test.test_type_id.toString() === "1") ??
+          [];
         if (micro_params.length) setParameters(micro_params);
       }
     }
@@ -404,7 +448,7 @@ const TestParamsForm = ({
 
   useEffect(() => {
     if (!test_watch) return;
-    const ids:[number|string] = test_watch.map((field, idx) => {
+    const ids: [number | string] = test_watch.map((field, idx) => {
       if (field.test_params_id !== "") return field.test_params_id.toString();
     });
     console.log(ids);

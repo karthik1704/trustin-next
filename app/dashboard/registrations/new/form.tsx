@@ -116,17 +116,23 @@ const RegistrationForm = ({ data }: { data: Data }) => {
     name: "samples",
   });
 
-  const [filterId, setFilterId] = useState("1");
+  const [filterId, setFilterId] = useState([1]);
   const [parameters, setParameters] = useState<FullParametersType[]>([]);
-  const [samplsTestType, setSampleTestType] = useState<(string | number)[]>([]);
+  const [samplsTestType, setSampleTestType] = useState<(string | number[])[]>(
+    [],
+  );
   const [contactPersons, setContactPersons] = useState<ContactPerson[]>([]);
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
 
   useEffect(() => {
-    const ids = watchSamples.map((field, idx) => field.test_type_id) ?? [];
-
+    console.log(watchSamples);
+    const ids =
+      watchSamples.map((field, idx) =>
+        JSON.parse(field.test_types as string),
+      ) ?? [];
+    console.log(ids);
     if (ids.length) {
       setSampleTestType(ids);
     }
@@ -165,10 +171,8 @@ const RegistrationForm = ({ data }: { data: Data }) => {
     setContactPersons(customer?.contact_persons ?? []);
     // form.setValue("status", frontDesk?.status ?? "");
   }, [data.customers, data?.frontDesks, form, watchFrontDesk]);
- 
- 
+
   useEffect(() => {
-    
     if (!watchContactPerson) return;
 
     const contactPerson = contactPersons?.find(
@@ -228,7 +232,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
       const query = `product=${encodeURIComponent(watchProductId.toString())}&test_type=${encodeURIComponent("2")}`;
 
       fetchTestParameters(query, watchProductId.toString());
-      if (filterId === "1") {
+      if (filterId.includes(1)) {
         const micro_params =
           data?.parameters?.filter(
             (test: any) => test.test_type_id.toString() === "1",
@@ -337,7 +341,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
         append({
           sample_name: `${sample.sample_name} -${fields.length + 1}`,
           batch_or_lot_no: sample.batch_or_lot_no,
-          test_type_id: "1",
+          test_types: "[1]",
           manufactured_date: sample.manufactured_date,
           expiry_date: sample.expiry_date,
           tat: sample.tat,
@@ -354,7 +358,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
     append({
       sample_name: "",
       batch_or_lot_no: "",
-      test_type_id: "1",
+      test_types: "[1]",
       manufactured_date: null,
       expiry_date: null,
       tat: null,
@@ -1072,12 +1076,13 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                           Test Type <span className="text-meta-1">*</span>
                         </label>
                         <Select
-                          name={`samples.${index}.test_type_id`}
+                          name={`samples.${index}.test_types`}
                           // label="Test Type"
                           register={form.register}
                         >
-                          <option value="1">Micro</option>
-                          <option value="2">Mech</option>
+                          <option value={"[1]"}>Micro</option>
+                          <option value={"[2]"}>Mech</option>
+                          <option value={"[1,2]"}>Both</option>
                         </Select>
                       </div>
                       <div className="w-full xl:w-1/4">
@@ -1265,7 +1270,7 @@ const TestParamsForm = ({
   control: any;
   register: any;
   data: FullParametersType[];
-  filterId: [] | number | string;
+  filterId: [] | number[] | string;
   arrayFieldName: string;
   productId?: string | number;
 }) => {
@@ -1292,31 +1297,44 @@ const TestParamsForm = ({
   // }, [data, append, replace]);
 
   useEffect(() => {
-    async function fetchTestParameters(query: string, product: string) {
+    async function fetchTestParameters(query: string, filterIdLength: number) {
       // let res = await fetch(
       //   `${SERVER_API_URL}/parameters/product/${product}?${query}`,
       // );
       console.log("here");
       let res = await fetch(`/api/registrations/parameters/?${query}`);
       const response: any = await res.json();
+      if (filterIdLength === 2) {
+        const micro_params =
+          data?.filter((test: any) => test.test_type_id.toString() === "1") ??
+          [];
+        setParameters([...micro_params, ...response]);
+        return;
+      }
       setParameters(response);
     }
 
-    if (!filterId) {
+    if (!filterId ) {
       return;
     }
 
     if (productId) {
-      if (filterId.toString() === "2") {
-        const query = `product=${encodeURIComponent(productId.toString())}&test_type=${encodeURIComponent("2")}`;
+      const query = `product=${encodeURIComponent(productId.toString())}&test_type=${encodeURIComponent("2")}`;
 
-        fetchTestParameters(query, productId.toString());
+      if (filterId.length === 2) {
+        fetchTestParameters(query, filterId.length);
+        return;
       }
-      if (filterId.toString() === "1") {
-        const micro_params =
-          data?.filter((test: any) => test.test_type_id.toString() === "1") ??
-          [];
-        if (micro_params.length) setParameters(micro_params);
+      if (filterId.length === 1) {
+        if (filterId[0] === 2) {
+          fetchTestParameters(query, filterId.length);
+        }
+        if (filterId[0] === 1) {
+          const micro_params =
+            data?.filter((test: any) => test.test_type_id.toString() === "1") ??
+            [];
+          if (micro_params.length) setParameters(micro_params);
+        }
       }
     }
   }, [data, filterId, productId]);

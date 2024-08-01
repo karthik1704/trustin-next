@@ -126,6 +126,7 @@ export async function patchSampleWorkflow(
 
   let jsonObject =Object.fromEntries(formData.entries());
   jsonObject.test_params = [] as any;
+  console.log(jsonObject);
 
   const access_token = cookies().get("access_token");
 

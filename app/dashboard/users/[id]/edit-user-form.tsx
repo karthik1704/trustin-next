@@ -190,7 +190,7 @@ const EditUserForm = ({
         </Select>
 
         <Select
-          label="QA Type"
+          label="QC Type"
           name="qa_type_id"
           defaultValue={user.qa_type_id}
           error={state?.fieldErrors?.qa_type_id}

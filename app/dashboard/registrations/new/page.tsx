@@ -43,7 +43,7 @@ async function getData() {
   const res4 = await fetch(`${SERVER_API_URL}/products/`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token?.value}`,
+      Authorization: `Bearer ${access_token?.value}`, 
     },
   });
   const res6 = await fetch(`${SERVER_API_URL}/samples/without-reg`, {
@@ -59,13 +59,7 @@ async function getData() {
     },
   });
 
-  const res7 = await fetch(`${SERVER_API_URL}/registrations/`,{
-    headers:{
-      "Content-Type" : "application/json",
-      Authorization :`Bearer ${access_token?.value}`,
-    },
 
-  })
   const res8 = await fetch(`${SERVER_API_URL}/front-desks/under-registrations`,{
     headers:{
       "Content-Type" : "application/json",
@@ -91,7 +85,6 @@ async function getData() {
   if (res4.status === 401) redirect("/signin");
   if (res6.status === 401) redirect("/signin");
   if (res5.status === 401) redirect("/signin");
-  if (res7.status === 401) redirect("/signin");
   if (res8.status === 401) redirect("/signin");
 
   const trf:TestReportForm[] = await res.json();
@@ -100,7 +93,6 @@ async function getData() {
   const products = await res4.json();
   const samples = await res6.json();
   const parameters:FullParametersType[] = await res5.json();
-  const {data:registration} = await res7.json(); 
   const frontDesks = await res8.json(); 
   console.log(parameters)
 

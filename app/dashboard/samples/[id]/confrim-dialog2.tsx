@@ -15,6 +15,7 @@ import {
 import { Checkbox, Field, Label } from "@headlessui/react";
 
 type Props = {
+  formName: string
   isLoading: boolean;
   isSubmitting: boolean;
   successButtonName: string;
@@ -24,6 +25,7 @@ type Props = {
 };
 
 function ConfrimDialog2({
+  formName ,
   isLoading = false,
   isSubmitting,
   successButtonName,
@@ -97,7 +99,7 @@ function ConfrimDialog2({
                 type="submit"
                 className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray disabled:bg-slate-500"
                 disabled={!enabled || isSubmitting}
-                form="workflow-form"
+                form={formName}
               >
                 {isLoading || isSubmitting ? "Loading" : "Continue"}
               </button>

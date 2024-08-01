@@ -23,7 +23,8 @@ type RegistrationSamples = {
   description: string;
   sample_condition: string;
   sterilization_batch_no: string;
-  test_type_id: string | number;
+  // test_type_id: string | number;
+  test_types: string | number[];
   manufactured_date: string | null;
   tat: string | null;
   expiry_date: string | null;
@@ -91,7 +92,7 @@ type RegistrationUpdateSamples = {
   sterilization_batch_no: string;
   batch_size: string;
   received_quantity: number;
-  test_type_id: number | string;
+  test_types: number[] | string;
   test_params: {
     test_params_id: number | string;
     order: number;
@@ -171,7 +172,7 @@ type Product = {
   product_name: string;
 };
 
-export type ContactPerson={
+export type ContactPerson = {
   person_name: string;
   mobile_number: string;
   contact_email: string;
@@ -309,9 +310,26 @@ export interface TestParameter {
   };
 }
 
+// Type for the test_type object
+type TestType1 = {
+  id: number;
+  name: string;
+};
+
+// Type for the sample_test_types object
+type SampleTestType = {
+  id: number;
+  sample_id: number;
+  test_type_id: number;
+  created_at: string; // Use 'string' for ISO 8601 datetime format
+  updated_at: string; // Use 'string' for ISO 8601 datetime format
+  test_type: TestType1;
+};
+
 type RegSample = {
   status_id: number;
-  test_type_id: number | string;
+  // test_type_id: number | string;
+  test_types: number[] | string;
   id: number;
   sample_name: string;
   sample_id: string;
@@ -332,7 +350,11 @@ type RegSample = {
 
     test_parameter: FullParametersType;
   }[];
+  sample_test_types: SampleTestType[];
+
 };
+
+
 
 export type RegistrationType = {
   id: number;

@@ -16,6 +16,7 @@ type Props = {
   assign: number;
   status?: string;
   status_id: number;
+  test_type_id: number;
   currentStep: number;
   comment?: string;
   buttonName: string;
@@ -41,6 +42,7 @@ function WorkFlowForm({
   assign,
   status = "",
   status_id,
+  test_type_id,
   buttonName,
   currentStep,
   assigneeData = [],
@@ -88,6 +90,7 @@ function WorkFlowForm({
     const res = await rejectActionData({
       status: status,
       status_id: currentStep === 2 ? 1 : currentStep - 1,
+      test_type_id:test_type_id,
       assigned_to: assign,
       comments: comments,
       test_params: [],
@@ -102,6 +105,7 @@ function WorkFlowForm({
       <div className="p-2.5">
         <input type="hidden" value={status} name="status" />
         <input type="hidden" value={status_id} name="status_id" />
+        <input type="hidden" value={test_type_id} name="test_type_id" />
         <input type="hidden" defaultValue={assign} name="assigned_to" />
         {/* {currentStep === 4 ? (
           <>

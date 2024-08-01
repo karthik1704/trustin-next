@@ -10,10 +10,11 @@ export async function createRegistration(jsonObject: any) {
   console.log("CREATE");
   console.log(jsonObject);
 
-  // jsonObject.test_types = jsonObject.test_types.map((type: any) => ({
-  //   test_type_id: type,
-  // }));
-  // jsonObject.test_params = [
+  jsonObject.samples = jsonObject.samples.map((sample: any) => ({
+    ...sample,
+    test_types: JSON.parse(sample.test_types),
+  }));
+    // jsonObject.test_params = [
   //   ...jsonObject.test_params_mech,
   //   ...jsonObject.test_params_micro,
   // ];
@@ -21,7 +22,7 @@ export async function createRegistration(jsonObject: any) {
   // delete jsonObject.test_params_mech;
   // delete jsonObject.test_params_micro;
 
-  // console.log(jsonObject);
+  console.log(jsonObject);
 
   const access_token = cookies().get("access_token");
 
@@ -69,7 +70,13 @@ export async function createRegistration(jsonObject: any) {
 
 export async function updateRegistration(id: string, data: any) {
   let jsonObject = data;
-  console.log(data)
+  console.log(data);
+  jsonObject.samples = jsonObject.samples.map((sample: any) => ({
+    ...sample,
+    test_types: JSON.parse(sample.test_types),
+  }));
+  console.log(jsonObject);
+
   // jsonObject.test_types = jsonObject.test_types.map((type: any) => ({
   //   test_type_id: type,
   // }));

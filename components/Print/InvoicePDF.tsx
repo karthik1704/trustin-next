@@ -8,7 +8,7 @@ import {
   Image,
   StyleSheet,
 } from "@react-pdf/renderer";
-import { Data } from "@/app/dashboard/samples/[id]/page";
+import { Data } from "@/app/dashboard/samples/[id]/typings";
 
 // Create styles
 const styles = StyleSheet.create({
