@@ -310,8 +310,12 @@ const SampleWorkflowForm = ({
           </div> */}
           {/* )} */}
           {data?.sample?.registration_id && (
-            <div >
-              <Accordion type="multiple" defaultValue={["mech", "micro"]} className="mb-4">
+            <div>
+              <Accordion
+                type="multiple"
+                defaultValue={["mech", "micro"]}
+                className="mb-4"
+              >
                 {(data.sample.sample_test_types.length === 2 ||
                   data.sample.sample_test_types[0].test_type_id === 1) &&
                   ([1, 2, 6].includes(data.currentUser.department_id) ||
@@ -323,6 +327,9 @@ const SampleWorkflowForm = ({
                       <AccordionContent>
                         <CombineWorkflow
                           data={data}
+                          formData={data.sample.sample_detail.find(
+                            (detail) => detail.test_type_id === 1,
+                          )}
                           test_type_id={1}
                           test_params={data.sample_micro_params}
                           formAction={formAction}
@@ -352,6 +359,9 @@ const SampleWorkflowForm = ({
                         <CombineWorkflow
                           data={data}
                           test_type_id={2}
+                          formData={data.sample.sample_detail.find(
+                            (detail) => detail.test_type_id === 2,
+                          )}
                           test_params={data.sample_mech_params}
                           formAction={formAction}
                           openModal={openModal}
@@ -480,7 +490,13 @@ const SampleWorkflowForm = ({
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Test Type:
                   </p>
-                  <p>{data?.sample?.test_type_id === 1 ? "Micro " : "Mech"}</p>
+                  <p>
+                    {data?.sample?.sample_test_types.length === 2
+                      ? "Mech and Micro"
+                      : data?.sample?.sample_test_types[0].test_type_id === 1
+                        ? "Micro "
+                        : "Mech"}
+                  </p>
                 </div>
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">

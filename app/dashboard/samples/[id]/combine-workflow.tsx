@@ -1,11 +1,17 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import StatusStepper from "./status-stepper1";
-import { Data, SampleHistory, SampleTestParameters } from "./typings";
+import {
+  Data,
+  SampleDetailSchema,
+  SampleHistory,
+  SampleTestParameters,
+} from "./typings";
 import WorkFlowForm from "@/components/WorkFlowForms/workflowform";
 import UnderTestingForm from "./under-testing-form";
 
 type Props = {
   data: Data;
+  formData: SampleDetailSchema | undefined;
   test_params: SampleTestParameters[];
   test_type_id: number;
   sample_history: SampleHistory;
@@ -32,6 +38,7 @@ type Props = {
 
 const CombineWorkflow = ({
   data,
+  formData,
   test_params,
   test_type_id,
   sample_history = [],
@@ -102,6 +109,7 @@ const CombineWorkflow = ({
             buttonName="Approve"
           /> */}
             <UnderTestingForm
+              formData={formData}
               test_type_id={test_type_id}
               data={data}
               showRejectButton={true}
@@ -128,6 +136,7 @@ const CombineWorkflow = ({
           //   showComment={true}
           // />
           <UnderTestingForm
+            formData={formData}
             test_type_id={test_type_id}
             data={data}
             showRejectButton={true}
@@ -153,6 +162,7 @@ const CombineWorkflow = ({
           //   showComment={true}
           // />
           <UnderTestingForm
+            formData={formData}
             test_type_id={test_type_id}
             data={data}
             showRejectButton={true}
@@ -167,6 +177,7 @@ const CombineWorkflow = ({
 
         {current_step === 5 && (
           <UnderTestingForm
+            formData={formData}
             test_type_id={test_type_id}
             data={data}
             showRejectButton={true}
@@ -180,6 +191,7 @@ const CombineWorkflow = ({
         )}
         {current_step === 6 && (
           <UnderTestingForm
+            formData={formData}
             test_type_id={test_type_id}
             data={data}
             showRejectButton={true}
@@ -193,6 +205,7 @@ const CombineWorkflow = ({
         )}
         {current_step === 7 && (
           <UnderTestingForm
+            formData={formData}
             test_type_id={test_type_id}
             data={data}
             showRejectButton={true}
@@ -220,6 +233,7 @@ const CombineWorkflow = ({
         )}
         {current_step === 8 && (
           <UnderTestingForm
+            formData={formData}
             test_type_id={test_type_id}
             data={data}
             showRejectButton={true}

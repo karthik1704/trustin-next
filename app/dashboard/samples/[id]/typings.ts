@@ -139,6 +139,7 @@ export type Sample = {
     method_or_spec: string;
     group_of_test_parameters: string;
   };
+  sample_detail: SampleDetailSchema[];
 };
 
 type TestType1 = {
@@ -155,6 +156,20 @@ type SampleTestType = {
   updated_at: string; // Use 'string' for ISO 8601 datetime format
   test_type: TestType1;
 };
+
+export type SampleDetailSchema = {
+  id: number;
+  sample_id: number;
+  test_type_id: number;
+  assigned_to?: number;
+  testing_start_date: string;
+  testing_end_date: string;
+  sample_issued: number;
+  issued_to: string;
+  samples_received: boolean;
+  // received_quantity: number;
+};
+
 
 export type Data = {
   currentUser: { id: number; department_id: number, qa_type_id:number };

@@ -4,7 +4,7 @@ import React from "react";
 import { useFieldArray, useForm, Form } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Data } from "./typings";
+import { Data, SampleDetailSchema } from "./typings";
 import ConfrimDialog from "./confrim-dialog";
 import ConfrimDialog2 from "./confrim-dialog2";
 
@@ -41,6 +41,7 @@ type Props = {
   showRejectButton?: boolean;
   parameters: Parameters;
   data: Data;
+  formData: SampleDetailSchema | undefined;
   patchFn: (
     data: any,
   ) => Promise<
@@ -86,8 +87,11 @@ const UnderTestingForm = ({
   rejectActionData,
   assigneeData,
   data,
+  formData,
+
   openModal,
 }: Props) => {
+  console.log("hey",formData)
   const {
     control,
     register,
@@ -98,7 +102,7 @@ const UnderTestingForm = ({
     defaultValues: {
       status: "",
       status_id: step,
-      assigned_to,
+      assigned_to:formData?.assigned_to ?? "",
       test_type_id: test_type_id,
       ...(currentStep == 2 && {
         nabl_logo: data.sample.nabl_logo ? 1 : 0,
@@ -106,20 +110,20 @@ const UnderTestingForm = ({
       }),
       comments: comment,
       ...(currentStep == 3 && {
-        issued_to: data.sample.issued_to,
-        sample_issued: data.sample.sample_issued,
+        issued_to:formData?.issued_to ??"",
+        sample_issued:formData?.sample_issued ?? "",
       }),
       ...(currentStep == 4 && {
-        samples_received: data.sample.samples_received ? 1 : 0,
+        samples_received: formData?.samples_received ? 1 : 0,
       }),
       ...(currentStep === 5 && {
-        testing_start_date: data?.sample?.testing_start_date
-          ? new Date(data?.sample?.testing_start_date)
+        testing_start_date: formData?.testing_start_date
+          ? new Date(formData?.testing_start_date)
               .toISOString()
               .split("T")[0]
           : "",
-        testing_end_date: data?.sample?.testing_end_date
-          ? new Date(data.sample.testing_end_date).toISOString().split("T")[0]
+        testing_end_date: formData?.testing_end_date
+          ? new Date(formData.testing_end_date).toISOString().split("T")[0]
           : "",
       }),
 
@@ -185,6 +189,7 @@ const UnderTestingForm = ({
         duration: 10000,
         closeButton: true,
       });
+      setLoading(false);
       return;
     }
 
@@ -192,7 +197,7 @@ const UnderTestingForm = ({
       status: "",
       status_id: currentStep === 2 ? 1 : currentStep - 1,
       test_type_id: test_type_id,
-      assigned_to: assigned_to,
+      assigned_to: formData?.assigned_to,
       comments: comments,
       test_params: test_params,
     });
