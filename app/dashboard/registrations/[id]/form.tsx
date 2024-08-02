@@ -173,11 +173,10 @@ const RegistrationEditForm = ({
   //   control: form.control,
   //   name: "contact_person_id",
   // });
-  // const watchNoOfSamplesValue = useWatch({
-  //   control: form.control,
-  //   name: "no_of_samples",
-  // });
-
+  const watchNoOfBatches = useWatch({
+    control: form.control,
+    name: "no_of_batches",
+  });
   // const watchMicroParams = useWatch({
   //   control: form.control,
   //   name: "micro_params",
@@ -531,6 +530,8 @@ const RegistrationEditForm = ({
   }, [state, router]);
 
   const addSample = () => {
+    if (watchNoOfBatches.toString() === fields.length.toString()) return;
+
     if (fields.length !== 0) {
       const sample = form.getValues("samples").at(-1);
       if (sample) {
@@ -1413,8 +1414,10 @@ const RegistrationEditForm = ({
 
                 <button
                   type="button"
-                  className="relative flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
+                  className="relative flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:border-slate-500 disabled:hover:bg-none disabled:transition-none disabled:animate-none"
                   onClick={addSample}
+                  disabled={watchNoOfBatches.toString() === fields.length.toString() ? true : false}
+
                 >
                   Add Samples
                 </button>
