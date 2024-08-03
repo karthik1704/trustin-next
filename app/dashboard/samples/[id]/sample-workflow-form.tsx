@@ -427,7 +427,13 @@ const SampleWorkflowForm = ({
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Department:
                   </p>
-                  <p>{data.sample.test_type_id === 1 ? "Micro" : "Mech"}</p>
+                  <p>
+                    {data.sample.sample_test_types.length === 2
+                      ? "Micro and Mech"
+                      : data.sample.sample_test_types[0].test_type_id === 1
+                        ? "Micro"
+                        : "Mech"}
+                  </p>
                 </div>
 
                 <div className="w-full xl:w-1/5">
@@ -474,65 +480,81 @@ const SampleWorkflowForm = ({
                 </div>
               </div>
 
-              <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
-                <div className="w-full xl:w-1/5">
-                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                    Assignee:
-                  </p>
-                  <p>
-                    {data?.sample?.assignee?.first_name ??
-                      "---" + " " + data?.sample?.assignee?.last_name ??
-                      "---"}
-                  </p>
-                </div>
+              {data.sample.sample_detail.map(
+                (detail) =>
+                  ([1, 2, 6].includes(data.currentUser.department_id) ||
+                    data.currentUser.qa_type_id === detail.test_type_id) && (
+                    <div
+                      className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row"
+                      key={detail.id}
+                    >
+                      <div className="w-full xl:w-1/5">
+                        <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                          Assignee:
+                        </p>
+                        <p>
+                          {`${detail?.assignee?.first_name} ${detail?.assignee?.last_name}`}
+                        </p>
+                      </div>
+                      <div className="w-full xl:w-1/5">
+                        <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                          Test Type:
+                        </p>
+                        <p>{detail.test_type_id === 1 ? "Micro " : "Mech"}</p>
+                      </div>
+                      <div className="w-full xl:w-1/5">
+                        <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                          TAT:
+                        </p>
+                        <p>
+                          {data.sample.tat
+                            ? new Date(data.sample.tat)
+                                .toISOString()
+                                .split("T")[0]
+                            : "---"}
+                        </p>
+                      </div>
+                      <div className="w-full xl:w-1/5">
+                        <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                          Testing Start Date:
+                        </p>
+                        <p>
+                          {detail.testing_start_date
+                            ? new Date(detail.testing_start_date)
+                                .toISOString()
+                                .split("T")[0]
+                            : "---"}
+                        </p>
+                      </div>
+                      <div className="w-full xl:w-1/5">
+                        <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                          Testing End Date:
+                        </p>
+                        <p>
+                          {detail.testing_end_date
+                            ? new Date(detail.testing_end_date)
+                                .toISOString()
+                                .split("T")[0]
+                            : "---"}
+                        </p>
+                      </div>
 
-                <div className="w-full xl:w-1/5">
-                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                    Test Type:
-                  </p>
-                  <p>
-                    {data?.sample?.sample_test_types.length === 2
-                      ? "Mech and Micro"
-                      : data?.sample?.sample_test_types[0].test_type_id === 1
-                        ? "Micro "
-                        : "Mech"}
-                  </p>
-                </div>
-                <div className="w-full xl:w-1/5">
-                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                    TAT:
-                  </p>
-                  <p>
-                    {data.sample.tat
-                      ? new Date(data.sample.tat).toISOString().split("T")[0]
-                      : "---"}
-                  </p>
-                </div>
-                <div className="w-full xl:w-1/5">
-                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                    Testing Start Date:
-                  </p>
-                  <p>
-                    {data.sample.testing_start_date
-                      ? new Date(data.sample.testing_start_date)
-                          .toISOString()
-                          .split("T")[0]
-                      : "---"}
-                  </p>
-                </div>
-                <div className="w-full xl:w-1/5">
-                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                    Testing End Date:
-                  </p>
-                  <p>
-                    {data.sample.testing_end_date
-                      ? new Date(data.sample.testing_end_date)
-                          .toISOString()
-                          .split("T")[0]
-                      : "---"}
-                  </p>
-                </div>
-              </div>
+                      <div className="w-full xl:w-1/5">
+                        <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                          No. of Sample Issued:
+                        </p>
+                        <p>{detail?.sample_issued ?? "---"}</p>
+                      </div>
+
+                      <div className="w-full xl:w-1/5">
+                        <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                          Sample Issued To:
+                        </p>
+                        <p>{detail?.issued_to ?? "---"}</p>
+                      </div>
+                    </div>
+                  ),
+              )}
               <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
@@ -561,7 +583,7 @@ const SampleWorkflowForm = ({
                   <p>{data?.sample?.under_cdsco ? "Yes" : "No"}</p>
                 </div>
               </div>
-              <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
+              {/* <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     No. of Sample Issued:
@@ -575,7 +597,7 @@ const SampleWorkflowForm = ({
                   </p>
                   <p>{data?.sample?.issued_to ?? "---"}</p>
                 </div>
-              </div>
+              </div> */}
 
               <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
                 <div className="w-full xl:w-1/5">
@@ -587,7 +609,7 @@ const SampleWorkflowForm = ({
               </div>
               {data.currentUser.department_id !== 3 && (
                 <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
-                  <div className="w-full xl:w-1/5">
+                  <div className="w-full xl:w-1/4">
                     <p className="mb-2.5 block font-semibold text-black dark:text-white">
                       Company Name:
                     </p>
@@ -600,7 +622,7 @@ const SampleWorkflowForm = ({
                     </p>
                     <p>{data?.sample?.registration?.customer_address_line1}</p>
                   </div> */}
-                  <div className="w-full xl:w-1/5">
+                  <div className="w-full xl:w-1/2">
                     <p className="mb-2.5 block font-semibold text-black dark:text-white">
                       Adderess:
                     </p>

@@ -168,6 +168,17 @@ export type SampleDetailSchema = {
   issued_to: string;
   samples_received: boolean;
   // received_quantity: number;
+  assignee: {
+    id: number;
+    first_name: string;
+    last_name: string;
+  };
+  authorized_sign:  {
+    id: number;
+    first_name: string;
+    last_name: string;
+  }
+
 };
 
 
