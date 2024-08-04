@@ -11,6 +11,7 @@ import {
 } from "../actions";
 import SampleWorkflowForm from "./sample-workflow-form";
 import { Data, Sample } from "./typings";
+import { User } from "@/types/user";
 
 export const metadata: Metadata = {
   title: "Sample Workflow | Trustin",
@@ -62,6 +63,13 @@ async function getData(id: string) {
     },
   });
 
+  const res7 = await fetch(`${SERVER_API_URL}/users/departments/3`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
 
@@ -107,12 +115,19 @@ async function getData(id: string) {
     // throw new Error("Failed to fetch data");
     console.log("error5");
   }
+  if (!res7.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error5");
+  }
   const sample: Sample = await res.json();
   const branches = await res2.json();
   const users = await res3.json();
   const currentUser = await res4.json();
   const batches = await res5.json();
   const parameters = await res6.json();
+  const  hodUsers:User[] = await res7.json();
   // console.log(sample);
 
   const sample_micro_params = sample.sample_test_parameters.filter(
@@ -133,6 +148,10 @@ async function getData(id: string) {
   const sample_mech_history = sample.sample_history.filter(
     (histroy) => histroy.test_type?.id === 2,
   )??[];
+
+  const microUsers = hodUsers.filter(user=>user.qa_type_id===1)
+  const mechUsers = hodUsers.filter(user=>user.qa_type_id===2)
+
   return {
     sample,
     branches,
@@ -146,6 +165,8 @@ async function getData(id: string) {
     sample_micro_history,
     sample_micro_params,
     sample_micro_workfolw,
+    microUsers,
+    mechUsers
   };
 }
 

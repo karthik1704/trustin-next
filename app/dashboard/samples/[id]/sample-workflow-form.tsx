@@ -343,6 +343,7 @@ const SampleWorkflowForm = ({
                               ? data.sample_micro_history[0].to_status_id
                               : 1
                           }
+                          signUsers={data.microUsers}
                         />{" "}
                       </AccordionContent>
                     </AccordionItem>
@@ -374,6 +375,7 @@ const SampleWorkflowForm = ({
                               ? data.sample_mech_history[0].to_status_id
                               : 1
                           }
+                          signUsers={data.mechUsers}
                         />{" "}
                       </AccordionContent>
                     </AccordionItem>
@@ -485,7 +487,7 @@ const SampleWorkflowForm = ({
                   ([1, 2, 6].includes(data.currentUser.department_id) ||
                     data.currentUser.qa_type_id === detail.test_type_id) && (
                     <div
-                      className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row"
+                      className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row xl:flex-wrap"
                       key={detail.id}
                     >
                       <div className="w-full xl:w-1/5">
@@ -501,6 +503,12 @@ const SampleWorkflowForm = ({
                           Test Type:
                         </p>
                         <p>{detail.test_type_id === 1 ? "Micro " : "Mech"}</p>
+                      </div>
+                      <div className="w-full xl:w-1/5">
+                        <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                          ULR NO.:
+                        </p>
+                        <p>{data.sample.ulr_no ?? "N/A"}</p>
                       </div>
                       <div className="w-full xl:w-1/5">
                         <p className="mb-2.5 block font-semibold text-black dark:text-white">
@@ -551,6 +559,13 @@ const SampleWorkflowForm = ({
                           Sample Issued To:
                         </p>
                         <p>{detail?.issued_to ?? "---"}</p>
+                      </div>
+
+                      <div className="w-full xl:w-1/5">
+                        <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                          Authoized Sign
+                        </p>
+                        <p>{detail.authorized_sign ? `${detail?.authorized_sign.first_name} ${detail.authorized_sign.last_name}` : "---"}</p>
                       </div>
                     </div>
                   ),

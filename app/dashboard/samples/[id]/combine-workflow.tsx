@@ -8,6 +8,7 @@ import {
 } from "./typings";
 import WorkFlowForm from "@/components/WorkFlowForms/workflowform";
 import UnderTestingForm from "./under-testing-form";
+import { User } from "@/types/user";
 
 type Props = {
   data: Data;
@@ -34,6 +35,7 @@ type Props = {
     { fieldErrors: null; type: string; message: string | undefined } | undefined
   >;
   formAction: (data: FormData) => void;
+  signUsers:   User[]
 };
 
 const CombineWorkflow = ({
@@ -48,6 +50,7 @@ const CombineWorkflow = ({
   actionFnReject,
   actionFnResult,
   formAction,
+  signUsers
 }: Props) => {
   const getNextStatus = (nextStep: number) => {
     console.log(sample_history);
@@ -244,6 +247,8 @@ const CombineWorkflow = ({
             patchFn={actionFnResult}
             step={9}
             openModal={openModal}
+            signUsers={signUsers}
+
           />
         )}
         {current_step === 9 && (

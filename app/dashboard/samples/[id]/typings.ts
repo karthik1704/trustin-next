@@ -1,3 +1,5 @@
+import { User } from "@/types/user";
+
 export type SampleTestParameters = {
   id: number;
   sample_id: number;
@@ -65,6 +67,7 @@ export type Sample = {
   status_id: number;
   department: string;
   assigned_to: number;
+  ulr_no:string;
   nabl_logo: boolean;
   samples_received: boolean;
   under_cdsco: boolean;
@@ -162,6 +165,7 @@ export type SampleDetailSchema = {
   sample_id: number;
   test_type_id: number;
   assigned_to?: number;
+  authorized_sign_id:number;
   testing_start_date: string;
   testing_end_date: string;
   sample_issued: number;
@@ -201,6 +205,8 @@ export type Data = {
     first_name: string;
     last_name: string;
   }[];
+  mechUsers: User[]
+  microUsers: User[]
 
   batches: {
     id: number;

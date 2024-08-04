@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Data, SampleDetailSchema } from "./typings";
 import ConfrimDialog from "./confrim-dialog";
 import ConfrimDialog2 from "./confrim-dialog2";
+import { User } from "@/types/user";
 
 type Parameters = {
   id: number;
@@ -60,6 +61,7 @@ type Props = {
   currentStep: number;
   assigneeData?: { id: number; first_name: string; last_name: string }[] | [];
   openModal?: () => void;
+  signUsers?: User[];
 };
 
 type InitialState = {
@@ -90,6 +92,7 @@ const UnderTestingForm = ({
   formData,
 
   openModal,
+  signUsers,
 }: Props) => {
   console.log("hey",formData)
   const {
@@ -125,6 +128,9 @@ const UnderTestingForm = ({
         testing_end_date: formData?.testing_end_date
           ? new Date(formData.testing_end_date).toISOString().split("T")[0]
           : "",
+      }),
+      ...(currentStep === 8 && {
+        authorized_sign_id: formData?.authorized_sign_id
       }),
 
       test_params: parameters.map((para) => ({
@@ -349,7 +355,17 @@ const UnderTestingForm = ({
         ) : (
           <input type="hidden" {...register("status_id")} />
         )}
-
+        {currentStep === 8 && (
+         
+            <Select name="authorized_sign_id" label="Authorized Sign" register={register}>
+              {signUsers?.map((assignee) => (
+                <option value={assignee.id} key={assignee.id}>
+                  {assignee.first_name + " " + assignee.last_name}
+                </option>
+              ))}
+            </Select>
+          
+        )}
         <div className="mb-6">
           <label className="mb-2.5 block text-black dark:text-white">
             Comments

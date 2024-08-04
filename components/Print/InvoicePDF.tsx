@@ -105,12 +105,6 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
                 justifyContent: "flex-start",
               }}
             >
-              {data.sample.nabl_logo && (
-                <Image
-                  src="/images/pdf/nabl_logo.png"
-                  style={{ width: 100, height: 30 }}
-                />
-              )}
               <Image
                 src="/images/logo/logo.png"
                 style={{ width: 100, height: 30 }}
@@ -174,15 +168,171 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
                 Test Report {isDraft && "- Draft"}
               </Text>
             </View>
+
+            {data.sample.nabl_logo && (
+              <View>
+                <Image
+                  src="/images/pdf/nabl_logo.png"
+                  style={{ width: 100, height: 50 }}
+                />
+              </View>
+            )}
           </View>
           {/* <View>
             <Text>Invoice Number: 123456</Text>
             <Text>Date: January 1, 2024</Text>
           </View> */}
 
-          <View>
-            <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
+          <View >
+            {/* <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
               <Text>Customer Information</Text>
+            </View> */}
+
+            <View
+              style={{
+                border: "1 solid #000",
+                display: "flex",
+                flexDirection: "row",
+                fontWeight: "bold",
+                fontSize: "12px",
+                padding: 2,
+              }}
+            >
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                Sample ID No.
+              </Text>
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                {data.sample.sample_id}
+              </Text>
+
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                ULR No.
+              </Text>
+              <Text style={{ padding: 2 }}>{data.sample.ulr_no ?? "N/A"}</Text>
+            </View>
+            <View
+              style={{
+                border: "1 solid #000",
+                display: "flex",
+                flexDirection: "row",
+                fontWeight: "bold",
+                fontSize: "12px",
+                padding: 2,
+              }}
+            >
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                Sample Received Date
+              </Text>
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                {new Date(
+                  data.sample.registration.date_of_received,
+                ).toLocaleDateString()}
+              </Text>
+
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                Discipline
+              </Text>
+              <Text style={{ padding: 2 }}> N/A</Text>
+            </View>
+            <View
+              style={{
+                border: "1 solid #000",
+                display: "flex",
+                flexDirection: "row",
+                fontWeight: "bold",
+                fontSize: "12px",
+                padding: 2,
+              }}
+            >
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                Analysis Start Date
+              </Text>
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                {data.sample.sample_detail.map((detail) =>
+                  new Date(detail.testing_start_date).toLocaleDateString(),
+                )}
+              </Text>
+
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                Group
+              </Text>
+              <Text style={{ padding: 2 }}> N/A</Text>
+            </View>
+            <View
+              style={{
+                border: "1 solid #000",
+                display: "flex",
+                flexDirection: "row",
+                fontWeight: "bold",
+                fontSize: "12px",
+                padding: 2,
+              }}
+            >
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                Analysis Completed Date
+              </Text>
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                {data.sample.sample_detail.map((detail) =>
+                  new Date(detail.testing_end_date).toLocaleDateString(),
+                )}
+              </Text>
+
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                Test Report No.
+              </Text>
+              <Text style={{ padding: 2 }}> N/A</Text>
+            </View>
+            <View
+              style={{
+                border: "1 solid #000",
+                display: "flex",
+                flexDirection: "row",
+                fontWeight: "bold",
+                fontSize: "12px",
+                padding: 2,
+              }}
+            >
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                Report Date
+              </Text>
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                {new Date(data.sample.updated_at).toLocaleDateString()}
+              </Text>
+
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                Report Type.
+              </Text>
+              <Text style={{ padding: 2 }}> Original</Text>
             </View>
 
             <View
@@ -196,11 +346,30 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               }}
             >
               <Text
-                style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                Customer Ref No.
+              </Text>
+              <Text style={{ padding: 1 }}>
+                {data.sample.registration.customer_reference_no ?? "---"}
+              </Text>
+            </View>
+            <View
+              style={{
+                border: "1 solid #000",
+                display: "flex",
+                flexDirection: "row",
+                fontWeight: "bold",
+                fontSize: "12px",
+                padding: 2,
+              }}
+            >
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
               >
                 Company Name
               </Text>
-              <Text style={{ padding: 2 }}>
+              <Text style={{ padding: 1 }}>
                 {data.sample.registration.company_name}
               </Text>
             </View>
@@ -215,16 +384,67 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               }}
             >
               <Text
-                style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
               >
                 Address
               </Text>
-              <Text style={{ padding: 2 }}>
+              <Text style={{ padding: 1, width: "65%" }}>
                 {data.sample.registration.full_address}
               </Text>
             </View>
+            <View
+              style={{
+                border: "1 solid #000",
+                display: "flex",
+                flexDirection: "row",
+                fontWeight: "bold",
+                fontSize: "12px",
+                padding: 2,
+              }}
+            >
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                Manufacturing License No.
+              </Text>
+              <Text style={{ padding: 1 }}>
+                {data.sample.registration.license_no ?? "---"}
+              </Text>
+            </View>
+            <View
+              style={{
+                border: "1 solid #000",
+                display: "flex",
+                flexDirection: "row",
+                fontWeight: "bold",
+                fontSize: "12px",
+                padding: 2,
+              }}
+            >
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                Contact Person Name
+              </Text>
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                {data.sample.registration.contact_person_name}
+              </Text>
+
+              <Text
+                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+              >
+                Contact Number
+              </Text>
+              <Text style={{ padding: 2 }}>
+                {" "}
+                {data.sample.registration.contact_number}
+              </Text>
+            </View>
+
             <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
-              <Text>Sample Information</Text>
+              <Text>Sample Deatils</Text>
             </View>
             <View
               style={{
@@ -239,7 +459,41 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               <Text
                 style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}
               >
-                Batch No
+                Sample Name
+              </Text>
+              <Text
+                style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}
+              >
+                {data.sample.sample_name}
+              </Text>
+
+              <Text
+                style={{ borderRight: "1 solid #000", width: 100, padding: 2 }}
+              >
+                Test Method
+              </Text>
+              <Text style={{ padding: 2 }}>
+                {data.sample.sample_detail.length === 2
+                  ? "Micro, Mech"
+                  : data.sample.sample_detail[0].test_type_id === 1
+                    ? "Micro"
+                    : "Mech"}
+              </Text>
+            </View>
+            <View
+              style={{
+                border: "1 solid #000",
+                display: "flex",
+                flexDirection: "row",
+                fontWeight: "bold",
+                fontSize: "12px",
+                padding: 2,
+              }}
+            >
+              <Text
+                style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}
+              >
+                Batch No.
               </Text>
               <Text
                 style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}
@@ -267,22 +521,38 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               <Text
                 style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}
               >
-                Mfg No
+                Mfg Date
               </Text>
               <Text
                 style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}
               >
-                {new Date(data.sample.manufactured_date).toLocaleDateString()}
+                {data.sample.manufactured_date}
               </Text>
 
               <Text
                 style={{ borderRight: "1 solid #000", width: 100, padding: 2 }}
               >
-                Exp Size
+                Exp Date
               </Text>
-              <Text style={{ padding: 2 }}>
-                {" "}
-                {new Date(data.sample.expiry_date).toLocaleDateString()}
+              <Text style={{ padding: 2 }}> {data.sample.expiry_date}</Text>
+            </View>
+            <View
+              style={{
+                border: "1 solid #000",
+                display: "flex",
+                flexDirection: "row",
+                fontWeight: "bold",
+                fontSize: "12px",
+                padding: 2,
+              }}
+            >
+              <Text
+                style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}
+              >
+                Description
+              </Text>
+              <Text style={{ padding: 2, width: "65%" }}>
+                {data.sample.description}
               </Text>
             </View>
             <View
@@ -298,10 +568,10 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               <Text
                 style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}
               >
-                Test Method
+                Received Quantity
               </Text>
               <Text style={{ padding: 2 }}>
-                {data.sample.test_type_id === 2 ? "Mech" : "Micro"}
+                {data.sample.received_quantity ?? "---"}
               </Text>
             </View>
             <View
@@ -323,7 +593,7 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
                 {data?.sample?.registration?.product_data?.product_name}
               </Text>
             </View>
-            <View
+            {/* <View
               style={{
                 border: "1 solid #000",
                 display: "flex",
@@ -362,7 +632,7 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
                   data?.sample?.registration?.date_of_received,
                 ).toLocaleDateString()}
               </Text>
-            </View>
+            </View> */}
           </View>
           <View
             style={{
@@ -373,12 +643,12 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
             }}
           ></View>
           <View style={[styles.row, styles.tableBody]}>
-            <Text style={[styles.cell, styles.firstCell, { width: "25%" }]}>
+            <Text style={[styles.cell, styles.firstCell, { width: "30%" }]}>
               Parameter Name
             </Text>
-            <Text style={[styles.cell, { width: "15%" }]}>Parameter Code</Text>
-            <Text style={[styles.cell, { width: "20%" }]}>Method</Text>
-            <Text style={[styles.cell, { width: "20%" }]}>Value</Text>
+            {/* <Text style={[styles.cell, { width: "15%" }]}>Parameter Code</Text> */}
+            <Text style={[styles.cell, { width: "25%" }]}>Method</Text>
+            <Text style={[styles.cell, { width: "25%" }]}>Value</Text>
             <Text style={[styles.cell, styles.lastCell, { width: "20%" }]}>
               Result
             </Text>
@@ -392,16 +662,16 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
           <Text style={{ ...styles.cell, width: '20%' }}>{item.value}</Text>
           <Text style={{ ...styles.cell, width: '20%' }}>{item.result ? "Pass" : "Fail"}</Text> */}
 
-              <Text style={[styles.cell, styles.firstCell, { width: "25%" }]}>
+              <Text style={[styles.cell, styles.firstCell, { width: "30%" }]}>
                 {item.test_parameter.testing_parameters}
               </Text>
-              <Text style={[styles.cell, { width: "15%" }]}>
+              {/* <Text style={[styles.cell, { width: "15%" }]}>
                 {item.test_parameter.parameter_code}
-              </Text>
-              <Text style={[styles.cell, { width: "20%" }]}>
+              </Text> */}
+              <Text style={[styles.cell, { width: "25%" }]}>
                 {item.test_parameter.method_or_spec}
               </Text>
-              <Text style={[styles.cell, { width: "20%" }]}>{item.value}</Text>
+              <Text style={[styles.cell, { width: "25%" }]}>{item.value}</Text>
               <Text style={[styles.cell, styles.lastCell, { width: "20%" }]}>
                 {item.result ? "Pass" : "Fail"}
               </Text>
@@ -485,9 +755,18 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               fontSize: 14,
             }}
           >
-            <Text style={{ fontWeight: "bold", textAlign: "right" }}>
-              Authorized Signatory{" "}
-            </Text>
+            {data.sample.sample_detail.map((detail) => (
+              <View key={detail.id}>
+                <Text style={{ fontWeight: "bold", textAlign: "right" }}>
+                  Authorized Signatory{" "}
+                </Text>
+                <Text style={{ fontWeight: "bold", textAlign: "right" }}>
+                  {detail.authorized_sign
+                    ? `${detail.authorized_sign.first_name} ${detail.authorized_sign.last_name}`
+                    : ""}
+                </Text>
+              </View>
+            ))}
           </View>
           <View
             style={{
@@ -497,13 +776,24 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               fontSize: 10,
             }}
           >
-            <Text style={{ fontWeight: "bold", textAlign: "center" }}>
-              * This test report shall not be reproduced except in full, without
+           
+
+            <Text style={{ fontWeight: "bold", textAlign: "left" , paddingVertical: 2}}>
+              Note : 1. No external service provider used in this report
+            </Text>
+            <Text style={{ fontWeight: "bold", textAlign: "left" , textIndent:30 , paddingVertical: 2}}>
+              2. No additions, deviations or exclusions from the tesrmethod.
+            </Text>
+            <Text style={{ fontWeight: "bold", textAlign: "center",  paddingVertical: 2 }}>              * This test report shall not be reproduced except in full, without
               written approval of the laboratory. *
             </Text>
-            <Text style={{ fontWeight: "bold", textAlign: "center" }}>
+            <Text style={{ fontWeight: "bold", textAlign: "center", paddingVertical: 2 }}>
               * The test results in this report refer only to the sample tested
               in the laboratory and the sample submitted by the party. *
+            </Text>
+            <Text style={{ fontWeight: "bold", textAlign: "center", paddingVertical: 2 }}>
+              NABL Accredited Laboratory vide cert. No: TC-5410 valid upto
+              30/03/2026, CDSCO Registration No: TLIMD/2020/000002
             </Text>
             {isDraft && (
               <Text style={{ fontWeight: "bold", textAlign: "center" }}>
