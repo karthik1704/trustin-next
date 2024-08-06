@@ -129,6 +129,8 @@ const UnderTestingForm = ({
       }),
       ...(currentStep === 8 && {
         authorized_sign_id: formData?.authorized_sign_id,
+        discipline: formData?.discipline,
+        group: formData?.group,
       }),
 
       test_params: parameters.map((para) => ({
@@ -354,17 +356,39 @@ const UnderTestingForm = ({
           <input type="hidden" {...register("status_id")} />
         )}
         {currentStep === 8 && (
-          <Select
-            name="authorized_sign_id"
-            label="Authorized Sign"
-            register={register}
-          >
-            {signUsers?.map((assignee) => (
-              <option value={assignee.id} key={assignee.id}>
-                {assignee.first_name + " " + assignee.last_name}
-              </option>
-            ))}
-          </Select>
+          <>
+            <Select
+              name="authorized_sign_id"
+              label="Authorized Sign"
+              register={register}
+            >
+              {signUsers?.map((assignee) => (
+                <option value={assignee.id} key={assignee.id}>
+                  {assignee.first_name + " " + assignee.last_name}
+                </option>
+              ))}
+            </Select>
+            <div className="mb-6">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Issued to
+              </label>
+              <input
+                type="text"
+                {...register("group")}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />{" "}
+            </div>
+            <div className="mb-6">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Issued to
+              </label>
+              <input
+                type="text"
+                {...register("discipline")}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />{" "}
+            </div>
+          </>
         )}
         <div className="mb-6">
           <label className="mb-2.5 block text-black dark:text-white">

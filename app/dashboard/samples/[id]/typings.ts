@@ -179,6 +179,8 @@ export type SampleDetailSchema = {
   sample_issued: number;
   issued_to: string;
   samples_received: boolean;
+  group: string;
+  discipline:string;
   // received_quantity: number;
   assignee: {
     id: number;
