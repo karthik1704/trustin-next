@@ -2,7 +2,7 @@
 import { Package } from "@/types/package";
 import Link from "next/link";
 import { Data } from "./page";
-import { convertToLocalISOString } from "@/lib/utils";
+import { convertToIST, convertToLocalISOString, convertToLocalTimeString, getCurrentLocalISOString } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 const params = new URLSearchParams(window.location.search);
@@ -74,7 +74,8 @@ const FrontDeskTable = ({ data }: { data: Data }) => {
                   <p
                     className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium`}
                   >
-                    {new Date(convertToLocalISOString(packageItem.date_of_received)).toLocaleString()}
+                    {new Date(packageItem.date_of_received.slice(0, 16)).toLocaleString()}
+                    {/* {new Date(packageItem.date_of_received).toLocaleString()} */}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

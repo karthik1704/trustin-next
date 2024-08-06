@@ -94,3 +94,19 @@ export function convertToLocalISOString(timestring:string) {
 
   return localISOString;
 }
+
+export function convertToLocalTimeString(timestring:string) {
+  // Create a Date object from the provided timestring
+  const date = new Date(timestring);
+
+  // Return the local time string
+  return date.toLocaleString();
+}
+
+
+// export function convertToIST(timestring:string) {
+//   // Create a Date object from the provided UTC time string
+//   const date = new Date(timestring);
+//   const timeZone = "Europe/Berlin";
+//   const zonedDate = utcToZonedTime(date, timeZone);
+// }

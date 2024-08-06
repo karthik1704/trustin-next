@@ -22,6 +22,7 @@ type Props = {
   rejectLoading?: boolean;
   rejectFn?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   reject?: boolean;
+  isDisable: boolean;
 };
 
 function ConfrimDialog2({
@@ -32,6 +33,7 @@ function ConfrimDialog2({
   rejectLoading,
   rejectFn,
   reject = false,
+  isDisable
 }: Props) {
   const [enabled, setEnabled] = useState(false);
 
@@ -42,14 +44,14 @@ function ConfrimDialog2({
       {!reject ? (
         <AlertDialogTrigger
           className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray disabled:bg-slate-500"
-          disabled={isLoading || isSubmitting || rejectLoading}
+          disabled={isLoading || isSubmitting || rejectLoading || isDisable} 
         >
           {isLoading || isSubmitting ? "Loading..." : successButtonName}
         </AlertDialogTrigger>
       ) : (
         <AlertDialogTrigger
           className="flex w-1/2 justify-center rounded bg-danger p-3 font-medium text-gray disabled:bg-slate-500"
-          disabled={rejectLoading || isSubmitting}
+          disabled={rejectLoading || isSubmitting || isDisable}
         >
           {rejectLoading ? "Loading..." : "Reject"}
         </AlertDialogTrigger>

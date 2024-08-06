@@ -94,7 +94,7 @@ const UnderTestingForm = ({
   openModal,
   signUsers,
 }: Props) => {
-  console.log("hey",formData)
+  console.log("hey", formData);
   const {
     control,
     register,
@@ -105,7 +105,7 @@ const UnderTestingForm = ({
     defaultValues: {
       status: "",
       status_id: step,
-      assigned_to:formData?.assigned_to ?? "",
+      assigned_to: formData?.assigned_to ?? "",
       test_type_id: test_type_id,
       ...(currentStep == 2 && {
         nabl_logo: data.sample.nabl_logo ? 1 : 0,
@@ -113,24 +113,22 @@ const UnderTestingForm = ({
       }),
       comments: comment,
       ...(currentStep == 3 && {
-        issued_to:formData?.issued_to ??"",
-        sample_issued:formData?.sample_issued ?? "",
+        issued_to: formData?.issued_to ?? "",
+        sample_issued: formData?.sample_issued ?? "",
       }),
       ...(currentStep == 4 && {
         samples_received: formData?.samples_received ? 1 : 0,
       }),
       ...(currentStep === 5 && {
         testing_start_date: formData?.testing_start_date
-          ? new Date(formData?.testing_start_date)
-              .toISOString()
-              .split("T")[0]
+          ? new Date(formData?.testing_start_date).toISOString().split("T")[0]
           : "",
         testing_end_date: formData?.testing_end_date
           ? new Date(formData.testing_end_date).toISOString().split("T")[0]
           : "",
       }),
       ...(currentStep === 8 && {
-        authorized_sign_id: formData?.authorized_sign_id
+        authorized_sign_id: formData?.authorized_sign_id,
       }),
 
       test_params: parameters.map((para) => ({
@@ -356,15 +354,17 @@ const UnderTestingForm = ({
           <input type="hidden" {...register("status_id")} />
         )}
         {currentStep === 8 && (
-         
-            <Select name="authorized_sign_id" label="Authorized Sign" register={register}>
-              {signUsers?.map((assignee) => (
-                <option value={assignee.id} key={assignee.id}>
-                  {assignee.first_name + " " + assignee.last_name}
-                </option>
-              ))}
-            </Select>
-          
+          <Select
+            name="authorized_sign_id"
+            label="Authorized Sign"
+            register={register}
+          >
+            {signUsers?.map((assignee) => (
+              <option value={assignee.id} key={assignee.id}>
+                {assignee.first_name + " " + assignee.last_name}
+              </option>
+            ))}
+          </Select>
         )}
         <div className="mb-6">
           <label className="mb-2.5 block text-black dark:text-white">
@@ -523,6 +523,14 @@ const UnderTestingForm = ({
             isLoading={isLoading}
             isSubmitting={isSubmitting}
             rejectLoading={loading}
+            isDisable={
+              currentStep === 3 && data.currentUser.department_id === 3
+                ? true
+                : false ||
+                    (currentStep === 4 && data.currentUser.department_id === 3)
+                  ? true
+                  : false
+            }
           />
           {showRejectButton && (
             <ConfrimDialog2
@@ -537,6 +545,15 @@ const UnderTestingForm = ({
               rejectLoading={loading}
               rejectFn={handleReject}
               reject
+              isDisable={
+                currentStep === 3 && data.currentUser.department_id === 3
+                  ? true
+                  : false ||
+                      (currentStep === 4 &&
+                        data.currentUser.department_id === 3)
+                    ? true
+                    : false
+              }
             />
           )}
 
