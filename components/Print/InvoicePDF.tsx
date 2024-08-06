@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from "react";
 import {
   Document,
   Page,
@@ -63,13 +62,22 @@ const styles = StyleSheet.create({
 });
 
 // Create PDF component
-const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
+const MyDocument = ({
+  data,
+  isDraft,
+  qr,
+}: {
+  data: Data;
+  isDraft: boolean;
+  qr: string;
+}) => {
   console.log(data);
+  console.log(qr);
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <View
+        {/* <View
           style={{
             display: "flex",
             flexDirection: "row",
@@ -87,7 +95,7 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
           >
             {new Date().toLocaleString()}
           </Text>
-        </View>
+        </View> */}
         <View style={styles.section}>
           <View
             style={{
@@ -112,7 +120,7 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
                 />
               )}
             </View>
-            <View
+            {/* <View
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -191,7 +199,29 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               >
                 Test Report {isDraft && "- Draft"}
               </Text>
+            </View> */}
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+                margin: "auto ",
+              }}
+            >
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  fontSize: "12px",
+                  marginTop: "5px",
+                }}
+              >
+                Test Report {isDraft && "- Draft"}
+              </Text>
             </View>
+
             <View>
               <Image
                 src="/images/logo/logo.png"
@@ -277,7 +307,10 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               >
                 Discipline
               </Text>
-              <Text style={{ padding: 2, marginLeft: 4 }}> N/A</Text>
+              <Text style={{ padding: 2, marginLeft: 4 }}>
+                {" "}
+                {data.sample.disicipline ?? "N/A"}
+              </Text>
             </View>
             <View
               style={{
@@ -316,7 +349,10 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               >
                 Group
               </Text>
-              <Text style={{ padding: 2, marginLeft: 4 }}> N/A</Text>
+              <Text style={{ padding: 2, marginLeft: 4 }}>
+                {" "}
+                {data.sample.group ?? "N/A"}
+              </Text>
             </View>
             <View
               style={{
@@ -355,7 +391,10 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               >
                 Test Report No.
               </Text>
-              <Text style={{ padding: 2, marginLeft: 4 }}> N/A</Text>
+              <Text style={{ padding: 2, marginLeft: 4 }}>
+                {" "}
+                {data.sample.report_no ?? "N/A"}
+              </Text>
             </View>
             <View
               style={{
@@ -578,8 +617,11 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               >
                 {data.sample.batch_or_lot_no}
               </Text>
-              <Text                 style={{ borderRight: "1 solid #000", width: 100, padding: 2 }}
-              >Mfg Date</Text>
+              <Text
+                style={{ borderRight: "1 solid #000", width: 100, padding: 2 }}
+              >
+                Mfg Date
+              </Text>
               <Text style={{ padding: 2, marginLeft: 4 }}>
                 {data.sample.manufactured_date}
               </Text>
@@ -613,7 +655,7 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               <Text
                 style={{ borderRight: "1 solid #000", width: 100, padding: 2 }}
               >
-                 Exp Date
+                Exp Date
               </Text>
               <Text style={{ padding: 2, marginLeft: 4 }}>
                 {" "}
@@ -801,7 +843,9 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
               <Text style={[styles.cell, { width: "25%" }]}>
                 {item.test_parameter.method_or_spec}
               </Text>
-              <Text style={[styles.cell, { width: "25%" }]}>{item.value ?? "Pending"}</Text>
+              <Text style={[styles.cell, { width: "25%" }]}>
+                {item.value ?? "Pending"}
+              </Text>
               <Text style={[styles.cell, styles.lastCell, { width: "20%" }]}>
                 {item.result ? "Pass" : "Fail"}
               </Text>
@@ -982,6 +1026,9 @@ const MyDocument = ({ data, isDraft }: { data: Data; isDraft: boolean }) => {
                 certification purpose. *
               </Text>
             )}
+          </View>
+          <View style={{ height: "200px" }}>
+            <Image src={qr} style={{ width: 150, height: 150 }} />
           </View>
           <View style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
             <View style={{ display: "flex", marginBottom: "16px" }}>

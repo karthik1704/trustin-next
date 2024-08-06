@@ -5,8 +5,8 @@ import { SERVER_API_URL } from "@/app/constant";
 import { getErrorMessage } from "@/lib/utils";
 import { revalidateTag } from "next/cache";
 
-export async function createParameters(prevState: any, formData: FormData) {
-  let jsonObject = Object.fromEntries(formData.entries());
+export async function createParameters( formData: any) {
+  let jsonObject = formData;
 
   if (jsonObject.customer_id === "null") jsonObject.customer_id = null as any;
   if (jsonObject.product_id === "null") jsonObject.product_id = null as any;
@@ -14,7 +14,7 @@ export async function createParameters(prevState: any, formData: FormData) {
   if (jsonObject.test_type_id !== "2" && jsonObject.product_id !== "null")
     jsonObject.product_id = null as any;
 
-  console.log(jsonObject);
+  // console.log(jsonObject);
 
   const access_token = cookies().get("access_token");
   const res = await fetch(`${SERVER_API_URL}/parameters/`, {

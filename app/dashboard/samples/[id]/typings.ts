@@ -83,11 +83,15 @@ export type Sample = {
   description: string;
   sample_issued: number | null;
   issued_to: string | null;
+  report_no: string | null;
+  disicipline: string | null;
+  group: string | null;
   sample_condition: string;
   sterilization_batch_no: string;
 
   created_by: number;
   updated_by: number;
+  updated_at: string;
   status: string;
   sample_test_parameters: SampleTestParameters[];
   sample_test_types: SampleTestType[];
@@ -96,6 +100,10 @@ export type Sample = {
     id: number;
     company_name: string;
     full_address: string;
+    customer_reference_no: string;
+    license_no: string;
+    contact_person_name: string;
+    contact_number: string;
     test_type_id: number;
     product_id: number;
     date_of_received: string;

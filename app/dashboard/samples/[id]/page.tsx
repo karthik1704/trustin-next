@@ -2,7 +2,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { SERVER_API_URL } from "@/app/constant";
+import { PDF_URL, SERVER_API_URL } from "@/app/constant";
 import {
   patchSampleWorkflow,
   patchSampleWorkflowTestResult,
@@ -12,6 +12,7 @@ import {
 import SampleWorkflowForm from "./sample-workflow-form";
 import { Data, Sample } from "./typings";
 import { User } from "@/types/user";
+import QRCode from 'qrcode';
 
 export const metadata: Metadata = {
   title: "Sample Workflow | Trustin",
@@ -170,6 +171,17 @@ async function getData(id: string) {
   };
 }
 
+
+
+const generateQRCode = async (text:string) => {
+  try {
+    const url = await QRCode.toDataURL(text);
+    return url;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const EditSamplePage = async ({
   params: { id },
 }: {
@@ -187,6 +199,7 @@ const EditSamplePage = async ({
     id,
   );
   const updateSampleWithId = updateSamples.bind(null, id);
+  const qrcode = await generateQRCode(`${PDF_URL}/pdf/${id}`)
 
   return (
     <>
@@ -201,6 +214,7 @@ const EditSamplePage = async ({
             actionFnResult={patchSampleWorkflowResultWithId}
             actionFnReject={rejectSampleWorkflowWithId}
             actionUpdateSample={updateSampleWithId}
+            qr={qrcode as string}
           />
         
         </div>

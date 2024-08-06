@@ -1,5 +1,6 @@
-'use client';
+"use client";
 import { Package } from "@/types/package";
+import { User } from "@/types/user";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -18,14 +19,18 @@ export type RegisterType = {
     sample_name: string;
     department: string;
     status: string;
+    sample_test_types:{
+      id:number;
+      test_type_id: number;
+    }[];
     registration: {
       code: string | null;
       company_name: string;
     };
     status_data: {
-      id: number
-    name: string;
-    }
+      id: number;
+      name: string;
+    };
   }[];
   total: number;
   page: number;
@@ -36,7 +41,7 @@ const params = new URLSearchParams(window.location.search);
 const SortBy = params.get("sort_by") || "id";
 const SortOrder = params.get("sort_order") || "asc";
 
-const SampleTable = ({ data }: { data: RegisterType }) => {
+const SampleTable = ({ data, user }: { data: RegisterType; user: User }) => {
   const router = useRouter();
 
   const handleSort = (column: string) => {
@@ -58,16 +63,21 @@ const SampleTable = ({ data }: { data: RegisterType }) => {
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="min-w-[200px] px-4 py-4 font-medium text-black dark:text-white xl:pl-9">
                 Sample ID
               </th>
-              <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-9">
                 Sample Name
               </th>
-              <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                Customer Name
+              {user.role_id !== 4 && (
+                <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-9">
+                  Customer Name
+                </th>
+              )}
+              <th className="w-[120px] px-4 py-4 font-medium text-black dark:text-white xl:pl-9">
+                Test Method
               </th>
-              <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
+              <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white xl:pl-9">
                 Status
               </th>
 
@@ -80,18 +90,38 @@ const SampleTable = ({ data }: { data: RegisterType }) => {
             {data.data.map((packageItem, key) => (
               <tr key={packageItem.id}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
-                    {packageItem.sample_id}
-                  </h5>
+                  <Link
+                    className="hover:text-primary"
+                    href={`samples/${packageItem.id}`}
+                  >
+                    <h5 className="font-medium text-black dark:text-white">
+                      {packageItem.sample_id}
+                    </h5>
+                  </Link>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem.sample_name}
                   </h5>
                 </td>
+                {user.role_id !== 4 && (
+                  <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">
+                      {packageItem?.registration?.company_name ?? "---"}
+                    </h5>
+                  </td>
+                )}
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem?.registration?.company_name ?? "---"}
+                    {packageItem.sample_test_types.length === 2
+                      ? user.role_id === 4
+                        ? user.qa_type_id === 1
+                          ? "Micro"
+                          : "Mech"
+                        : "Mech, Micro"
+                      : packageItem?.sample_test_types[0].test_type_id === 1
+                        ? "Micro"
+                        : "Mech"}
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">

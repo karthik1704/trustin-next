@@ -7,6 +7,7 @@ import Link from "next/link";
 import axios from "axios";
 import Pagination from "@/components/pagination";
 import Search from "@/components/search-box";
+import { User } from "@/types/user";
 
 export const metadata: Metadata = {
   title: "Samples | Trustin",
@@ -67,6 +68,35 @@ async function getData(
   return response.data;
 }
 
+export async function getCurrentUser(){
+  const cookieStore = cookies();
+  const access_token = cookieStore.get("access_token");
+
+  const res = await fetch(`${SERVER_API_URL}/users/me`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+
+
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error");
+  }
+
+  if (res.status === 401) redirect("/signin");
+
+  const user = await res.json();
+
+  return  user;
+}
+
 const SamplePage = async ({
   params,
   searchParams,
@@ -75,6 +105,7 @@ const SamplePage = async ({
   searchParams?: { [key: string]: string | string[] | undefined };
 }) => {
   const data: RegisterType = await getData(searchParams);
+  const user:User = await getCurrentUser();
   return (
     <>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -91,7 +122,7 @@ const SamplePage = async ({
       <div className="flex flex-col gap-10">
         <Search path="/dashboard/samples" />
 
-        <SampleTable data={data} />
+        <SampleTable data={data} user={user} />
         <Pagination
           total={data.total}
           page={data.page}

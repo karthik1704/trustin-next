@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { createParameters } from "../actions";
 import Select from "@/components/select-input";
 import { Data } from "./page";
-import { useForm,  useWatch } from "react-hook-form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import SubmitButton from "@/components/submit-button/submit-button";
 import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Trash2 } from "lucide-react";
 
 type InitialState = {
   fieldErrors?: {} | null;
@@ -21,12 +22,21 @@ const initialState: InitialState = {
   message: null,
 };
 
-
 type Props = {
   data: Data;
 };
 const ParameterNewForm = ({ data }: Props) => {
-  const { register, control, setValue } = useForm();
+  const {
+    register,
+    control,
+    setValue,
+    handleSubmit,
+    formState: { isLoading, isSubmitting },
+  } = useForm();
+  const { fields, append, remove } = useFieldArray({
+    name: "methods",
+    control,
+  });
   const [showProductSelect, setShowProductSelect] = useState<boolean>(true);
 
   const watchTestType = useWatch({
@@ -39,16 +49,17 @@ const ParameterNewForm = ({ data }: Props) => {
     if (watchTestType) {
       if (watchTestType === "2") {
         setShowProductSelect(true);
-      
       } else {
         setShowProductSelect(false);
         setValue("product_id", "null");
       }
     }
-  }, [setShowProductSelect,setValue, watchTestType]);
+  }, [setShowProductSelect, setValue, watchTestType]);
 
-  const [state, formAction] = useFormState(createParameters, initialState);
+  const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
+
+
   useEffect(() => {
     if (state?.type === null) return;
 
@@ -67,31 +78,17 @@ const ParameterNewForm = ({ data }: Props) => {
     }
   }, [state, router]);
 
-  // const handleSubmit = ({
-  //   formData,
-  //   data,
-  // }: {
-  //   formData: FormData;
-  //   data: {};
-  // }) => {
-  //   console.log(data);
-  //   createParameters(formData);
-  // };
 
-
+  const handleForm = async (data: any) => {
+    // console.log(data);
+    const res = await createParameters(data)
+    setState(res);
+  };
 
   return (
     // <Form control={control} onSubmit={handleSubmit}>
-    <form action={formAction}>
+    <form onSubmit={handleSubmit(handleForm)}>
       <div className="p-6.5">
-        {/* <Select name="branch_id" label="Branch" register={register}>
-          {data?.branch.map((b) => (
-            <option value={b.id} key={b.id}>
-              {b.branch_name}
-            </option>
-          ))}
-        </Select> */}
-
         <Select name="test_type_id" label="Test Type" register={register}>
           {data?.test_types.map((test) => (
             <option value={test.id} key={test.id}>
@@ -113,65 +110,184 @@ const ParameterNewForm = ({ data }: Props) => {
             </option>
           ))}
         </Select>
-{/* 
-        <Select name="customer_id" label="Customer" register={register}>
-          <option value="null">----</option>
-          {data?.customers.map((customer) => (
-            <option value={customer.id} key={customer.id}>
-              {customer.company_name}
-            </option>
+
+        <div className="mb-4">
+          {fields.map((item, index) => (
+            <div key={item.id} className="mb-4 mt-2">
+              <div className="mb-2 flex justify-between border-b-2">
+                <p>
+                  Method <strong>#{index + 1}:</strong>
+                </p>
+                <div>
+                  <button
+                    type="button"
+                    className="flex justify-center rounded-full p-2 font-medium text-black hover:bg-gray"
+                    onClick={() => {
+                      remove(index);
+                      // form.setValue("no_of_samples", fields.length - 1);
+                    }}
+                  >
+                    <Trash2 className="w-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div className=" flex flex-col gap-3 xl:flex-row xl:flex-wrap">
+                <div className="mb-4.5 w-full">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Method or Specification
+                  </label>
+                  <input
+                    type="text"
+                    {...register(`methods.${index}.method_or_spec`)}
+                    placeholder="Method or Specification"
+                    required
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
+                </div>
+              </div>
+              <TestParamsForm
+                control={control}
+                register={register}
+                arrayFieldName={`methods.${index}.parameters`}
+              />
+
+              <hr />
+              <hr className="mt-4"/>
+            </div>
           ))}
-        </Select> */}
-        <div className="mb-4.5">
-          <label className="mb-2.5 block text-black dark:text-white">
-            Test Parameters
-          </label>
-          <input
-            type="text"
-            {...register("testing_parameters")}
-            placeholder="Test Parameters"
-            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          />
+          <button
+            type="button"
+            className="relative flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:animate-none disabled:border-slate-500 disabled:transition-none disabled:hover:bg-none"
+            onClick={() => append({ method_or_spec: "", parameters: [] })}
+          >
+            Add Method
+          </button>
         </div>
 
-        <div className="mb-4.5">
-          <label className="mb-2.5 block text-black dark:text-white">
-            Amount
-          </label>
-          <input
-            type="number"
-            {...register("amount")}
-            placeholder="Amount"
-            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          />
-        </div>
-        <div className="mb-4.5">
-          <label className="mb-2.5 block text-black dark:text-white">
-            Method or Specification
-          </label>
-          <input
-            type="text"
-            {...register("method_or_spec")}
-            placeholder="  Method or Specification"
-            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          />
-        </div>
-
-        <div className="mb-6">
-          <label className="mb-2.5 block text-black dark:text-white">
-            Group of test parameters
-          </label>
-          <textarea
-            rows={6}
-            {...register("group_of_test_parameters")}
-            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          ></textarea>
-        </div>
-
-        <SubmitButton />
+        <button
+          type="submit"
+          className="mt-4 flex w-full transform-gpu justify-center rounded bg-primary p-3 font-medium text-gray transition-all duration-300 hover:bg-blue-500 active:scale-95 disabled:bg-slate-500"
+          disabled={isLoading||isSubmitting}
+        >
+          {isSubmitting || isLoading ? "Loading..." : "Submit"}
+        </button>
       </div>
       {/* </Form> */}
     </form>
+  );
+};
+
+const TestParamsForm = ({
+  control,
+  register,
+  arrayFieldName,
+}: {
+  control: any;
+  register: any;
+  arrayFieldName: string;
+}) => {
+  const { fields, append, remove, replace } = useFieldArray({
+    control,
+    name: arrayFieldName,
+  });
+
+  return (
+    <div className="rounded-sm   bg-white px-2 pb-2.5  sm:px-3.5 xl:pb-1">
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={() => replace([])}
+          className="hover:text-bule-400 mb-1 flex transform-gpu font-medium text-primary transition-all duration-300 hover:text-blue-400 active:scale-95 disabled:bg-slate-500"
+        >
+          Reset
+        </button>
+      </div>
+      <div className="max-w-full overflow-x-auto">
+        <table className="w-full table-auto">
+          <thead>
+            <tr className="bg-gray-2 text-left dark:bg-meta-4">
+              <th className="w-[20px] px-1 py-4 font-medium text-black dark:text-white xl:pl-4">
+                S.NO.
+              </th>
+              <th className="min-w-[320px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4">
+                Test Parameters
+              </th>
+              {/* <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                QTY
+              </th> */}
+              <th className="w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4">
+                Amount
+              </th>
+              <th className="w-[220px] px-2 py-4 font-medium text-black dark:text-white xl:pl-6">
+                Group of test parameters
+              </th>
+
+              <th className="w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-6">
+                Remove?
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {fields.map((item, idx) => (
+              <tr key={item.id}>
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
+                  <h5 className="font-medium text-black dark:text-white">
+                    {idx + 1}
+                  </h5>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
+                  <input
+                    type="text"
+                    {...register(`${arrayFieldName}.${idx}.testing_parameters`)}
+                    required
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
+                </td>
+
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
+                  <input
+                    type="text"
+                    {...register(`${arrayFieldName}.${idx}.amount`)}
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
+                </td>
+
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-6">
+                  <input
+                    type="text"
+                    {...register(
+                      `${arrayFieldName}.${idx}.group_of_test_parameters`,
+                    )}
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
+                </td>
+                <td className="border-b border-[#eee] px-2 py-5 pl-6 dark:border-strokedark xl:pl-6">
+                  <button type="button" onClick={() => remove(idx)}>
+                    <Trash2 />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="flex gap-4">
+          <button
+            type="button"
+            className="mt-2 flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
+            onClick={() =>
+              append({
+                testing_parameters: "",
+                amount: undefined,
+                group_of_test_parameters: "",
+              })
+            }
+          >
+            Add Parameter
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

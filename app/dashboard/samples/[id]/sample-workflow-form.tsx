@@ -44,6 +44,7 @@ import { date } from "zod";
 import { current } from "tailwindcss/colors";
 
 type Props = {
+  qr:string,
   data: Data;
   actionFn: (
     prevState: any,
@@ -194,6 +195,7 @@ const SampleWorkflowForm = ({
   actionFnResult,
   actionFnReject,
   actionUpdateSample,
+  qr
 }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -285,6 +287,7 @@ const SampleWorkflowForm = ({
           showToolbar={data.sample.status_id > 7 ? true : false}
         >
           <MyDocument
+          qr={qr}
             data={data}
             isDraft={data.sample.status_id === 8 ? true : false}
           />

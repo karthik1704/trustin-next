@@ -1476,7 +1476,7 @@ const TestParamsForm = ({
                       <ComboBox2
                         name={`${arrayFieldName}.${idx}.test_parameter_id`}
                         data={parameters.map((t) => ({
-                          name: t.testing_parameters,
+                          name: `${t.testing_parameters} - (${t.method_or_spec})`,
                           value: t.id,
                         }))}
                         onChange={onChange}

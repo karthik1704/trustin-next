@@ -2,7 +2,7 @@
 import { Package } from "@/types/package";
 import Link from "next/link";
 import { Data } from "./page";
-import { convertToIST, convertToLocalISOString, convertToLocalTimeString, getCurrentLocalISOString } from "@/lib/utils";
+import {  convertToLocalISOString, convertToLocalTimeString, getCurrentLocalISOString } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 const params = new URLSearchParams(window.location.search);
