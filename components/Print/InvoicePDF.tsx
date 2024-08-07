@@ -102,6 +102,7 @@ const MyDocument = ({
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
+              justifyContent:"space-between",
               borderBottom: "1px solid #000",
             }}
             fixed
@@ -116,7 +117,7 @@ const MyDocument = ({
               {data.sample.nabl_logo && (
                 <Image
                   src="/images/pdf/nabl_logo.png"
-                  style={{ width: 100, height: 50 }}
+                  style={{ width: 150, height: 80 }}
                 />
               )}
             </View>
