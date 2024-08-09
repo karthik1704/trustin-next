@@ -33,7 +33,7 @@ type Props = {
 const ParameterEditForm = ({ data, actionFn }: Props) => {
   const { parameter, products, customers, branch, test_types } = data;
 
-  const { register, control, setValue, formState:{isSubmitting} } = useForm({
+  const { register, control, setValue, formState:{isSubmitting , isLoading} } = useForm({
     defaultValues: {
       // branch_id: parameter.branch_id,
       test_type_id: "" + parameter.test_type_id,
@@ -41,6 +41,9 @@ const ParameterEditForm = ({ data, actionFn }: Props) => {
       product_id: "" + parameter.product_id,
       testing_parameters: parameter.testing_parameters,
       method_or_spec: parameter.method_or_spec,
+      specification_limits: parameter.specification_limits ?? "",
+      min_limits: parameter.min_limits ?? "",
+      max_limits: parameter.max_limits ?? "",
       amount: parameter.amount,
       group_of_test_parameters: parameter.group_of_test_parameters,
     },
@@ -56,9 +59,13 @@ const ParameterEditForm = ({ data, actionFn }: Props) => {
     if (watchTestType) {
       if (watchTestType === "2") {
         setShowProductSelect(true);
+        setValue("specification_limits","");
       } else {
         setShowProductSelect(false);
         setValue("product_id", "null");
+        setValue("min_limits","");
+        setValue("max_limits","");
+
       }
     }
   }, [setShowProductSelect, setValue, watchTestType]);
@@ -150,7 +157,58 @@ const ParameterEditForm = ({ data, actionFn }: Props) => {
           />
         </div>
 
+       
         <div className="mb-4.5">
+          <label className="mb-2.5 block text-black dark:text-white">
+          Method or Specification
+
+          </label>
+          <input
+            type="text"
+            {...register("method_or_spec")}
+            placeholder="  Method or Specification"
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          />
+        </div>
+       {showProductSelect ? <>
+        <div className="mb-4.5">
+          <label className="mb-2.5 block text-black dark:text-white">
+            Specification Maximum Limits
+          </label>
+          <input
+            type="text"
+            {...register("max_limits")}
+            placeholder="  Method or Specification"
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          />
+        </div>
+        <div className="mb-4.5">
+          <label className="mb-2.5 block text-black dark:text-white">
+            Specification Minimum Limits
+          </label>
+          <input
+            type="text"
+            {...register("min_limits")}
+            placeholder="  Method or Specification"
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          />
+        </div>
+       </> :
+        <div className="mb-4.5">
+          <label className="mb-2.5 block text-black dark:text-white">
+          Specification  Limits
+
+          </label>
+          <input
+            type="text"
+            {...register("specification_limits")}
+            placeholder="  Method or Specification"
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          />
+        </div>
+}
+
+        {/* <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
             Amount
           </label>
@@ -158,17 +216,6 @@ const ParameterEditForm = ({ data, actionFn }: Props) => {
             type="number"
             {...register("amount")}
             placeholder="Amount"
-            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          />
-        </div>
-        <div className="mb-4.5">
-          <label className="mb-2.5 block text-black dark:text-white">
-            Method or Specification
-          </label>
-          <input
-            type="text"
-            {...register("method_or_spec")}
-            placeholder="  Method or Specification"
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
         </div>
@@ -182,7 +229,7 @@ const ParameterEditForm = ({ data, actionFn }: Props) => {
             {...register("group_of_test_parameters")}
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           ></textarea>
-        </div>
+        </div> */}
 
         <SubmitButton />
       </div>

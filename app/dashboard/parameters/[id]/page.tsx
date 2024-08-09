@@ -95,6 +95,9 @@ export type Data = {
     testing_parameters: string;
     amount: number;
     method_or_spec: string;
+    specification_limits: string | null | undefined;
+    min_limits: string | null | undefined;
+    max_limits: string | null | undefined;
 
     group_of_test_parameters: string;
   };

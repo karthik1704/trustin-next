@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 import { createParameters } from "../actions";
 import Select from "@/components/select-input";
 import { Data } from "./page";
-import { useFieldArray, useForm, useWatch } from "react-hook-form";
+import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import SubmitButton from "@/components/submit-button/submit-button";
 import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
+import ComboBox2 from "@/components/combo-box/combo-box2";
 
 type InitialState = {
   fieldErrors?: {} | null;
@@ -59,7 +60,6 @@ const ParameterNewForm = ({ data }: Props) => {
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
 
-
   useEffect(() => {
     if (state?.type === null) return;
 
@@ -78,10 +78,9 @@ const ParameterNewForm = ({ data }: Props) => {
     }
   }, [state, router]);
 
-
   const handleForm = async (data: any) => {
     // console.log(data);
-    const res = await createParameters(data)
+    const res = await createParameters(data);
     setState(res);
   };
 
@@ -97,7 +96,7 @@ const ParameterNewForm = ({ data }: Props) => {
           ))}
         </Select>
 
-        <Select
+        {/* <Select
           name="product_id"
           label="Product"
           register={register}
@@ -109,7 +108,31 @@ const ParameterNewForm = ({ data }: Props) => {
               {product.product_name}
             </option>
           ))}
-        </Select>
+        </Select> */}
+        <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+          <div className="w-full">
+            <label className="mb-2.5 block text-black dark:text-white">
+              Product
+            </label>
+            <Controller
+              name={`product_id`}
+              control={control}
+              render={({ field: { onChange, value, onBlur } }) => (
+                <ComboBox2
+                  name={`product_id`}
+                  data={data.products.map((t) => ({
+                    name: `${t.product_name}`,
+                    value: t.id,
+                  }))}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  disabled={!showProductSelect}
+                />
+              )}
+            />
+          </div>
+        </div>
 
         <div className="mb-4">
           {fields.map((item, index) => (
@@ -132,7 +155,7 @@ const ParameterNewForm = ({ data }: Props) => {
                 </div>
               </div>
 
-              <div className=" flex flex-col gap-3 xl:flex-row xl:flex-wrap">
+              <div className="flex flex-col gap-3 xl:flex-row xl:flex-wrap">
                 <div className="mb-4.5 w-full">
                   <label className="mb-2.5 block text-black dark:text-white">
                     Method or Specification
@@ -150,10 +173,11 @@ const ParameterNewForm = ({ data }: Props) => {
                 control={control}
                 register={register}
                 arrayFieldName={`methods.${index}.parameters`}
+                showLimits={!showProductSelect}
               />
 
               <hr />
-              <hr className="mt-4"/>
+              <hr className="mt-4" />
             </div>
           ))}
           <button
@@ -168,7 +192,7 @@ const ParameterNewForm = ({ data }: Props) => {
         <button
           type="submit"
           className="mt-4 flex w-full transform-gpu justify-center rounded bg-primary p-3 font-medium text-gray transition-all duration-300 hover:bg-blue-500 active:scale-95 disabled:bg-slate-500"
-          disabled={isLoading||isSubmitting}
+          disabled={isLoading || isSubmitting}
         >
           {isSubmitting || isLoading ? "Loading..." : "Submit"}
         </button>
@@ -182,10 +206,12 @@ const TestParamsForm = ({
   control,
   register,
   arrayFieldName,
+  showLimits,
 }: {
   control: any;
   register: any;
   arrayFieldName: string;
+  showLimits: boolean;
 }) => {
   const { fields, append, remove, replace } = useFieldArray({
     control,
@@ -193,7 +219,7 @@ const TestParamsForm = ({
   });
 
   return (
-    <div className="rounded-sm   bg-white px-2 pb-2.5  sm:px-3.5 xl:pb-1">
+    <div className="rounded-sm bg-white px-2 pb-2.5 sm:px-3.5 xl:pb-1">
       <div className="flex justify-end">
         <button
           type="button"
@@ -216,17 +242,28 @@ const TestParamsForm = ({
               {/* <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 QTY
               </th> */}
-              <th className="w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4">
-                Amount
-              </th>
-              <th className="w-[220px] px-2 py-4 font-medium text-black dark:text-white xl:pl-6">
-                Group of test parameters
+              <th
+                className="min-w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4"
+                colSpan={ 2}
+              >
+                Specification Limits
               </th>
 
               <th className="w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-6">
                 Remove?
               </th>
             </tr>
+            {!showLimits && (
+              <tr>
+                <th></th>
+                <th></th>
+                <th className="min-w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4">
+                  Min
+                </th>
+                <th className="min-w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4">Max</th>
+                <th ></th>
+              </tr>
+            )}
           </thead>
           <tbody>
             {fields.map((item, idx) => (
@@ -244,24 +281,34 @@ const TestParamsForm = ({
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </td>
-
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
-                  <input
-                    type="text"
-                    {...register(`${arrayFieldName}.${idx}.amount`)}
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  />
-                </td>
-
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-6">
-                  <input
-                    type="text"
-                    {...register(
-                      `${arrayFieldName}.${idx}.group_of_test_parameters`,
-                    )}
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  />
-                </td>
+                {!showLimits ? (
+                  <>
+                    <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
+                      <input
+                        type="text"
+                        {...register(`${arrayFieldName}.${idx}.min_limits`)}
+                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                      />
+                    </td>
+                    <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
+                      <input
+                        type="text"
+                        {...register(`${arrayFieldName}.${idx}.max_limits`)}
+                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                      />
+                    </td>
+                  </>
+                ) : (
+                  <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
+                    <input
+                      type="text"
+                      {...register(
+                        `${arrayFieldName}.${idx}.specification_limits`,
+                      )}
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </td>
+                )}
                 <td className="border-b border-[#eee] px-2 py-5 pl-6 dark:border-strokedark xl:pl-6">
                   <button type="button" onClick={() => remove(idx)}>
                     <Trash2 />

@@ -365,7 +365,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
       expiry_date: null,
       tat: null,
       batch_size: "",
-      received_quantity: 0,
+      received_quantity: "",
       description: "",
       sample_condition: "",
       sterilization_batch_no: "",
@@ -1023,18 +1023,14 @@ const RegistrationForm = ({ data }: { data: Data }) => {
               />
             </div>
           </div>
-          <div className="mb-4.5">
-            <div className="w-full">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Status
-              </label>
+         
               <input
                 readOnly={true}
+                type="hidden"
                 {...form.register("status")}
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
-            </div>
-          </div>
+           
           <Tabs defaultValue="samples" className="w-full">
             <TabsList>
               <TabsTrigger value="samples">Samples</TabsTrigger>
@@ -1151,7 +1147,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                           {...form.register(
                             `samples.${index}.received_quantity`,
                           )}
-                          type="number"
+                          type="text"
                           required
                           placeholder="Enter Received Quantity"
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"

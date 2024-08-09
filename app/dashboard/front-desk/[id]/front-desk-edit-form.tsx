@@ -111,6 +111,19 @@ const FrontDeskEditForm = ({
 
         <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
+            No. of boxes Received
+          </label>
+          <input
+            type="text"
+            name="no_of_boxes_received"
+            placeholder=" Mode of Received"
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            required
+          />
+        </div>
+
+        <div className="mb-4.5">
+          <label className="mb-2.5 block text-black dark:text-white">
             Date Received
           </label>
           <input

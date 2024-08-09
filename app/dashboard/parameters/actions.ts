@@ -60,8 +60,14 @@ export async function updateParameter(
   if (jsonObject.customer_id === "null") jsonObject.customer_id = null as any;
   if (jsonObject.product_id === "null") jsonObject.product_id = null as any;
 
-  if (jsonObject.test_type_id !== "2" && jsonObject.product_id !== "null")
+  if (jsonObject.test_type_id !== "2" && jsonObject.product_id !== "null"){
     jsonObject.product_id = null as any;
+    jsonObject.max_limits=null as any;
+    jsonObject.min_limits=null as any;
+  }
+  else {
+    jsonObject.specification_limits=null as any;
+  }
 
   console.log(jsonObject);
   const access_token = cookies().get("access_token");

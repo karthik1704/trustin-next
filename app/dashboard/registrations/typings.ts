@@ -29,7 +29,7 @@ type RegistrationSamples = {
   tat: string | null;
   expiry_date: string | null;
   batch_size: string;
-  received_quantity: number;
+  received_quantity: string;
   test_params: {
     test_params_id: number | string;
     order: number;
@@ -91,7 +91,7 @@ type RegistrationUpdateSamples = {
   sample_condition: string;
   sterilization_batch_no: string;
   batch_size: string;
-  received_quantity: number;
+  received_quantity: string;
   test_types: number[] | string;
   test_params: {
     test_params_id: number | string;
@@ -341,7 +341,7 @@ type RegSample = {
   tat: string;
   expiry_date: string;
   batch_size: string;
-  received_quantity: number;
+  received_quantity: string;
   sample_test_parameters: {
     id: number;
     sample_id: number;

@@ -26,6 +26,7 @@ type InitialState = {
   fieldErrors?: {
     first_name: undefined | string;
     last_name: undefined | string;
+    designation: undefined | string;
     username: undefined | string;
     email: undefined | string;
     phone: undefined | string;
@@ -41,6 +42,7 @@ const initialState: InitialState = {
   fieldErrors: {
     first_name: undefined,
     last_name: undefined,
+    designation: undefined,
     username: undefined,
     email: undefined,
     phone: undefined,
@@ -160,6 +162,22 @@ const EditUserForm = ({
           />
           {state?.fieldErrors?.phone && (
             <p className="text-red-500">{state?.fieldErrors?.phone}</p>
+          )}
+        </div>
+        <div className="mb-4.5">
+          <label className="mb-2.5 block text-black dark:text-white">
+          Designation <span className="text-meta-1">*</span>
+          </label>
+          <input
+            type="text"
+            name="designation"
+            placeholder="Enter your designation"
+            defaultValue={user.designation}
+
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          />
+          {state?.fieldErrors?.designation && (
+            <p className="text-red-500">{state?.fieldErrors?.designation}</p>
           )}
         </div>
 

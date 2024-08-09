@@ -10,6 +10,7 @@ const schema = z
   .object({
     first_name: z.string().min(1, "First Name Required").trim(),
     last_name: z.string().min(1, "Last Name Required").trim(),
+    designation: z.string().min(1, "Designation Required").trim(),
     email: z.string().max(0).or(z.string().email("Invalid E-mail")),
     username: z
       .string()
@@ -42,6 +43,7 @@ const schema = z
   const updateSchema = z
   .object({
     first_name: z.string().min(1, "First Name Required").trim(),
+    designation: z.string().min(1, "Designation Required").trim(),
     last_name: z.string().min(1, "Last Name Required").trim(),
     email: z.string().max(0).or(z.string().email("Invalid E-mail")),
     username: z

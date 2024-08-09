@@ -25,9 +25,10 @@ type Props = {
   onChange:any;
   onBlur:any;
   value: string|number;
+  disabled?:boolean;
 };
 
-export default function ComboBox2({ data, register, name, onChange,onBlur, value }: Props) {
+export default function ComboBox2({ data, register, name, onChange,onBlur, value, disabled=false }: Props) {
   const [query, setQuery] = useState("");
 
   const filteredData =
@@ -59,6 +60,8 @@ export default function ComboBox2({ data, register, name, onChange,onBlur, value
           displayValue={(value: string | number) => getNameFromValue(value)}
           onChange={(event) => setQuery(event.target.value)}
           onBlur={onBlur}
+          disabled={disabled}
+          placeholder="--- Select ---"
         />
          <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">
             <ChevronDown className="size-4 fill-black/60 group-data-[hover]:fill-black" />

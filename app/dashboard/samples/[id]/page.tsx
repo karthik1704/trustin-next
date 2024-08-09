@@ -64,7 +64,7 @@ async function getData(id: string) {
     },
   });
 
-  const res7 = await fetch(`${SERVER_API_URL}/users/departments/3`, {
+  const res7 = await fetch(`${SERVER_API_URL}/users/departments/4`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
@@ -150,8 +150,8 @@ async function getData(id: string) {
     (histroy) => histroy.test_type?.id === 2,
   )??[];
 
-  const microUsers = hodUsers.filter(user=>user.qa_type_id===1)
-  const mechUsers = hodUsers.filter(user=>user.qa_type_id===2)
+  const microUsers = hodUsers.filter(user=>user.qa_type_id===1 && [3,4].includes(user.role_id))
+  const mechUsers = hodUsers.filter(user=>user.qa_type_id===2 && [3,4].includes(user.role_id))
 
   return {
     sample,
