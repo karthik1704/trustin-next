@@ -6,6 +6,7 @@ export type SampleTestParameters = {
   test_parameter_id: number;
   test_type: string;
   value: string;
+  specification_limits: string;
   result: true;
   order: number;
   quantity: number | null;

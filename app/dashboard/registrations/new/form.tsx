@@ -382,6 +382,13 @@ const RegistrationForm = ({ data }: { data: Data }) => {
       });
       return;
     }
+    if (data.samples.length !== +data.no_of_batches) {
+      toast.error(`Sample must contain all ${data.no_of_batches} samples`, {
+        duration: 10000,
+        closeButton: true,
+      });
+      return;
+    }
     let isError = false;
     data.samples.forEach((sample) => {
       if (sample.test_params.length === 0) {

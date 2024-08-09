@@ -9,6 +9,7 @@ import {
 import WorkFlowForm from "@/components/WorkFlowForms/workflowform";
 import UnderTestingForm from "./under-testing-form";
 import { User } from "@/types/user";
+import Select from "@/components/select-input";
 
 type Props = {
   data: Data;
@@ -17,7 +18,7 @@ type Props = {
   test_type_id: number;
   sample_history: SampleHistory;
   current_step: number;
-  openModal: () => void;
+  openModal: (type:string) => void;
   actionFn: (
     prevState: any,
     data: FormData,
@@ -36,6 +37,7 @@ type Props = {
   >;
   formAction: (data: FormData) => void;
   signUsers:   User[]
+
 };
 
 const CombineWorkflow = ({
@@ -254,12 +256,21 @@ const CombineWorkflow = ({
         {current_step === 9 && (
           <div className="mb-3 text-center">
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          
               <button
                 type="button"
-                onClick={openModal}
+                onClick={()=>openModal && openModal("Original")}
                 className="flex w-1/5 justify-center rounded bg-primary p-2 font-medium text-gray"
-              >
-                Print
+              > 
+                Print Original
+              </button>
+          
+              <button
+                type="button"
+                onClick={()=>openModal && openModal("Copy")}
+                className="flex w-1/5 justify-center rounded bg-primary p-2 font-medium text-gray"
+              > 
+                Print Copy
               </button>
             </div>
             <h4 className="text-title-xl2 font-bold">

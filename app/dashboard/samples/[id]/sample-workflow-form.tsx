@@ -198,9 +198,17 @@ const SampleWorkflowForm = ({
   qr
 }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reportType, setReportType] = useState("Original");
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const handleReportType = (type:string)=>{
+    setReportType(type)
+    openModal()
+  }
+
+
 
   const handlePrintButtonClick = () => {
     generateAndDisplayPDF();
@@ -290,6 +298,7 @@ const SampleWorkflowForm = ({
           qr={qr}
             data={data}
             isDraft={data.sample.status_id === 8 ? true : false}
+            reportType = {reportType}
           />
         </PDFViewer>
         {/* <PDFDownloadLink document={< MyDocument/>} fileName="somename.pdf">
@@ -336,7 +345,7 @@ const SampleWorkflowForm = ({
                           test_type_id={1}
                           test_params={data.sample_micro_params}
                           formAction={formAction}
-                          openModal={openModal}
+                          openModal={handleReportType}
                           actionFn={actionFn}
                           actionFnReject={actionFnReject}
                           actionFnResult={actionFnResult}
@@ -368,7 +377,7 @@ const SampleWorkflowForm = ({
                           )}
                           test_params={data.sample_mech_params}
                           formAction={formAction}
-                          openModal={openModal}
+                          openModal={handleReportType}
                           actionFn={actionFn}
                           actionFnReject={actionFnReject}
                           actionFnResult={actionFnResult}

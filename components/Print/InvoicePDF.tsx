@@ -66,10 +66,12 @@ const MyDocument = ({
   data,
   isDraft,
   qr,
+  reportType = "Copy",
 }: {
   data: Data;
   isDraft: boolean;
   qr: string;
+  reportType: string;
 }) => {
   console.log(data);
   console.log(qr);
@@ -102,7 +104,7 @@ const MyDocument = ({
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              justifyContent:"space-between",
+              justifyContent: "space-between",
               borderBottom: "1px solid #000",
             }}
             fixed
@@ -234,12 +236,7 @@ const MyDocument = ({
             <Text>Invoice Number: 123456</Text>
             <Text>Date: January 1, 2024</Text>
           </View> */}
-
           <View>
-            {/* <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
-              <Text>Customer Information</Text>
-            </View> */}
-
             <View
               style={{
                 border: "1 solid #000",
@@ -251,7 +248,11 @@ const MyDocument = ({
               }}
             >
               <Text
-                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 140,
+                  padding: 1,
+                }}
               >
                 Sample ID No.
               </Text>
@@ -267,7 +268,11 @@ const MyDocument = ({
               </Text>
 
               <Text
-                style={{ borderRight: "1 solid #000", width: 100, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 100,
+                  padding: 1,
+                }}
               >
                 ULR No.
               </Text>
@@ -286,7 +291,11 @@ const MyDocument = ({
               }}
             >
               <Text
-                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 140,
+                  padding: 1,
+                }}
               >
                 Sample Received Date
               </Text>
@@ -304,7 +313,11 @@ const MyDocument = ({
               </Text>
 
               <Text
-                style={{ borderRight: "1 solid #000", width: 100, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 100,
+                  padding: 1,
+                }}
               >
                 Discipline
               </Text>
@@ -324,7 +337,11 @@ const MyDocument = ({
               }}
             >
               <Text
-                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 140,
+                  padding: 1,
+                }}
               >
                 Analysis Start Date
               </Text>
@@ -346,7 +363,11 @@ const MyDocument = ({
               </Text>
 
               <Text
-                style={{ borderRight: "1 solid #000", width: 100, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 100,
+                  padding: 1,
+                }}
               >
                 Group
               </Text>
@@ -366,7 +387,11 @@ const MyDocument = ({
               }}
             >
               <Text
-                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 140,
+                  padding: 1,
+                }}
               >
                 Analysis Completed Date
               </Text>
@@ -388,7 +413,11 @@ const MyDocument = ({
               </Text>
 
               <Text
-                style={{ borderRight: "1 solid #000", width: 100, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 100,
+                  padding: 1,
+                }}
               >
                 Test Report No.
               </Text>
@@ -408,7 +437,11 @@ const MyDocument = ({
               }}
             >
               <Text
-                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 140,
+                  padding: 1,
+                }}
               >
                 Report Date
               </Text>
@@ -424,11 +457,15 @@ const MyDocument = ({
               </Text>
 
               <Text
-                style={{ borderRight: "1 solid #000", width: 100, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 100,
+                  padding: 1,
+                }}
               >
                 Report Type.
               </Text>
-              <Text style={{ padding: 2, marginLeft: 4 }}> Original</Text>
+              <Text style={{ padding: 2, marginLeft: 4 }}> {reportType}</Text>
             </View>
 
             <View
@@ -442,7 +479,11 @@ const MyDocument = ({
               }}
             >
               <Text
-                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 140,
+                  padding: 1,
+                }}
               >
                 Customer Ref No.
               </Text>
@@ -461,7 +502,11 @@ const MyDocument = ({
               }}
             >
               <Text
-                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 140,
+                  padding: 1,
+                }}
               >
                 Name of the customer
               </Text>
@@ -480,7 +525,11 @@ const MyDocument = ({
               }}
             >
               <Text
-                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 140,
+                  padding: 1,
+                }}
               >
                 Address
               </Text>
@@ -499,7 +548,11 @@ const MyDocument = ({
               }}
             >
               <Text
-                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 140,
+                  padding: 1,
+                }}
               >
                 Manufacturing License No.
               </Text>
@@ -518,7 +571,11 @@ const MyDocument = ({
               }}
             >
               <Text
-                style={{ borderRight: "1 solid #000", width: 140, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 140,
+                  padding: 1,
+                }}
               >
                 Contact Person Name
               </Text>
@@ -534,7 +591,11 @@ const MyDocument = ({
               </Text>
 
               <Text
-                style={{ borderRight: "1 solid #000", width: 100, padding: 1 }}
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 100,
+                  padding: 1,
+                }}
               >
                 Contact Number
               </Text>
@@ -542,6 +603,11 @@ const MyDocument = ({
                 {data.sample.registration.contact_number}
               </Text>
             </View>
+          </View>
+          <View>
+            {/* <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
+              <Text>Customer Information</Text>
+            </View> */}
 
             <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
               <Text
@@ -803,55 +869,64 @@ const MyDocument = ({
               flexDirection: "column",
             }}
           ></View>
-          <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
-            <Text
-              style={{
-                textAlign: "center",
-                fontSize: 12,
-                fontWeight: "extrabold",
-              }}
+          <View>
+            <View
+              style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}
+              fixed
             >
-              Test Result
-            </Text>
-          </View>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: 12,
+                  fontWeight: "extrabold",
+                }}
+              >
+                Test Result
+              </Text>
+            </View>
 
-          <View style={[styles.row, styles.tableBody]}>
-            <Text style={[styles.cell, styles.firstCell, { width: "30%" }]}>
-              Parameter Name
-            </Text>
-            {/* <Text style={[styles.cell, { width: "15%" }]}>Parameter Code</Text> */}
-            <Text style={[styles.cell, { width: "25%" }]}>Method</Text>
-            <Text style={[styles.cell, { width: "25%" }]}>Value</Text>
-            <Text style={[styles.cell, styles.lastCell, { width: "20%" }]}>
-              Result
-            </Text>
-          </View>
-          {/* Table Body */}
-          {data?.sample.sample_test_parameters.map((item, index) => (
-            <View key={index} style={styles.row}>
-              {/* <Text style={{ ...styles.cell, width: '25%' }}>{item.test_parameter.testing_parameters}</Text>
+            <View style={[styles.row, styles.tableBody]} fixed>
+              <Text style={[styles.cell, styles.firstCell, { width: "30%" }]}>
+                Parameter Name
+              </Text>
+              {/* <Text style={[styles.cell, { width: "15%" }]}>Parameter Code</Text> */}
+              <Text style={[styles.cell, { width: "25%" }]}>Method</Text>
+              <Text style={[styles.cell, { width: "25%" }]}>Value</Text>
+              <Text style={[styles.cell, styles.lastCell, { width: "20%" }]}>
+                Result
+              </Text>
+            </View>
+            {/* Table Body */}
+            {data?.sample.sample_test_parameters.map((item, index) => (
+              <View
+                key={index}
+                style={styles.row}
+                // break={(index + 1) % 10 === 0}
+              >
+                {/* <Text style={{ ...styles.cell, width: '25%' }}>{item.test_parameter.testing_parameters}</Text>
           <Text style={{ ...styles.cell, width: '15%' }}>{item.test_parameter.parameter_code}</Text>
           <Text style={{ ...styles.cell, width: '20%' }}>{item.test_parameter.method_or_spec}</Text>
           <Text style={{ ...styles.cell, width: '20%' }}>{item.value}</Text>
           <Text style={{ ...styles.cell, width: '20%' }}>{item.result ? "Pass" : "Fail"}</Text> */}
 
-              <Text style={[styles.cell, styles.firstCell, { width: "30%" }]}>
-                {item.test_parameter.testing_parameters}
-              </Text>
-              {/* <Text style={[styles.cell, { width: "15%" }]}>
+                <Text style={[styles.cell, styles.firstCell, { width: "30%" }]}>
+                  {item.test_parameter.testing_parameters}
+                </Text>
+                {/* <Text style={[styles.cell, { width: "15%" }]}>
                 {item.test_parameter.parameter_code}
               </Text> */}
-              <Text style={[styles.cell, { width: "25%" }]}>
-                {item.test_parameter.method_or_spec}
-              </Text>
-              <Text style={[styles.cell, { width: "25%" }]}>
-                {item.value ?? "Pending"}
-              </Text>
-              <Text style={[styles.cell, styles.lastCell, { width: "20%" }]}>
-                {item.result ? "Pass" : "Fail"}
-              </Text>
-            </View>
-          ))}
+                <Text style={[styles.cell, { width: "25%" }]}>
+                  {item.test_parameter.method_or_spec}
+                </Text>
+                <Text style={[styles.cell, { width: "25%" }]}>
+                  {item.value ?? "Pending"}
+                </Text>
+                <Text style={[styles.cell, styles.lastCell, { width: "20%" }]}>
+                  {item.result ? "Pass" : "Fail"}
+                </Text>
+              </View>
+            ))}
+          </View>
 
           {/* <View style={{ marginTop: 5, padding: 2 }}>
             <View
@@ -947,21 +1022,26 @@ const MyDocument = ({
               fontSize: 14,
             }}
           >
-            {data.sample.sample_detail.map((detail) => (
-              <View
-                key={detail.id}
-                style={{ display: "flex", justifyContent: "flex-end" }}
-              >
-                <Text style={{ fontWeight: "bold", textAlign: "right" }}>
-                  Authorized Signatory{" "}
-                </Text>
-                <Text style={{ fontWeight: "bold", textAlign: "right" }}>
-                  {detail.authorized_sign
-                    ? `${detail.authorized_sign.first_name} ${detail.authorized_sign.last_name}`
-                    : ""}
-                </Text>
-              </View>
-            ))}
+            <View
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexDirection: "row-reverse",
+              }}
+            >
+              {data.sample.sample_detail.map((detail) => (
+                <View key={detail.id}>
+                  <Text style={{ fontWeight: "bold", textAlign: "right" }}>
+                    Authorized Signatory{" "}
+                  </Text>
+                  <Text style={{ fontWeight: "bold", textAlign: "right" }}>
+                    {detail.authorized_sign
+                      ? `${detail.authorized_sign.first_name} ${detail.authorized_sign.last_name}`
+                      : ""}
+                  </Text>
+                </View>
+              ))}
+            </View>
           </View>
           <View
             style={{
@@ -1031,7 +1111,7 @@ const MyDocument = ({
           <View style={{ height: "200px" }}>
             <Image src={qr} style={{ width: 150, height: 150 }} />
           </View>
-          <View style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
+          <View style={{ position: "absolute", bottom: 30, left: 0, right: 0 }}>
             <View style={{ display: "flex", marginBottom: "16px" }}>
               <View style={{ border: "1 solid #000" }}></View>
               <View style={{ border: "1 solid #000" }}></View>

@@ -15,6 +15,7 @@ type Parameters = {
   test_parameter_id: number;
   test_type: string;
   value: string;
+  specification_limits: string;
   result: boolean;
   order: number;
   quantity: number | null;
@@ -60,7 +61,7 @@ type Props = {
   comment?: string;
   currentStep: number;
   assigneeData?: { id: number; first_name: string; last_name: string }[] | [];
-  openModal?: () => void;
+  openModal?: (type:string) => void;
   signUsers?: User[];
 };
 
@@ -110,6 +111,8 @@ const UnderTestingForm = ({
       ...(currentStep == 2 && {
         nabl_logo: data.sample.nabl_logo ? 1 : 0,
         under_cdsco: data.sample.under_cdsco ? 1 : 0,
+        discipline: formData?.discipline,
+        group: formData?.group,
       }),
       comments: comment,
       ...(currentStep == 3 && {
@@ -126,11 +129,10 @@ const UnderTestingForm = ({
         testing_end_date: formData?.testing_end_date
           ? new Date(formData.testing_end_date).toISOString().split("T")[0]
           : "",
+
       }),
       ...(currentStep === 8 && {
         authorized_sign_id: formData?.authorized_sign_id,
-        discipline: formData?.discipline,
-        group: formData?.group,
       }),
 
       test_params: parameters.map((para) => ({
@@ -140,6 +142,7 @@ const UnderTestingForm = ({
         test_name: para.test_parameter.testing_parameters,
 
         ...(currentStep === 5 && {
+          specification_limits:para.specification_limits??"",
           value: para.value ?? "",
           result: para.result ? 1 : 0,
         }),
@@ -223,9 +226,9 @@ const UnderTestingForm = ({
         <div className="align-items:flex-end flex flex-col items-end gap-3 sm:flex-row sm:justify-end">
           <button
             type="button"
-            onClick={openModal}
+            onClick={()=>openModal && openModal("Preview")}
             className="align-items: flex-end m-1 justify-center rounded bg-primary p-2 font-medium text-gray"
-          >
+            >
             Preview
           </button>
         </div>
@@ -235,7 +238,7 @@ const UnderTestingForm = ({
         <div className="align-items:flex-end flex flex-col items-end gap-3 sm:flex-row sm:justify-end">
           <button
             type="button"
-            onClick={openModal}
+            onClick={()=>openModal && openModal("Draft")}
             className="align-items: flex-end m-1 justify-center rounded bg-primary p-2 font-medium text-gray"
           >
             Print Draft
@@ -275,6 +278,26 @@ const UnderTestingForm = ({
                 </option>
               ))}
             </Select>{" "}
+            <div className="mb-6">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Group
+              </label>
+              <input
+                type="text"
+                {...register("group")}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />{" "}
+            </div>
+            <div className="mb-6">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Discipline
+              </label>
+              <input
+                type="text"
+                {...register("discipline")}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />{" "}
+            </div>
           </>
         )}
         {currentStep === 3 && (
@@ -368,26 +391,6 @@ const UnderTestingForm = ({
                 </option>
               ))}
             </Select>
-            <div className="mb-6">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Issued to
-              </label>
-              <input
-                type="text"
-                {...register("group")}
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              />{" "}
-            </div>
-            <div className="mb-6">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Issued to
-              </label>
-              <input
-                type="text"
-                {...register("discipline")}
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              />{" "}
-            </div>
           </>
         )}
         <div className="mb-6">
@@ -420,6 +423,9 @@ const UnderTestingForm = ({
                   </th>
                   {currentStep >= 5 && (
                     <>
+                     <th className="min-w-[100px] font-medium text-black dark:text-white">
+                    Specification Limits
+                  </th>
                       <th className="w-1/5 font-medium text-black dark:text-white">
                         Value
                       </th>
@@ -451,6 +457,7 @@ const UnderTestingForm = ({
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                         <input
                           type="text"
+                          required
                           {...register(`test_params.${index}.order`)}
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
@@ -458,6 +465,7 @@ const UnderTestingForm = ({
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                         <input
                           type="number"
+                          required
                           {...register(`test_params.${index}.quantity`)}
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
@@ -467,6 +475,15 @@ const UnderTestingForm = ({
                           <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                             <input
                               type="text"
+                              required
+                              {...register(`test_params.${index}.specification_limits`)}
+                              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                            />
+                          </td>
+                          <td className="border-b border-[#eee] px-2 dark:border-strokedark">
+                            <input
+                              type="text"
+                              required
                               {...register(`test_params.${index}.value`)}
                               className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                             />
@@ -511,6 +528,11 @@ const UnderTestingForm = ({
                         </p>
                       </td>
 
+                      <td className="border-b border-[#eee] px-2 dark:border-strokedark">
+                        <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
+                          {item.specification_limits}
+                        </p>
+                      </td>
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                         <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
                           {item.value}
