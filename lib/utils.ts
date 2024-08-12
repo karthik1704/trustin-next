@@ -1,6 +1,11 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -104,9 +109,37 @@ export function convertToLocalTimeString(timestring:string) {
 }
 
 
-// export function convertToIST(timestring:string) {
-//   // Create a Date object from the provided UTC time string
-//   const date = new Date(timestring);
-//   const timeZone = "Europe/Berlin";
-//   const zonedDate = utcToZonedTime(date, timeZone);
-// }
+export function dateTimeFormatter(dateStr:string ) {
+  const formattedDate = dayjs(dateStr).format('DD/MM/YYYY, hh:mm:ss A');
+
+  return formattedDate
+}
+export function dateFormatter(dateStr:string ) {
+  const formattedDate = dayjs(dateStr).format('DD/MM/YYYY');
+
+  return formattedDate
+}
+
+function getEarlierDate(date1:string, date2:string) :string {
+  const d1 = dayjs(date1);
+  const d2 = dayjs(date2);
+
+  const lessDate = d1.isBefore(d2) ? d1 : d2;
+
+  return lessDate.format('DD/MM/YYYY');
+}
+
+
+
+
+
+export function getLaterDate(date1:string, date2:string):string {
+  const d1 = dayjs(date1);
+  const d2 = dayjs(date2);
+
+  const laterDate = d1.isAfter(d2) ? d1 : d2;
+
+  return laterDate.format('DD/MM/YYYY');
+}
+
+

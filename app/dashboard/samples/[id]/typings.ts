@@ -160,7 +160,7 @@ type TestType1 = {
 };
 
 // Type for the sample_test_types object
-type SampleTestType = {
+export type SampleTestType = {
   id: number;
   sample_id: number;
   test_type_id: number;
@@ -192,6 +192,7 @@ export type SampleDetailSchema = {
     id: number;
     first_name: string;
     last_name: string;
+    designation: string;
   }
 
 };
@@ -229,18 +230,24 @@ export type Data = {
     created_by: number;
     updated_by: number;
   };
-  test_params: {
-    id: number;
-    branch_id: number;
-    test_type_id: number;
-    product_id: number;
-    customer_id: number;
-    created_at: "2024-03-10T08:14:48.411Z";
-    updated_at: "2024-03-10T08:14:48.411Z";
-    parameter_code: string;
-    testing_parameters: string;
-    amount: number;
-    method_or_spec: string;
-    group_of_test_parameters: "string";
-  }[];
+  test_params: TestParams[];
 };
+
+export type TestParams = {
+  id: number;
+  branch_id: number;
+  test_type_id: number;
+  product_id: number;
+  customer_id: number;
+  created_at: "2024-03-10T08:14:48.411Z";
+  updated_at: "2024-03-10T08:14:48.411Z";
+  parameter_code: string;
+  testing_parameters: string;
+  amount: number;
+  method_or_spec: string;
+  group_of_test_parameters: "string";
+  test_type: {
+    name: string;
+    id: number;
+  };
+}

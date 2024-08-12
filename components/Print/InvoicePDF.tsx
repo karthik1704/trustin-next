@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 import { Data } from "@/app/dashboard/samples/[id]/typings";
+import { dateFormatter, getLaterDate } from "@/lib/utils";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -19,6 +20,10 @@ const styles = StyleSheet.create({
   page: {
     // flexDirection: "row",
     backgroundColor: "white",
+    fontSize: "10px",
+    position: "relative",
+    flexDirection: "column",
+    justifyContent: "space-between",
   },
   section: {
     margin: 10,
@@ -99,151 +104,19 @@ const MyDocument = ({
           </Text>
         </View> */}
         <View style={styles.section}>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              borderBottom: "1px solid #000",
-            }}
-            fixed
-          >
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-              }}
-            >
-              {data.sample.nabl_logo && (
-                <Image
-                  src="/images/pdf/nabl_logo.png"
-                  style={{ width: 150, height: 80 }}
-                />
-              )}
-            </View>
-            {/* <View
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-                margin: "auto ",
-              }}
-            >
-              <Text
-                style={{
-                  fontWeight: "extrabold",
-                  textAlign: "center",
-                  fontSize: "12px",
-                }}
-              >
-                Trustin Analytical Solutions Private Limited
-              </Text>
-              <Text
-                style={{
-                  fontSize: "7px",
-                  fontWeight: "light",
-                  textAlign: "center",
-                }}
-              >
-                {" "}
-                (An ISO 17025:2017 Accredited / CDSCO & BIS APProved Testing
-                Laboratory)
-              </Text>
-
-              <Text
-                style={{
-                  fontWeight: "light",
-                  textAlign: "center",
-                  fontSize: "7px",
-                }}
-              >
-                R.K complex, First Floor, Plot No.303/B, B-Block
-              </Text>
-              <Text
-                style={{
-                  fontWeight: "light",
-                  textAlign: "center",
-                  fontSize: "7px",
-                }}
-              >
-                Thiruneermalai Road, Parvathypuram{" "}
-              </Text>
-              <Text
-                style={{
-                  fontWeight: "light",
-                  textAlign: "center",
-                  fontSize: "7px",
-                }}
-              >
-                Chrompet, Chennai - 600044{" "}
-              </Text>
-              <Text
-                style={{
-                  fontSize: "7px",
-                  fontWeight: "light",
-                  textAlign: "center",
-                }}
-              >
-                Ph: 044-22731006, Email: customercare@trustingroup.in,
-                web:www.trustingroup.in
-              </Text>
-
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  fontSize: "12px",
-                  marginTop: "5px",
-                }}
-              >
-                Test Report {isDraft && "- Draft"}
-              </Text>
-            </View> */}
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-                margin: "auto ",
-              }}
-            >
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  fontSize: "12px",
-                  marginTop: "5px",
-                }}
-              >
-                Test Report {isDraft && "- Draft"}
-              </Text>
-            </View>
-
-            <View>
-              <Image
-                src="/images/logo/logo.png"
-                style={{ width: 100, height: 50 }}
-              />
-            </View>
-          </View>
+          <Header nabl_logo={data.sample.nabl_logo} />
           {/* <View>
             <Text>Invoice Number: 123456</Text>
             <Text>Date: January 1, 2024</Text>
           </View> */}
-          <View>
+          <View fixed>
             <View
               style={{
                 border: "1 solid #000",
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -307,9 +180,7 @@ const MyDocument = ({
                   marginLeft: 4,
                 }}
               >
-                {new Date(
-                  data.sample.registration.date_of_received,
-                ).toLocaleDateString()}
+                {dateFormatter(data.sample.registration.date_of_received)}
               </Text>
 
               <Text
@@ -332,7 +203,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -353,13 +224,14 @@ const MyDocument = ({
                   marginLeft: 4,
                 }}
               >
-                {data.sample.sample_detail
-                  .map((detail) =>
-                    detail.testing_start_date
-                      ? new Date(detail.testing_start_date).toLocaleDateString()
-                      : "---",
-                  )
-                  .join(", ")}
+                {data.sample.sample_detail.length == 2
+                  ? getLaterDate(
+                      data.sample.sample_detail[0].testing_start_date,
+                      data.sample.sample_detail[1].testing_start_date,
+                    )
+                  : dateFormatter(
+                      data.sample.sample_detail[0].testing_start_date,
+                    )}
               </Text>
 
               <Text
@@ -382,7 +254,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -403,13 +275,14 @@ const MyDocument = ({
                   marginLeft: 4,
                 }}
               >
-                {data.sample.sample_detail
-                  .map((detail) =>
-                    detail.testing_end_date
-                      ? new Date(detail.testing_end_date).toLocaleDateString()
-                      : "---",
-                  )
-                  .join(", ")}
+                {data.sample.sample_detail.length == 2
+                  ? getLaterDate(
+                      data.sample.sample_detail[0].testing_end_date,
+                      data.sample.sample_detail[1].testing_end_date,
+                    )
+                  : dateFormatter(
+                      data.sample.sample_detail[0].testing_end_date,
+                    )}
               </Text>
 
               <Text
@@ -432,7 +305,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -453,7 +326,7 @@ const MyDocument = ({
                   marginLeft: 4,
                 }}
               >
-                {new Date(data.sample.updated_at).toLocaleDateString()}
+                {dateFormatter(data.sample.updated_at)}
               </Text>
 
               <Text
@@ -474,7 +347,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -497,7 +370,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -520,7 +393,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -543,7 +416,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -566,7 +439,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -613,7 +486,7 @@ const MyDocument = ({
               <Text
                 style={{
                   textAlign: "center",
-                  fontSize: 12,
+                  fontSize: "10px",
                   fontWeight: "extrabold",
                 }}
               >
@@ -626,7 +499,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -665,7 +538,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -699,7 +572,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -735,7 +608,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -768,7 +641,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -787,7 +660,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -806,7 +679,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -877,7 +750,7 @@ const MyDocument = ({
               <Text
                 style={{
                   textAlign: "center",
-                  fontSize: 12,
+                  fontSize: 10,
                   fontWeight: "extrabold",
                 }}
               >
@@ -885,14 +758,42 @@ const MyDocument = ({
               </Text>
             </View>
 
-            <View style={[styles.row, styles.tableBody]} fixed>
-              <Text style={[styles.cell, styles.firstCell, { width: "30%" }]}>
+            <View
+              style={[
+                styles.row,
+                styles.tableBody,
+                { fontSize: "10px", textAlign: "center" },
+              ]}
+              fixed
+            >
+              <Text
+                style={[
+                  styles.cell,
+                  styles.firstCell,
+                  { width: "30%", fontSize: "10px" },
+                ]}
+              >
                 Parameter Name
               </Text>
               {/* <Text style={[styles.cell, { width: "15%" }]}>Parameter Code</Text> */}
               <Text style={[styles.cell, { width: "25%" }]}>Method</Text>
-              <Text style={[styles.cell, { width: "25%" }]}>Value</Text>
-              <Text style={[styles.cell, styles.lastCell, { width: "20%" }]}>
+              <View style={[styles.cell, { width: "35%" }]}>
+                <Text style={{ paddingBottom: 1 }}>Specification Limits</Text>
+                <View style={{ flexDirection: "row", textAlign: "center" }}>
+                  <Text
+                    style={{
+                      width: "50%",
+                      borderRightWidth: "1px",
+                      borderRightColor: "#000",
+                    }}
+                  >
+                    Min
+                  </Text>
+                  <Text style={{ width: "50%" }}>Max</Text>
+                </View>
+              </View>
+              <Text style={[styles.cell, { width: "20%" }]}>Value</Text>
+              <Text style={[styles.cell, styles.lastCell, { width: "15%" }]}>
                 Result
               </Text>
             </View>
@@ -900,8 +801,11 @@ const MyDocument = ({
             {data?.sample.sample_test_parameters.map((item, index) => (
               <View
                 key={index}
-                style={styles.row}
-                // break={(index + 1) % 10 === 0}
+                style={[styles.row, { fontSize: "10px" }]}
+                break={
+                  index === 2 || // Break after the 3rd item (index 2)
+                  (index > 2 && (index - 3) % 6 === 0) // Break every 7 items after the first 3
+                }
               >
                 {/* <Text style={{ ...styles.cell, width: '25%' }}>{item.test_parameter.testing_parameters}</Text>
           <Text style={{ ...styles.cell, width: '15%' }}>{item.test_parameter.parameter_code}</Text>
@@ -918,10 +822,36 @@ const MyDocument = ({
                 <Text style={[styles.cell, { width: "25%" }]}>
                   {item.test_parameter.method_or_spec}
                 </Text>
-                <Text style={[styles.cell, { width: "25%" }]}>
+                <View style={[styles.cell, { width: "35%" }]}>
+                  {item.test_parameter.test_type_id === 1 ? (
+                    <Text> {item.specification_limits} </Text>
+                  ) : (
+                    <View style={{ flexDirection: "row" }}>
+                      <Text
+                        style={{
+                          width: "50%",
+                          borderRightWidth: "1px",
+                          borderRightColor: "#000",
+                        }}
+                      >
+                        {" "}
+                        {item.min_limits}{" "}
+                      </Text>
+                      <Text
+                        style={{
+                          width: "50%",
+                        }}
+                      >
+                        {" "}
+                        {item.max_limits}{" "}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+                <Text style={[styles.cell, { width: "20%" }]}>
                   {item.value ?? "Pending"}
                 </Text>
-                <Text style={[styles.cell, styles.lastCell, { width: "20%" }]}>
+                <Text style={[styles.cell, styles.lastCell, { width: "15%" }]}>
                   {item.result ? "Pass" : "Fail"}
                 </Text>
               </View>
@@ -980,11 +910,18 @@ const MyDocument = ({
             ))}
           </View> */}
 
+          <Footer />
+        </View>
+      </Page>
+      <Page>
+        <View style={styles.section}>
+          <Header nabl_logo={data.sample.nabl_logo} />
           <View
             style={{
               display: "flex",
               fontSize: 12,
               padding: 2,
+              marginTop: "16px",
             }}
           >
             <Text style={{ fontWeight: "bold", textAlign: "left" }}>
@@ -998,7 +935,7 @@ const MyDocument = ({
           <View
             style={{
               display: "flex",
-              fontSize: 12,
+              fontSize: 10,
               padding: 2,
             }}
           >
@@ -1030,13 +967,21 @@ const MyDocument = ({
               }}
             >
               {data.sample.sample_detail.map((detail) => (
-                <View key={detail.id}>
-                  <Text style={{ fontWeight: "bold", textAlign: "right" }}>
+                <View
+                  key={detail.id}
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
+                  <Text style={{ fontWeight: "bold", textAlign: "right", marginBottom:"8px" }}>
                     Authorized Signatory{" "}
                   </Text>
-                  <Text style={{ fontWeight: "bold", textAlign: "right" }}>
+                  <Text style={{ fontWeight: "bold", textAlign: "center", marginBottom:"8px" }}>
                     {detail.authorized_sign
                       ? `${detail.authorized_sign.first_name} ${detail.authorized_sign.last_name}`
+                      : ""}
+                  </Text>
+                  <Text style={{ fontWeight: "bold", textAlign: "center" }}>
+                    {detail.authorized_sign
+                      ? `${detail.authorized_sign.designation ?? ""} `
                       : ""}
                   </Text>
                 </View>
@@ -1109,54 +1054,118 @@ const MyDocument = ({
             )}
           </View>
           <View style={{ height: "200px" }}>
-            <Image src={qr} style={{ width: 150, height: 150 }} />
+            <Image src={qr} style={{ width: 100, height: 100 }} />
           </View>
-          <View style={{ position: "absolute", bottom: 30, left: 0, right: 0 }}>
-            <View style={{ display: "flex", marginBottom: "16px" }}>
-              <View style={{ border: "1 solid #000" }}></View>
-              <View style={{ border: "1 solid #000" }}></View>
-              <View style={{ textAlign: "center", padding: 1 }}>
-                <Text
-                  style={{
-                    fontSize: "17px",
-                    fontWeight: "ultrabold",
-                    padding: 2,
-                  }}
-                >
-                  Trustin Analytical Solutions Private Limited
-                </Text>
-                <Text
-                  style={{ fontSize: "12px", fontWeight: "thin", padding: 2 }}
-                >
-                  {" "}
-                  (An ISO 17025:2017 Accredited / CDSCO & BIS APProved Testing
-                  Laboratory)
-                </Text>
-                <Text
-                  style={{ fontSize: "12px", fontWeight: "medium", padding: 2 }}
-                >
-                  {" "}
-                  R.K Complex First Floor, Plot No.303/B, B-Block,
-                  Thiruneermalai Road,
-                </Text>
-                <Text
-                  style={{ fontSize: "12px", fontWeight: "medium", padding: 2 }}
-                >
-                  {" "}
-                  Parvathy Puram, Chrompet, Chennai-600044, Tamilnadu, India.
-                </Text>
-                <Text
-                  style={{ fontSize: "12px", fontWeight: "medium", padding: 2 }}
-                >
-                  Ph: 044-22731006, Email: customercare@trustingroup.in,
-                  web:www.trustingroup.in
-                </Text>
-              </View>
-            </View>
-          </View>
+          <Footer />
         </View>
       </Page>
     </Document>
   );
 };
+
+const Header = ({ nabl_logo }: { nabl_logo: boolean }) => {
+  return (
+    <View
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        borderBottom: "1px solid #000",
+      }}
+      fixed
+    >
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-start",
+        }}
+      >
+        {nabl_logo && (
+          <Image
+            src="/images/pdf/nabl_logo.png"
+            style={{ width: 150, height: 80 }}
+          />
+        )}
+      </View>
+
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          margin: "auto ",
+        }}
+      >
+        <Text
+          style={{
+            fontWeight: "bold",
+            textAlign: "center",
+            fontSize: "12px",
+            marginTop: "5px",
+          }}
+        >
+          Test Report
+        </Text>
+      </View>
+
+      <View>
+        <Image src="/images/logo/logo.png" style={{ width: 100, height: 50 }} />
+      </View>
+    </View>
+  );
+};
+
+const Footer = () => {
+  return (
+    <View
+      style={{
+        position: "absolute",
+        bottom: 5,
+        left: 0,
+        right: 0,
+        padding: 2,
+      }}
+      fixed
+    >
+      <View style={{ display: "flex", marginBottom: "7px" }}>
+        <View style={{ border: "1 solid #000" }}></View>
+        <View style={{ border: "1 solid #000" }}></View>
+        <View style={{ textAlign: "center", padding: 1 }}>
+          <Text
+            style={{
+              fontSize: "17px",
+              fontWeight: "ultrabold",
+              padding: 2,
+            }}
+          >
+            Trustin Analytical Solutions Private Limited
+          </Text>
+          <Text style={{ fontSize: "12px", fontWeight: "thin", padding: 2 }}>
+            {" "}
+            (An ISO 17025:2017 Accredited / CDSCO & BIS APProved Testing
+            Laboratory)
+          </Text>
+          <Text style={{ fontSize: "12px", fontWeight: "medium", padding: 2 }}>
+            {" "}
+            R.K Complex First Floor, Plot No.303/B, B-Block, Thiruneermalai
+            Road,
+          </Text>
+          <Text style={{ fontSize: "12px", fontWeight: "medium", padding: 2 }}>
+            {" "}
+            Parvathy Puram, Chrompet, Chennai-600044, Tamilnadu, India.
+          </Text>
+          <Text style={{ fontSize: "12px", fontWeight: "medium", padding: 2 }}>
+            Ph: 044-22731006, Email: customercare@trustingroup.in,
+            web:www.trustingroup.in
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+};
+
 export default MyDocument;

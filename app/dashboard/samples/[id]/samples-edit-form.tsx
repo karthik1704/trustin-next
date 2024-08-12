@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 import { createSamples } from "../actions";
 import { SERVER_API_URL } from "@/app/constant";
 import SubmitButton from "@/components/submit-button/submit-button";
-import { Data } from "./page";
+import { Data, SampleTestParameters, SampleTestType, TestParams } from "./typings";
+import { TestParameter } from "../../registrations/typings";
 
 type Sample = {
   sample_name: string;
@@ -22,7 +23,7 @@ type Sample = {
   sterilization_batch_no: string;
   tat: string;
   // test_type_id: string;
-
+sample_test_types: SampleTestType[];
   test_params: Array<{
     id?: number | null;
     test_params_id: string;
@@ -89,7 +90,7 @@ const SamplesEditForm = ({
   const [filterId, setFilterId] = useState<number[]>(
     data?.sample?.sample_test_types.map(type=>type.test_type_id),
   );
-  const [parameters, setParameters] = useState<[]>([]);
+  const [parameters, setParameters] = useState<TestParams[]>([]);
   // const [selectedBatch, setSelectBatch] = useState<{} | null>(null);
 
   // useEffect(() => {
@@ -411,8 +412,8 @@ const TestParamsForm = ({
 }: {
   control: any;
   register: any;
-  data: any;
-  parameters: any;
+  data: Data;
+  parameters: TestParams[];
   filterId: [] | number | string;
 }) => {
   const { fields, append, remove, replace } = useFieldArray({
@@ -448,7 +449,7 @@ const TestParamsForm = ({
 
   useEffect(() => {
     if (!test_watch) return;
-    const ids: [number | string] = test_watch.map((field, idx) => {
+    const ids: [number | string] = test_watch.map((field:any, idx:number) => {
       if (field.test_params_id !== "") return field.test_params_id.toString();
     });
     console.log(ids);

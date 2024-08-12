@@ -61,7 +61,7 @@ type Props = {
   comment?: string;
   currentStep: number;
   assigneeData?: { id: number; first_name: string; last_name: string }[] | [];
-  openModal?: (type:string) => void;
+  openModal?: (type: string) => void;
   signUsers?: User[];
 };
 
@@ -129,7 +129,6 @@ const UnderTestingForm = ({
         testing_end_date: formData?.testing_end_date
           ? new Date(formData.testing_end_date).toISOString().split("T")[0]
           : "",
-
       }),
       ...(currentStep === 8 && {
         authorized_sign_id: formData?.authorized_sign_id,
@@ -142,7 +141,12 @@ const UnderTestingForm = ({
         test_name: para.test_parameter.testing_parameters,
 
         ...(currentStep === 5 && {
-          specification_limits:para.specification_limits??"",
+          ...(test_type_id === 1
+            ? { specification_limits: para.specification_limits ?? para.test_parameter.specification_limits }
+            : {
+                min_limits: para.min_limits ?? para.test_parameter.min_limits ,
+                max_limits: para.max_limits ?? para.test_parameter.max_limits ,
+              }),
           value: para.value ?? "",
           result: para.result ? 1 : 0,
         }),
@@ -226,9 +230,9 @@ const UnderTestingForm = ({
         <div className="align-items:flex-end flex flex-col items-end gap-3 sm:flex-row sm:justify-end">
           <button
             type="button"
-            onClick={()=>openModal && openModal("Preview")}
+            onClick={() => openModal && openModal("Preview")}
             className="align-items: flex-end m-1 justify-center rounded bg-primary p-2 font-medium text-gray"
-            >
+          >
             Preview
           </button>
         </div>
@@ -238,7 +242,7 @@ const UnderTestingForm = ({
         <div className="align-items:flex-end flex flex-col items-end gap-3 sm:flex-row sm:justify-end">
           <button
             type="button"
-            onClick={()=>openModal && openModal("Draft")}
+            onClick={() => openModal && openModal("Draft")}
             className="align-items: flex-end m-1 justify-center rounded bg-primary p-2 font-medium text-gray"
           >
             Print Draft
@@ -423,9 +427,9 @@ const UnderTestingForm = ({
                   </th>
                   {currentStep >= 5 && (
                     <>
-                     <th className="min-w-[100px] font-medium text-black dark:text-white">
-                    Specification Limits
-                  </th>
+                      <th className="min-w-[100px] font-medium text-black dark:text-white">
+                        Specification Limits
+                      </th>
                       <th className="w-1/5 font-medium text-black dark:text-white">
                         Value
                       </th>
@@ -473,12 +477,35 @@ const UnderTestingForm = ({
                       {currentStep === 5 && (
                         <>
                           <td className="border-b border-[#eee] px-2 dark:border-strokedark">
-                            <input
-                              type="text"
-                              required
-                              {...register(`test_params.${index}.specification_limits`)}
-                              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                            />
+                            {test_type_id === 1 ? (
+                               <input
+                               type="text"
+                               required
+                               {...register(`test_params.${index}.specification_limits`)}
+                               className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                             />
+                            ) : (
+                              <div className="flex gap-2">
+                               <div>
+                                <label>Min</label>
+                               <input
+                               type="text"
+                               required
+                               {...register(`test_params.${index}.min_limits`)}
+                               className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                             />
+                               </div>
+                               <div>
+                                <label>Max</label>
+                               <input
+                               type="text"
+                               required
+                               {...register(`test_params.${index}.max_limits`)}
+                               className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                             />
+                               </div>
+                              </div>
+                            )}
                           </td>
                           <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                             <input
@@ -529,9 +556,16 @@ const UnderTestingForm = ({
                       </td>
 
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
-                        <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
+{                     test_type_id===1 ?   <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
                           {item.specification_limits}
+                        </p>: <>
+                        <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
+                         <span>Min:-</span> {item.min_limits}
                         </p>
+                        <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
+                          <span>Max:-</span>{item.max_limits}
+                        </p>
+                        </>}
                       </td>
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                         <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
