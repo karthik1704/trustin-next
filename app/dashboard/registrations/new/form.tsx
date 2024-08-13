@@ -343,7 +343,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
         append({
           sample_name: `${sample.sample_name} -${fields.length + 1}`,
           batch_or_lot_no: sample.batch_or_lot_no,
-          test_types: "[1]",
+          test_types: sample.test_types,
           manufactured_date: sample.manufactured_date,
           expiry_date: sample.expiry_date,
           tat: sample.tat,
@@ -352,7 +352,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
           description: sample.description,
           sample_condition: sample.sample_condition,
           sterilization_batch_no: sample.sterilization_batch_no,
-          test_params: [],
+          test_params: sample.test_params,
         });
       }
       return;

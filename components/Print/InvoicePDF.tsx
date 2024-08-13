@@ -109,7 +109,6 @@ const MyDocument = ({
             <Text>Invoice Number: 123456</Text>
             <Text>Date: January 1, 2024</Text>
           </View> */}
-          <View fixed>
             <View
               style={{
                 border: "1 solid #000",
@@ -119,6 +118,7 @@ const MyDocument = ({
                 fontSize: "10px",
                 padding: 2,
               }}
+              fixed
             >
               <Text
                 style={{
@@ -153,6 +153,8 @@ const MyDocument = ({
                 {data.sample.ulr_no ?? "N/A"}
               </Text>
             </View>
+            <View >
+
             <View
               style={{
                 border: "1 solid #000",
@@ -477,12 +479,12 @@ const MyDocument = ({
               </Text>
             </View>
           </View>
-          <View>
+          <View fixed>
             {/* <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
               <Text>Customer Information</Text>
             </View> */}
 
-            <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
+            <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }} >
               <Text
                 style={{
                   textAlign: "center",
@@ -493,6 +495,7 @@ const MyDocument = ({
                 Sample Details
               </Text>
             </View>
+            
             <View
               style={{
                 border: "1 solid #000",
@@ -792,9 +795,9 @@ const MyDocument = ({
                   <Text style={{ width: "50%" }}>Max</Text>
                 </View>
               </View>
-              <Text style={[styles.cell, { width: "20%" }]}>Value</Text>
+              <Text style={[styles.cell, { width: "20%" }]}>Result Obtained</Text>
               <Text style={[styles.cell, styles.lastCell, { width: "15%" }]}>
-                Result
+                Status
               </Text>
             </View>
             {/* Table Body */}
