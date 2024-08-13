@@ -77,6 +77,7 @@ const RegistrationEditForm = ({
       // city: data?.registration?.city,
       // state: data?.registration?.state,
       // pincode_no: data?.registration?.pincode_no,
+      manufactured_by: data?.registration?.manufactured_by,
       customer_reference_no: data?.registration?.customer_reference_no,
       contact_person_name: data?.registration?.contact_person_name,
       contact_email: data?.registration?.contact_email,
@@ -1026,15 +1027,19 @@ const RegistrationEditForm = ({
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
-            {/* <Select
-              name="nabl_logo"
-              label="NABL Logo"
-              register={form.register}
-              width={"w-full xl:w-1/2"}
-            >
-              <option value="0">No</option>
-              <option value="1">Yes</option>
-            </Select> */}
+           
+          </div>
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Original Manufactured by
+              </label>
+              <input
+                {...form.register("manufactured_by")}
+                placeholder="Enter License No"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
           </div>
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <Select

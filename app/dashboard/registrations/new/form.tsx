@@ -845,17 +845,20 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
-
-            {/* <Select
-              name="nabl_logo"
-              label="NABL Logo"
-              register={form.register}
-              width={"w-full xl:w-1/2"}
-            >
-              <option value="0">No</option>
-              <option value="1">Yes</option>
-            </Select> */}
           </div>
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Original Manufactured by
+              </label>
+              <input
+                {...form.register("manufactured_by")}
+                placeholder="Enter License No"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+          </div>
+
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <Select
               name="testing_process"
@@ -1023,14 +1026,14 @@ const RegistrationForm = ({ data }: { data: Data }) => {
               />
             </div>
           </div>
-         
-              <input
-                readOnly={true}
-                type="hidden"
-                {...form.register("status")}
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              />
-           
+
+          <input
+            readOnly={true}
+            type="hidden"
+            {...form.register("status")}
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          />
+
           <Tabs defaultValue="samples" className="w-full">
             <TabsList>
               <TabsTrigger value="samples">Samples</TabsTrigger>
@@ -1224,9 +1227,13 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                 ))}
                 <button
                   type="button"
-                  className="relative flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:border-slate-500 disabled:hover:bg-none disabled:transition-none disabled:animate-none"
+                  className="relative flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:animate-none disabled:border-slate-500 disabled:transition-none disabled:hover:bg-none"
                   onClick={addSample}
-                  disabled={watchNoOfBatches.toString() === fields.length.toString() ? true : false}
+                  disabled={
+                    watchNoOfBatches.toString() === fields.length.toString()
+                      ? true
+                      : false
+                  }
                 >
                   Add Samples
                 </button>

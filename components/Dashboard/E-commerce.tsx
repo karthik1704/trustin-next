@@ -18,6 +18,7 @@ import RegistrationChart from "./registration-chart";
 import FollowupCountTable from "./followup-count-table";
 import Select from "../select-input";
 import DashboardForm from "./dashboard-form";
+import SampleStatusCheck from "./sample-status-search";
 // import Map from "../Maps/TestMap";
 
 // without this the component renders on server and throws an error
@@ -26,7 +27,7 @@ import DashboardForm from "./dashboard-form";
 //   ssr: false,
 // });
 
-const ECommerce = ({ data, startDate, endDate }: { data: DashboardData, startDate: string | undefined, endDate: string | undefined }) => {
+const ECommerce = ({ data, startDate, endDate, sample }: { data: DashboardData, startDate: string | undefined, endDate: string | undefined, sample: any }) => {
   return (
     <>
       <div className="flex justify-end">
@@ -34,6 +35,7 @@ const ECommerce = ({ data, startDate, endDate }: { data: DashboardData, startDat
           <DashboardForm startDate={startDate} endDate={endDate}/>
         </div>
       </div>
+      <SampleStatusCheck sampleData={sample}/>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-5 2xl:gap-7.5">
         {data?.dashboard?.customer && (
           <CardDataStats

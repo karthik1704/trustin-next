@@ -43,17 +43,15 @@ const { startDate, endDate } = getDateRange();
 const startDateString = formatDate(startDate);
 const endDateString = formatDate(endDate);
 
-async function getData(
-  start_date: string,
-  end_date: string 
-) {
+async function getData(start_date: string, end_date: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-  
-  if (start_date==="" || start_date===undefined) start_date=startDateString;
-  if (end_date==="" || end_date===undefined) end_date=endDateString;
 
-  console.log(start_date, end_date)
+  if (start_date === "" || start_date === undefined)
+    start_date = startDateString;
+  if (end_date === "" || end_date === undefined) end_date = endDateString;
+
+  console.log(start_date, end_date);
 
   const res = await fetch(
     `${SERVER_API_URL}/dashboard/?start_date_str=${start_date}&${end_date}`,
@@ -106,12 +104,46 @@ async function getData(
   return { dashboard, menus };
 }
 
+async function getDataSample(q: string | undefined) {
+  const cookieStore = cookies();
+  const access_token = cookieStore.get("access_token");
+
+  if (q === "" || q === undefined) return {sample:null, status:null};
+
+  const res = await fetch(`${SERVER_API_URL}/dashboard/sample/?q=${q}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+    next: {
+      tags: ["Dashboard", "Samples"],
+      revalidate: 100000,
+    },
+  });
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error");
+  }
+
+  if (res.status === 401) redirect("/signin");
+  if (res.status === 404) return {sample: null, status:404};
+
+  const sample = await res.json();
+  console.log(sample)
+
+  return {sample: sample,status:200};
+}
+
 export default async function DashboardPage({
-  searchParams: { start_date_str, end_date_str },
+  searchParams: { start_date_str, end_date_str, q },
 }: {
   searchParams: {
     start_date_str: string | undefined;
     end_date_str: string | undefined;
+    q: string | undefined;
   };
 }) {
   console.log(start_date_str, end_date_str);
@@ -119,9 +151,15 @@ export default async function DashboardPage({
     start_date_str ?? "",
     end_date_str ?? "",
   );
+  const sample: any = await getDataSample(q);
   return (
     <>
-      <ECommerce data={data} startDate={start_date_str} endDate={end_date_str} />
+      <ECommerce
+        data={data}
+        startDate={start_date_str}
+        endDate={end_date_str}
+        sample={sample}
+      />
     </>
   );
 }

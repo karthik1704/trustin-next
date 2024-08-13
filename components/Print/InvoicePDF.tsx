@@ -159,7 +159,7 @@ const MyDocument = ({
                 display: "flex",
                 flexDirection: "row",
                 fontWeight: "bold",
-                fontSize: "12px",
+                fontSize: "10px",
                 padding: 2,
               }}
             >
@@ -625,7 +625,7 @@ const MyDocument = ({
                   marginLeft: 4,
                 }}
               >
-                N/A
+              {data.sample.registration.manufactured_by ?? "N/A" }  
               </Text>
 
               <Text
@@ -633,7 +633,7 @@ const MyDocument = ({
               >
                 Sampled By
               </Text>
-              <Text style={{ padding: 2, marginLeft: 4 }}> N/A</Text>
+              <Text style={{ padding: 2, marginLeft: 4 }}> {data.sample.registration.sampled_by}</Text>
             </View>
             <View
               style={{

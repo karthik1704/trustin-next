@@ -50,6 +50,7 @@ export type CreateData = {
   // city: string;
   // state: string;
   // pincode_no: string;
+  manufactured_by:string;
   contact_person_id: number | string;
   customer_reference_no: string;
   contact_person_name: string;
@@ -112,6 +113,8 @@ export type UpdateData = {
   // state: string;
   // pincode_no: string;
   // contact_person_id:number|string;
+
+  manufactured_by: string;
   customer_reference_no: string;
   contact_person_name: string;
   contact_email: string;
@@ -369,6 +372,7 @@ export type RegistrationType = {
   contact_person_name: string;
   contact_email: string;
   contact_number: string;
+  manufactured_by: string;
 
   // customer_address_line1: string;
   // customer_address_line2: string;
