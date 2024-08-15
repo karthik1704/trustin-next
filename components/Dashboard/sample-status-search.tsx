@@ -34,7 +34,7 @@ const SampleStatusCheck = ({ sampleData }) => {
           <div className="mb-4.5 flex flex-row gap-2 xl:flex-row">
             <div className="flex w-1/2 flex-col">
               <label className="mb-2.5 w-[200px] text-black dark:text-white">
-                Status Number
+                Sample ID
               </label>
               <input
                 type="string"

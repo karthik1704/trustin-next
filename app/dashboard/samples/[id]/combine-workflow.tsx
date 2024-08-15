@@ -10,6 +10,7 @@ import WorkFlowForm from "@/components/WorkFlowForms/workflowform";
 import UnderTestingForm from "./under-testing-form";
 import { User } from "@/types/user";
 import Select from "@/components/select-input";
+import EmailPopup from "./email-popup";
 
 type Props = {
   data: Data;
@@ -254,6 +255,23 @@ const CombineWorkflow = ({
           />
         )}
         {current_step === 9 && (
+          <UnderTestingForm
+            formData={formData}
+            test_type_id={test_type_id}
+            data={data}
+            showRejectButton={true}
+            rejectActionData={actionFnReject}
+            currentStep={current_step}
+            assigned_to={data.sample.assigned_to}
+            parameters={test_params}
+            patchFn={actionFnResult}
+            step={10}
+            openModal={openModal}
+            signUsers={signUsers}
+
+          />
+        )}
+        {current_step === 10 && (
           <div className="mb-3 text-center">
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           
@@ -272,6 +290,7 @@ const CombineWorkflow = ({
               > 
                 Print Copy
               </button>
+              {/* <EmailPopup  filename={data.sample.sample_id} pdf={}/> */}
             </div>
             <h4 className="text-title-xl2 font-bold">
               Sample WorkFlow Completed

@@ -133,6 +133,9 @@ const UnderTestingForm = ({
       ...(currentStep === 8 && {
         authorized_sign_id: formData?.authorized_sign_id,
       }),
+      ...(currentStep === 8 && {
+        sign_verified: formData?.sign_verified ? 1 : 0,
+      }),
 
       test_params: parameters.map((para) => ({
         id: para.id,
@@ -402,6 +405,18 @@ const UnderTestingForm = ({
             </Select>
           </>
         )}
+           {currentStep === 9 && (
+          <>
+            <Select
+              label={"Verify Your Sign"}
+              name={`sign_verified`}
+              register={register}
+            >
+              <option value={0}> No </option>
+              <option value={1}> Yes </option>
+            </Select>
+          </>
+        )}
         <div className="mb-6">
           <label className="mb-2.5 block text-black dark:text-white">
             Comments
@@ -418,30 +433,30 @@ const UnderTestingForm = ({
             <table className="w-full table-fixed">
               <thead>
                 <tr className="bg-gray-2 p-2 text-left dark:bg-meta-4">
-                  <th className="w-[40px] pr-2 font-medium text-black dark:text-white">
+                  <th className="w-[40px] pr-2 font-medium text-sm text-black dark:text-white">
                     S.No.
                   </th>
-                  <th className="min-w-[320px] pl-2 font-medium text-black dark:text-white">
+                  <th className="min-w-[320px] pl-2 font-medium text-sm text-black dark:text-white">
                     Test Parameter Name
                   </th>
-                  <th className="w-[100px] pl-2 font-medium text-black dark:text-white">
+                  <th className="w-[100px] pl-2 font-medium text-sm text-black dark:text-white">
                     Unit
                   </th>
-                  <th className="min-w-[100px] font-medium text-black dark:text-white">
+                  <th className="min-w-[100px] font-medium text-sm text-black dark:text-white">
                     Order
                   </th>
-                  <th className="min-w-[100px] font-medium text-black dark:text-white">
+                  <th className="min-w-[100px] font-medium text-sm text-black dark:text-white">
                     Amt of samples
                   </th>
                   {currentStep >= 5 && (
                     <>
-                      <th className="min-w-[100px] font-medium text-black dark:text-white">
+                      <th className="min-w-[100px] font-medium text-sm text-black dark:text-white">
                         Specification Limits
                       </th>
-                      <th className="w-1/5 font-medium text-black dark:text-white">
+                      <th className="w-1/5 font-medium text-sm text-black dark:text-white">
                         Result Obtained
                       </th>
-                      <th className="w-[120px] font-medium text-black dark:text-white">
+                      <th className="w-[120px] font-medium text-sm text-black dark:text-white">
                         Status
                       </th>
                     </>
@@ -453,7 +468,7 @@ const UnderTestingForm = ({
                   {fields.map((item, index) => (
                     <tr key={item.id}>
                       <td className="w-[40px] border-b border-[#eee] dark:border-strokedark">
-                        <h5 className="w-[40px] font-medium text-black dark:text-white">
+                        <h5 className="w-[40px] font-medium text-sm text-black dark:text-white">
                           {index + 1}
                         </h5>
                       </td>
@@ -464,7 +479,7 @@ const UnderTestingForm = ({
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                           disabled
                         />
-                        <p>{item.test_name}</p>
+                        <p className="text-sm">{item.test_name}</p>
                       </td>
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                         <input
@@ -557,42 +572,42 @@ const UnderTestingForm = ({
                   {parameters.map((item, index) => (
                     <tr key={item.id} className="mt-4 p-6 font-medium">
                       <td className="w-[40px] border-b border-[#eee] dark:border-strokedark">
-                        <h5 className="w-[40px] font-medium text-black dark:text-white">
+                        <h5 className="w-[40px] font-medium text-sm text-black dark:text-white">
                           {index + 1}
                         </h5>
                       </td>
                       <td className="border-b border-[#eee] pl-2 dark:border-strokedark">
-                        <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
+                        <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
                           {item.test_parameter.testing_parameters}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] pl-2 dark:border-strokedark">
-                        <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
+                        <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
                           {item.unit}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
-                        <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
+                        <p className="mb-2.5 block py-3 font-semibold text-black text-sm dark:text-white">
                           {item.order}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
-                        <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
+                        <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
                           {item.quantity}
                         </p>
                       </td>
 
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                         {test_type_id === 1 ? (
-                          <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
+                          <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
                             {item.specification_limits}
                           </p>
                         ) : (
                           <>
-                            <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
+                            <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
                               <span>Min:-</span> {item.min_limits}
                             </p>
-                            <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
+                            <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
                               <span>Max:-</span>
                               {item.max_limits}
                             </p>
@@ -600,13 +615,13 @@ const UnderTestingForm = ({
                         )}
                       </td>
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
-                        <p className="mb-2.5 block py-3 font-semibold text-black dark:text-white">
+                        <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
                           {item.value}
                         </p>
                       </td>
-                      <td className="border-b border-[#eee] px-2 dark:border-strokedark">
+                      <td className="border-b border-[#eee] px-2 text-sm dark:border-strokedark">
                         <p
-                          className={`mb-2.5 block py-3 font-semibold ${
+                          className={`mb-2.5 block py-3 font-semibold text-sm ${
                             item.result ? "text-green-700" : "text-red-700"
                           }`}
                         >

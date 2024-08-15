@@ -23,6 +23,7 @@ import {
   Text,
   View,
   StyleSheet,
+  pdf,
 } from "@react-pdf/renderer";
 import ReactDOMServer from "react-dom/server";
 // import Modal from 'react-modal';
@@ -42,9 +43,10 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import CombineWorkflow from "./combine-workflow";
 import { date } from "zod";
 import { current } from "tailwindcss/colors";
+import EmailPopup from "./email-popup";
 
 type Props = {
-  qr:string,
+  qr: string;
   data: Data;
   actionFn: (
     prevState: any,
@@ -195,7 +197,7 @@ const SampleWorkflowForm = ({
   actionFnResult,
   actionFnReject,
   actionUpdateSample,
-  qr
+  qr,
 }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reportType, setReportType] = useState("Original");
@@ -203,12 +205,10 @@ const SampleWorkflowForm = ({
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleReportType = (type:string)=>{
-    setReportType(type)
-    openModal()
-  }
-
-
+  const handleReportType = (type: string) => {
+    setReportType(type);
+    openModal();
+  };
 
   const handlePrintButtonClick = () => {
     generateAndDisplayPDF();
@@ -286,6 +286,10 @@ const SampleWorkflowForm = ({
           Print
         </button>
       </div> */}
+      <EmailPopup
+        filename={data.sample.sample_id}
+        pdf={ pdf(MyDocument({ data, isDraft: false, qr, reportType })).toBlob()}
+      />
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {/* <h2>This is a modal</h2>
         <p>Modal content goes here...</p> */}
@@ -295,10 +299,10 @@ const SampleWorkflowForm = ({
           showToolbar={data.sample.status_id > 7 ? true : false}
         >
           <MyDocument
-          qr={qr}
+            qr={qr}
             data={data}
             isDraft={data.sample.status_id === 8 ? true : false}
-            reportType = {reportType}
+            reportType={reportType}
           />
         </PDFViewer>
         {/* <PDFDownloadLink document={< MyDocument/>} fileName="somename.pdf">
@@ -394,8 +398,11 @@ const SampleWorkflowForm = ({
                   )}
               </Accordion>
 
-              {data.sample.status_id === 1 &&
-                (data.currentUser.department_id === 6 ||
+              {(data.sample.status_id === 1 ||
+                data.sample_micro_history[0].to_status_id === 1 ||
+                data.sample_micro_history[0].to_status_id === 1) &&
+                (data.currentUser.department_id === 3 ||
+                  data.currentUser.department_id === 6 ||
                   data.currentUser.department_id === 1) && (
                   <div className="mb-3 w-full flex-col">
                     <SamplesEditForm
@@ -577,7 +584,11 @@ const SampleWorkflowForm = ({
                         <p className="mb-2.5 block font-semibold text-black dark:text-white">
                           Authoized Sign
                         </p>
-                        <p>{detail.authorized_sign ? `${detail?.authorized_sign.first_name} ${detail.authorized_sign.last_name}` : "---"}</p>
+                        <p>
+                          {detail.authorized_sign
+                            ? `${detail?.authorized_sign.first_name} ${detail.authorized_sign.last_name}`
+                            : "---"}
+                        </p>
                       </div>
                     </div>
                   ),
