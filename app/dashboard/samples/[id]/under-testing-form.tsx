@@ -8,6 +8,7 @@ import { Data, SampleDetailSchema } from "./typings";
 import ConfrimDialog from "./confrim-dialog";
 import ConfrimDialog2 from "./confrim-dialog2";
 import { User } from "@/types/user";
+import EmailPopup from "./email-popup";
 
 type Parameters = {
   id: number;
@@ -63,6 +64,7 @@ type Props = {
   assigneeData?: { id: number; first_name: string; last_name: string }[] | [];
   openModal?: (type: string) => void;
   signUsers?: User[];
+  qr?:string | null
 };
 
 type InitialState = {
@@ -94,6 +96,7 @@ const UnderTestingForm = ({
 
   openModal,
   signUsers,
+  qr=null,
 }: Props) => {
   console.log("hey", formData);
   const {
@@ -243,6 +246,7 @@ const UnderTestingForm = ({
           >
             Preview
           </button>
+         
         </div>
       )}
 
@@ -255,6 +259,13 @@ const UnderTestingForm = ({
           >
             Print Draft
           </button>
+          <EmailPopup
+        filename={data.sample.sample_id}
+        data={data}
+        qr={qr?qr:""}
+        isDraft= {currentStep === 8 ? true : false}
+        
+      />
         </div>
       )}
 

@@ -141,7 +141,7 @@ async function getData(id: string) {
     (work) => work.test_type_id === 1,
   ) ?? [];
   const sample_mech_workfolw = sample.sample_workflows.filter(
-    (work) => work.test_type_id === 2,
+    (work) => work.test_type_id === 2
   )??[];
   const sample_micro_history = sample.sample_history.filter(
     (histroy) => histroy.test_type?.id === 1,
@@ -150,8 +150,8 @@ async function getData(id: string) {
     (histroy) => histroy.test_type?.id === 2,
   )??[];
 
-  const microUsers = hodUsers.filter(user=>user.qa_type_id===1 && [3,4].includes(user.role_id))
-  const mechUsers = hodUsers.filter(user=>user.qa_type_id===2 && [3,4].includes(user.role_id))
+  const microUsers = hodUsers.filter(user=>user.qa_type_id===1 && [14,15,30].includes(user.id))
+  const mechUsers = hodUsers.filter(user=>user.qa_type_id===2 &&[24,25,16].includes(user.id))
 
   return {
     sample,

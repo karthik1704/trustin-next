@@ -288,7 +288,10 @@ const SampleWorkflowForm = ({
       </div> */}
       <EmailPopup
         filename={data.sample.sample_id}
-        pdf={ pdf(MyDocument({ data, isDraft: false, qr, reportType })).toBlob()}
+        data={data}
+        qr={qr}
+        isDraft= {data.sample.status_id === 8 ? true : false}
+
       />
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {/* <h2>This is a modal</h2>
@@ -360,6 +363,7 @@ const SampleWorkflowForm = ({
                               : 1
                           }
                           signUsers={data.microUsers}
+                          qr={qr}
                         />{" "}
                       </AccordionContent>
                     </AccordionItem>
@@ -392,6 +396,8 @@ const SampleWorkflowForm = ({
                               : 1
                           }
                           signUsers={data.mechUsers}
+                          qr={qr}
+
                         />{" "}
                       </AccordionContent>
                     </AccordionItem>

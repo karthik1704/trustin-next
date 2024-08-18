@@ -300,7 +300,7 @@ export async function sentMail( data: any) {
     return {
       fieldErrors: null,
       type: "Success",
-      message: "Status updated Successfully",
+      message: "Mail Sent Shortly",
     };
   }
   // if (res.status===200) redirect("/dashboard/samples");

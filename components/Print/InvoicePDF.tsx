@@ -6,10 +6,34 @@ import {
   View,
   Image,
   StyleSheet,
+  Font,
 } from "@react-pdf/renderer";
 import { Data } from "@/app/dashboard/samples/[id]/typings";
 import { dateFormatter, getLaterDate } from "@/lib/utils";
 
+// import CambriaBold from '';
+const SIGN_IMAGES: { [key: string]: string } = {
+  "24": "/images/signs/mahendren.png",
+  "25": "/images/signs/senthil-kumar.png",
+  "16": "/images/signs/vasantha.png",
+  "14": "/images/signs/tamil vannan.png",
+  "15": "/images/signs/sabari.png",
+  "30": "/images/signs/dhanraj.png",
+};
+
+Font.register({
+  family: "Cambria",
+  fonts: [
+    { src: "/cambria/Cambria-Bold.ttf" }, // font-style: normal, font-weight: normal
+    { src: "/cambria/Cambria.ttf", fontWeight: 700 }, // font-style: normal, font-weight: normal
+    { src: "/cambria/Cambria-Italic.ttf", fontStyle: "italic" },
+    {
+      src: "/cambria/Cambria-BoldItalic.ttf",
+      fontStyle: "italic",
+      fontWeight: 700,
+    },
+  ],
+});
 // Create styles
 const styles = StyleSheet.create({
   PDFContainer: {
@@ -19,6 +43,7 @@ const styles = StyleSheet.create({
   },
   page: {
     // flexDirection: "row",
+    fontFamily: "Cambria",
     backgroundColor: "white",
     fontSize: "10px",
     position: "relative",
@@ -27,7 +52,7 @@ const styles = StyleSheet.create({
   },
   section: {
     margin: 10,
-    marginTop: 0,
+    // marginTop: 0,
     padding: 10,
     flexGrow: 1,
     borderStyle: "solid",
@@ -47,14 +72,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   tableHeader: {
-    fontSize: 12,
+    fontSize: 8,
     padding: 5,
     borderStyle: "solid",
     borderWidth: 1,
   },
   row: { flexDirection: "row", fontSize: "12px" },
   cell: {
-    padding: 5,
+     padding: 3,
     backgroundColor: "#ffffff",
     borderBottomWidth: 1,
     borderBottomColor: "#000000",
@@ -109,52 +134,51 @@ const MyDocument = ({
             <Text>Invoice Number: 123456</Text>
             <Text>Date: January 1, 2024</Text>
           </View> */}
-            <View
+          <View
+            style={{
+              border: "1 solid #000",
+              display: "flex",
+              flexDirection: "row",
+              fontWeight: "bold",
+              fontSize: "10px",
+              padding: 2,
+            }}
+            fixed
+          >
+            <Text
               style={{
-                border: "1 solid #000",
-                display: "flex",
-                flexDirection: "row",
-                fontWeight: "bold",
-                fontSize: "10px",
-                padding: 2,
+                borderRight: "1 solid #000",
+                width: 140,
+                padding: 1,
               }}
-              fixed
             >
-              <Text
-                style={{
-                  borderRight: "1 solid #000",
-                  width: 140,
-                  padding: 1,
-                }}
-              >
-                Sample ID No.
-              </Text>
-              <Text
-                style={{
-                  borderRight: "1 solid #000",
-                  width: 140,
-                  padding: 2,
-                  marginLeft: 4,
-                }}
-              >
-                {data.sample.sample_id}
-              </Text>
+              Sample ID No.
+            </Text>
+            <Text
+              style={{
+                borderRight: "1 solid #000",
+                width: 140,
+                padding: 2,
+                marginLeft: 4,
+              }}
+            >
+              {data.sample.sample_id}
+            </Text>
 
-              <Text
-                style={{
-                  borderRight: "1 solid #000",
-                  width: 100,
-                  padding: 1,
-                }}
-              >
-                ULR No.
-              </Text>
-              <Text style={{ padding: 2, marginLeft: 4 }}>
-                {data.sample.ulr_no ?? "N/A"}
-              </Text>
-            </View>
-            <View >
-
+            <Text
+              style={{
+                borderRight: "1 solid #000",
+                width: 100,
+                padding: 1,
+              }}
+            >
+              ULR No.
+            </Text>
+            <Text style={{ padding: 2, marginLeft: 4 }}>
+              {data.sample.ulr_no ?? "N/A"}
+            </Text>
+          </View>
+          <View>
             <View
               style={{
                 border: "1 solid #000",
@@ -484,7 +508,7 @@ const MyDocument = ({
               <Text>Customer Information</Text>
             </View> */}
 
-            <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }} >
+            <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
               <Text
                 style={{
                   textAlign: "center",
@@ -495,7 +519,7 @@ const MyDocument = ({
                 Sample Details
               </Text>
             </View>
-            
+
             <View
               style={{
                 border: "1 solid #000",
@@ -628,7 +652,7 @@ const MyDocument = ({
                   marginLeft: 4,
                 }}
               >
-              {data.sample.registration.manufactured_by ?? "N/A" }  
+                {data.sample.registration.manufactured_by ?? "N/A"}
               </Text>
 
               <Text
@@ -636,7 +660,10 @@ const MyDocument = ({
               >
                 Sampled By
               </Text>
-              <Text style={{ padding: 2, marginLeft: 4 }}> {data.sample.registration.sampled_by}</Text>
+              <Text style={{ padding: 2, marginLeft: 4 }}>
+                {" "}
+                {data.sample.registration.sampled_by}
+              </Text>
             </View>
             <View
               style={{
@@ -795,7 +822,9 @@ const MyDocument = ({
                   <Text style={{ width: "50%" }}>Max</Text>
                 </View>
               </View>
-              <Text style={[styles.cell, { width: "20%" }]}>Result Obtained</Text>
+              <Text style={[styles.cell, { width: "20%" }]}>
+                Result Obtained
+              </Text>
               <Text style={[styles.cell, styles.lastCell, { width: "15%" }]}>
                 Status
               </Text>
@@ -825,16 +854,19 @@ const MyDocument = ({
                 <Text style={[styles.cell, { width: "25%" }]}>
                   {item.test_parameter.method_or_spec}
                 </Text>
-                <View style={[styles.cell, { width: "35%" }]}>
+                <View style={[styles.cell, { width: "35%",  flexDirection: "row", alignItems: 'stretch'  }]}>
                   {item.test_parameter.test_type_id === 1 ? (
                     <Text> {item.specification_limits} </Text>
                   ) : (
-                    <View style={{ flexDirection: "row" }}>
+                    <View style={{ flexDirection: "row", flex: 1, alignItems: 'stretch' }}>
                       <Text
                         style={{
                           width: "50%",
                           borderRightWidth: "1px",
                           borderRightColor: "#000",
+                          height:'100%',
+                           alignSelf: "stretch",
+                           lineHeight: 'auto'
                         }}
                       >
                         {" "}
@@ -916,7 +948,7 @@ const MyDocument = ({
           <Footer />
         </View>
       </Page>
-      <Page>
+      <Page style={{ fontFamily: "Cambria" }}>
         <View style={styles.section}>
           <Header nabl_logo={data.sample.nabl_logo} />
           <View
@@ -974,10 +1006,22 @@ const MyDocument = ({
                   key={detail.id}
                   style={{ display: "flex", justifyContent: "center" }}
                 >
-                  <Text style={{ fontWeight: "bold", textAlign: "right", marginBottom:"8px" }}>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      textAlign: "right",
+                      marginBottom: "8px",
+                    }}
+                  >
                     Authorized Signatory{" "}
                   </Text>
-                  <Text style={{ fontWeight: "bold", textAlign: "center", marginBottom:"8px" }}>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      marginBottom: "8px",
+                    }}
+                  >
                     {detail.authorized_sign
                       ? `${detail.authorized_sign.first_name} ${detail.authorized_sign.last_name}`
                       : ""}
@@ -987,13 +1031,20 @@ const MyDocument = ({
                       ? `${detail.authorized_sign.designation ?? ""} `
                       : ""}
                   </Text>
+                  {detail.authorized_sign && (
+                    <Image
+                      src={SIGN_IMAGES[detail.authorized_sign.id.toString()] ?? "/images/signs/vasantha.png"}
+                      style={{ width: 150, height: 80 }}
+
+                    />
+                  )}
                 </View>
               ))}
             </View>
           </View>
           <View
             style={{
-              marginTop: 150,
+              marginTop: 90,
               display: "flex",
               flexDirection: "column",
               fontSize: 10,
@@ -1116,7 +1167,7 @@ const Header = ({ nabl_logo }: { nabl_logo: boolean }) => {
       </View>
 
       <View>
-        <Image src="/images/logo/logo.png" style={{ width: 100, height: 50 }} />
+        <Image src="/images/logo/logo.png" style={{ width: 120, height: 80 }} />
       </View>
     </View>
   );
@@ -1127,41 +1178,41 @@ const Footer = () => {
     <View
       style={{
         position: "absolute",
-        bottom: 5,
+        bottom: 3,
         left: 0,
         right: 0,
         padding: 2,
       }}
       fixed
     >
-      <View style={{ display: "flex", marginBottom: "7px" }}>
+      <View style={{ display: "flex", marginBottom: "3px" }}>
         <View style={{ border: "1 solid #000" }}></View>
         <View style={{ border: "1 solid #000" }}></View>
         <View style={{ textAlign: "center", padding: 1 }}>
           <Text
             style={{
-              fontSize: "17px",
-              fontWeight: "ultrabold",
+              fontSize: "14px",
+              fontWeight: "medium",
               padding: 2,
             }}
           >
             Trustin Analytical Solutions Private Limited
           </Text>
-          <Text style={{ fontSize: "12px", fontWeight: "thin", padding: 2 }}>
+          <Text style={{ fontSize: "10px", fontWeight: "normal", padding: 2 }}>
             {" "}
             (An ISO 17025:2017 Accredited / CDSCO & BIS APProved Testing
             Laboratory)
           </Text>
-          <Text style={{ fontSize: "12px", fontWeight: "medium", padding: 2 }}>
+          <Text style={{ fontSize: "10px", fontWeight: "medium", padding: 2 }}>
             {" "}
             R.K Complex First Floor, Plot No.303/B, B-Block, Thiruneermalai
             Road,
           </Text>
-          <Text style={{ fontSize: "12px", fontWeight: "medium", padding: 2 }}>
+          <Text style={{ fontSize: "10px", fontWeight: "medium", padding: 2 }}>
             {" "}
             Parvathy Puram, Chrompet, Chennai-600044, Tamilnadu, India.
           </Text>
-          <Text style={{ fontSize: "12px", fontWeight: "medium", padding: 2 }}>
+          <Text style={{ fontSize: "10px", fontWeight: "medium", padding: 2 }}>
             Ph: 044-22731006, Email: customercare@trustingroup.in,
             web:www.trustingroup.in
           </Text>

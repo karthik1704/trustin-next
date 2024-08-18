@@ -13,7 +13,8 @@ const config = {
   prefix: "",
   theme: {
     fontFamily: {
-      satoshi: ["Satoshi", "sans-serif"],
+      // satoshi: ["Satoshi", "sans-serif"],
+      cambria: ["Cambria", "sans-serif"],
     },
     screens: {
       "2xsm": "375px",

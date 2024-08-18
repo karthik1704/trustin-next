@@ -38,6 +38,7 @@ type Props = {
   >;
   formAction: (data: FormData) => void;
   signUsers:   User[]
+  qr:string;
 
 };
 
@@ -53,7 +54,8 @@ const CombineWorkflow = ({
   actionFnReject,
   actionFnResult,
   formAction,
-  signUsers
+  signUsers,
+  qr,
 }: Props) => {
   const getNextStatus = (nextStep: number) => {
     console.log(sample_history);
@@ -251,6 +253,7 @@ const CombineWorkflow = ({
             step={9}
             openModal={openModal}
             signUsers={signUsers}
+            qr={qr}
 
           />
         )}
@@ -268,13 +271,20 @@ const CombineWorkflow = ({
             step={10}
             openModal={openModal}
             signUsers={signUsers}
+            qr={qr}
 
           />
         )}
         {current_step === 10 && (
           <div className="mb-3 text-center">
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-          
+            <EmailPopup
+        filename={data.sample.sample_id}
+        data={data}
+        qr={qr?qr:""}
+        isDraft= { false}
+        
+      />
               <button
                 type="button"
                 onClick={()=>openModal && openModal("Original")}
