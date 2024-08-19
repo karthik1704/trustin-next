@@ -11,6 +11,9 @@ import { User } from "@/types/user";
 import EmailPopup from "./email-popup";
 
 type Parameters = {
+  unit: string;
+  min_limits: string;
+  max_limits: string;
   id: number;
   sample_id: number;
   test_parameter_id: number;
@@ -25,6 +28,9 @@ type Parameters = {
   updated_by: number;
 
   test_parameter: {
+    max_limits: string;
+    min_limits: string;
+    specification_limits: string;
     id: number;
     branch_id: number;
     test_type_id: number;
@@ -64,7 +70,7 @@ type Props = {
   assigneeData?: { id: number; first_name: string; last_name: string }[] | [];
   openModal?: (type: string) => void;
   signUsers?: User[];
-  qr?:string | null
+  qr?: string | null;
 };
 
 type InitialState = {
@@ -96,7 +102,7 @@ const UnderTestingForm = ({
 
   openModal,
   signUsers,
-  qr=null,
+  qr = null,
 }: Props) => {
   console.log("hey", formData);
   const {
@@ -235,6 +241,33 @@ const UnderTestingForm = ({
   //     )
   //   }
 
+  const permissionsDisable: { [key: number]: boolean } = {
+    2:
+      data.currentUser.role_id !== 3 &&
+      ![1, 2].includes(data.currentUser.department_id),
+    3:
+      data.currentUser.role_id !== 8 &&
+      ![1, 2].includes(data.currentUser.department_id),
+    4:
+      data.currentUser.role_id !== 3 &&
+      ![1, 2].includes(data.currentUser.department_id),
+    5:
+      data.currentUser.role_id !== 4 &&
+      ![1, 2].includes(data.currentUser.department_id),
+    6:
+      data.currentUser.role_id !== 3 &&
+      ![1, 2].includes(data.currentUser.department_id),
+    7:
+      data.currentUser.role_id !== 9 &&
+      ![1, 2].includes(data.currentUser.department_id),
+    8:
+      data.currentUser.role_id !== 10 &&
+      ![1, 2].includes(data.currentUser.department_id),
+    9:
+      data.currentUser.role_id !== 3 &&
+      ![1, 2].includes(data.currentUser.department_id),
+  };
+
   return (
     <div>
       {currentStep === 7 && (
@@ -246,11 +279,10 @@ const UnderTestingForm = ({
           >
             Preview
           </button>
-         
         </div>
       )}
 
-      {currentStep === 8 && (
+      {[8, 9].includes(currentStep) && (
         <div className="align-items:flex-end flex flex-col items-end gap-3 sm:flex-row sm:justify-end">
           <button
             type="button"
@@ -260,12 +292,11 @@ const UnderTestingForm = ({
             Print Draft
           </button>
           <EmailPopup
-        filename={data.sample.sample_id}
-        data={data}
-        qr={qr?qr:""}
-        isDraft= {currentStep === 8 ? true : false}
-        
-      />
+            filename={data.sample.sample_id}
+            data={data}
+            qr={qr ? qr : ""}
+            isDraft={currentStep === 8 ? true : false}
+          />
         </div>
       )}
 
@@ -416,7 +447,7 @@ const UnderTestingForm = ({
             </Select>
           </>
         )}
-           {currentStep === 9 && (
+        {currentStep === 9 && (
           <>
             <Select
               label={"Verify Your Sign"}
@@ -444,30 +475,30 @@ const UnderTestingForm = ({
             <table className="w-full table-fixed">
               <thead>
                 <tr className="bg-gray-2 p-2 text-left dark:bg-meta-4">
-                  <th className="w-[40px] pr-2 font-medium text-sm text-black dark:text-white">
+                  <th className="w-[40px] pr-2 text-sm font-medium text-black dark:text-white">
                     S.No.
                   </th>
-                  <th className="min-w-[320px] pl-2 font-medium text-sm text-black dark:text-white">
+                  <th className="min-w-[320px] pl-2 text-sm font-medium text-black dark:text-white">
                     Test Parameter Name
                   </th>
-                  <th className="w-[100px] pl-2 font-medium text-sm text-black dark:text-white">
+                  <th className="w-[100px] pl-2 text-sm font-medium text-black dark:text-white">
                     Unit
                   </th>
-                  <th className="min-w-[100px] font-medium text-sm text-black dark:text-white">
+                  <th className="min-w-[100px] text-sm font-medium text-black dark:text-white">
                     Order
                   </th>
-                  <th className="min-w-[100px] font-medium text-sm text-black dark:text-white">
+                  <th className="min-w-[100px] text-sm font-medium text-black dark:text-white">
                     Amt of samples
                   </th>
                   {currentStep >= 5 && (
                     <>
-                      <th className="min-w-[100px] font-medium text-sm text-black dark:text-white">
+                      <th className="min-w-[100px] text-sm font-medium text-black dark:text-white">
                         Specification Limits
                       </th>
-                      <th className="w-1/5 font-medium text-sm text-black dark:text-white">
+                      <th className="w-1/5 text-sm font-medium text-black dark:text-white">
                         Result Obtained
                       </th>
-                      <th className="w-[120px] font-medium text-sm text-black dark:text-white">
+                      <th className="w-[120px] text-sm font-medium text-black dark:text-white">
                         Status
                       </th>
                     </>
@@ -479,7 +510,7 @@ const UnderTestingForm = ({
                   {fields.map((item, index) => (
                     <tr key={item.id}>
                       <td className="w-[40px] border-b border-[#eee] dark:border-strokedark">
-                        <h5 className="w-[40px] font-medium text-sm text-black dark:text-white">
+                        <h5 className="w-[40px] text-sm font-medium text-black dark:text-white">
                           {index + 1}
                         </h5>
                       </td>
@@ -583,42 +614,42 @@ const UnderTestingForm = ({
                   {parameters.map((item, index) => (
                     <tr key={item.id} className="mt-4 p-6 font-medium">
                       <td className="w-[40px] border-b border-[#eee] dark:border-strokedark">
-                        <h5 className="w-[40px] font-medium text-sm text-black dark:text-white">
+                        <h5 className="w-[40px] text-sm font-medium text-black dark:text-white">
                           {index + 1}
                         </h5>
                       </td>
                       <td className="border-b border-[#eee] pl-2 dark:border-strokedark">
-                        <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
+                        <p className="mb-2.5 block py-3 text-sm font-semibold text-black dark:text-white">
                           {item.test_parameter.testing_parameters}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] pl-2 dark:border-strokedark">
-                        <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
+                        <p className="mb-2.5 block py-3 text-sm font-semibold text-black dark:text-white">
                           {item.unit}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
-                        <p className="mb-2.5 block py-3 font-semibold text-black text-sm dark:text-white">
+                        <p className="mb-2.5 block py-3 text-sm font-semibold text-black dark:text-white">
                           {item.order}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
-                        <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
+                        <p className="mb-2.5 block py-3 text-sm font-semibold text-black dark:text-white">
                           {item.quantity}
                         </p>
                       </td>
 
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                         {test_type_id === 1 ? (
-                          <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
+                          <p className="mb-2.5 block py-3 text-sm font-semibold text-black dark:text-white">
                             {item.specification_limits}
                           </p>
                         ) : (
                           <>
-                            <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
+                            <p className="mb-2.5 block py-3 text-sm font-semibold text-black dark:text-white">
                               <span>Min:-</span> {item.min_limits}
                             </p>
-                            <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
+                            <p className="mb-2.5 block py-3 text-sm font-semibold text-black dark:text-white">
                               <span>Max:-</span>
                               {item.max_limits}
                             </p>
@@ -626,13 +657,13 @@ const UnderTestingForm = ({
                         )}
                       </td>
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
-                        <p className="mb-2.5 block py-3 font-semibold text-sm text-black dark:text-white">
+                        <p className="mb-2.5 block py-3 text-sm font-semibold text-black dark:text-white">
                           {item.value}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-2 text-sm dark:border-strokedark">
                         <p
-                          className={`mb-2.5 block py-3 font-semibold text-sm ${
+                          className={`mb-2.5 block py-3 text-sm font-semibold ${
                             item.result ? "text-green-700" : "text-red-700"
                           }`}
                         >
@@ -661,14 +692,7 @@ const UnderTestingForm = ({
             isLoading={isLoading}
             isSubmitting={isSubmitting}
             rejectLoading={loading}
-            isDisable={
-              currentStep === 3 && data.currentUser.department_id === 3
-                ? true
-                : false ||
-                    (currentStep === 4 && data.currentUser.department_id === 3)
-                  ? true
-                  : false
-            }
+            isDisable={permissionsDisable[currentStep]}
           />
           {showRejectButton && (
             <ConfrimDialog2
@@ -683,15 +707,7 @@ const UnderTestingForm = ({
               rejectLoading={loading}
               rejectFn={handleReject}
               reject
-              isDisable={
-                currentStep === 3 && data.currentUser.department_id === 3
-                  ? true
-                  : false ||
-                      (currentStep === 4 &&
-                        data.currentUser.department_id === 3)
-                    ? true
-                    : false
-              }
+              isDisable={permissionsDisable[currentStep]}
             />
           )}
 

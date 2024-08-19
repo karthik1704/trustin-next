@@ -54,23 +54,23 @@ const FrontDeskTable = ({ data }: { data: Data }) => {
           <tbody>
             {data.data.map((packageItem, key) => (
               <tr key={packageItem.id}>
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-slate-400 px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem?.customer.company_name}
                   </h5>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="border-b border-slate-400 px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {packageItem.courier_name}
                   </p>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="border-b border-slate-400 px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {packageItem?.user_received_by?.first_name ?? ""}{" "}
                     {packageItem?.user_received_by?.last_name ?? ""}
                   </p>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="border-b border-slate-400 px-4 py-5 dark:border-strokedark">
                   <p
                     className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium`}
                   >
@@ -80,14 +80,14 @@ const FrontDeskTable = ({ data }: { data: Data }) => {
                     {/* {new Date(packageItem.date_of_received).toLocaleString()} */}
                   </p>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="border-b border-slate-400 px-4 py-5 dark:border-strokedark">
                   <p
                     className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium`}
                   >
                     {packageItem.status.split("_").join(" ")}
                   </p>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="border-b border-slate-400 px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
                     <Link
                       className="hover:text-primary"

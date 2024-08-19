@@ -54,24 +54,24 @@ const CustomerTable: React.FC<TableProps> = ({ customers }) => {
           <tbody>
             {customers.map((packageItem, key) => (
               <tr key={packageItem.id}>
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-slate-400 px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem?.company_name}
                   </h5>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="border-b border-slate-400 px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {packageItem.email ?? "---"}
                   </p>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="border-b border-slate-400 px-4 py-5 dark:border-strokedark">
                   <p
                     className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium `}
                   >
                     {packageItem.customer_code}
                   </p>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="border-b border-slate-400 px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
                     <Link
                       className="hover:text-primary"

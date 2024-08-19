@@ -124,7 +124,7 @@ async function getData(id: string) {
   }
   const sample: Sample = await res.json();
   const branches = await res2.json();
-  const users = await res3.json();
+  const users:User[]  = await res3.json();
   const currentUser = await res4.json();
   const batches = await res5.json();
   const parameters = await res6.json();
@@ -151,7 +151,8 @@ async function getData(id: string) {
   )??[];
 
   const microUsers = hodUsers.filter(user=>user.qa_type_id===1 && [14,15,30].includes(user.id))
-  const mechUsers = hodUsers.filter(user=>user.qa_type_id===2 &&[24,25,16].includes(user.id))
+  const mechUsers = users.filter(user=>[24,25,16].includes(user.id) )
+  
 
   return {
     sample,

@@ -184,7 +184,7 @@ const EmailForm = ({ filename, data, isDraft, qr, to }: Props) => {
           ></textarea>
         </div> */}
         <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-          <Select name="email_type" register={register} label={"Front Desk"}>
+          <Select name="email_type" register={register} label={"Report Type"}>
             {" "}
             {isDraft ? (
               <option value={"DRAFT"}>Draft</option>

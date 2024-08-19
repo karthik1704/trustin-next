@@ -42,34 +42,34 @@ const ParametersTable = ({ data }: { data: ParametersType }) => {
           <tbody>
             {data.map((packageItem, key) => (
               <tr key={packageItem.id}>
-                {/* <td className="border-b border-[#eee] py-5 px-2 pl-4 dark:border-strokedark xl:pl-2">
+                {/* <td className="border-b border-slate-400 py-5 px-2 pl-4 dark:border-strokedark xl:pl-2">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem.parameter_code}
                   </h5>
                 </td> */}
-                <td className="border-b border-[#eee] py-5 px-2 dark:border-strokedark">
+                <td className="border-b border-slate-400 py-5 px-2 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {packageItem.testing_parameters}
                   </p>
                 </td>
-                <td className="border-b border-[#eee] py-5 px-2 dark:border-strokedark">
+                <td className="border-b border-slate-400 py-5 px-2 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {packageItem?.product?.product_name ?? '---'}
                   </p>
                 </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                <td className="border-b border-slate-400 py-5 px-4 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {packageItem?.test_type?.name ?? '---'}
                   </p>
                 </td>
 
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                <td className="border-b border-slate-400 py-5 px-4 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {packageItem.amount}
                   </p>
                 </td>
 
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                <td className="border-b border-slate-400 py-5 px-4 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
                     <Link
                       className="hover:text-primary"

@@ -3,8 +3,11 @@ import { User } from "@/types/user";
 export type SampleTestParameters = {
   id: number;
   sample_id: number;
+  max_limits: string;
+  min_limits: string;
   test_parameter_id: number;
   test_type: string;
+  unit: string;
   value: string;
   specification_limits: string;
   result: true;
@@ -14,6 +17,9 @@ export type SampleTestParameters = {
   updated_by: number;
   test_parameter: {
     id: number;
+    max_limits: string;
+    min_limits: string;
+    specification_limits: string;
     branch_id: number;
     test_type_id: number;
     product_id: number;
@@ -28,25 +34,24 @@ export type SampleTestParameters = {
   };
 };
 
-export type SampleHistory = 
-  {
+export type SampleHistory = {
+  id: number;
+  from_status_id: number;
+  to_status_id: number;
+  test_type_id: number;
+  test_type: {
     id: number;
-    from_status_id: number;
-    to_status_id: number;
-    test_type_id: number;
-    test_type: {
-        id:number;
-        name: string;
-      }
-    assigned_to: number | null;
-    comments: string | null;
-    created_at: string;
-    created_by: number;
-    from_status: { id: number; name: string } | null;
-    to_status: { id: number; name: string } | null;
-    assignee: { first_name: string; last_name: string } | null;
-    created_by_user: { first_name: string; last_name: string } | null;
-  }[];
+    name: string;
+  };
+  assigned_to: number | null;
+  comments: string | null;
+  created_at: string;
+  created_by: number;
+  from_status: { id: number; name: string } | null;
+  to_status: { id: number; name: string } | null;
+  assignee: { first_name: string; last_name: string } | null;
+  created_by_user: { first_name: string; last_name: string } | null;
+}[];
 export type SampleWorkflow = {
   id: number;
   sample_status_id: number;
@@ -68,7 +73,7 @@ export type Sample = {
   status_id: number;
   department: string;
   assigned_to: number;
-  ulr_no:string;
+  ulr_no: string;
   nabl_logo: boolean;
   samples_received: boolean;
   under_cdsco: boolean;
@@ -97,6 +102,8 @@ export type Sample = {
   sample_test_parameters: SampleTestParameters[];
   sample_test_types: SampleTestType[];
   registration: {
+    sampled_by: string;
+    manufactured_by: string;
     code: string;
     id: number;
     company_name: string;
@@ -174,32 +181,36 @@ export type SampleDetailSchema = {
   sample_id: number;
   test_type_id: number;
   assigned_to?: number;
-  authorized_sign_id:number;
+  authorized_sign_id: number;
+  sign_verified:boolean;
   testing_start_date: string;
   testing_end_date: string;
   sample_issued: number;
   issued_to: string;
   samples_received: boolean;
   group: string;
-  discipline:string;
+  discipline: string;
   // received_quantity: number;
   assignee: {
     id: number;
     first_name: string;
     last_name: string;
   };
-  authorized_sign:  {
+  authorized_sign: {
     id: number;
     first_name: string;
     last_name: string;
     designation: string;
-  }
-
+  };
 };
 
-
 export type Data = {
-  currentUser: { id: number; department_id: number, qa_type_id:number };
+  currentUser: {
+    role_id: number;
+    id: number;
+    department_id: number;
+    qa_type_id: number;
+  };
   sample: Sample;
   sample_micro_params: SampleTestParameters[];
   sample_mech_params: SampleTestParameters[];
@@ -217,8 +228,8 @@ export type Data = {
     first_name: string;
     last_name: string;
   }[];
-  mechUsers: User[]
-  microUsers: User[]
+  mechUsers: User[];
+  microUsers: User[];
 
   batches: {
     id: number;
@@ -250,4 +261,4 @@ export type TestParams = {
     name: string;
     id: number;
   };
-}
+};

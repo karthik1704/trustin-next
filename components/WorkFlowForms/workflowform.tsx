@@ -154,7 +154,7 @@ function WorkFlowForm({
         ) : (
           <input type="hidden" value={comment} name="comments" />
         )}
-        <div className="flex gap-2">
+        <div className="flex gap-2 justify-center ">
           <SubmitButton name={buttonName} width="w-1/2" />
           {showRejectButton && (
             <button

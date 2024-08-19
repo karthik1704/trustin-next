@@ -275,6 +275,8 @@ const SampleWorkflowForm = ({
     }
   }, [state, router]);
 
+  console.log(data.sample);
+
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       {/* <div className="align-items:flex-end flex flex-col items-end gap-3 sm:flex-row sm:justify-end">
@@ -290,8 +292,7 @@ const SampleWorkflowForm = ({
         filename={data.sample.sample_id}
         data={data}
         qr={qr}
-        isDraft= {data.sample.status_id === 8 ? true : false}
-
+        isDraft={data.sample.status_id === 8 ? true : false}
       />
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {/* <h2>This is a modal</h2>
@@ -337,7 +338,7 @@ const SampleWorkflowForm = ({
               >
                 {(data.sample.sample_test_types.length === 2 ||
                   data.sample.sample_test_types[0].test_type_id === 1) &&
-                  ([1, 2, 6].includes(data.currentUser.department_id) ||
+                  ([1, 2, 3, 4].includes(data.currentUser.department_id) ||
                     data.currentUser.qa_type_id === 1) && (
                     <AccordionItem value="micro">
                       <AccordionTrigger className="px-6 font-extrabold">
@@ -370,7 +371,7 @@ const SampleWorkflowForm = ({
                   )}
                 {(data.sample.sample_test_types.length === 2 ||
                   data.sample.sample_test_types[0].test_type_id === 2) &&
-                  ([1, 2, 6].includes(data.currentUser.department_id) ||
+                  ([1, 2, 3, 4].includes(data.currentUser.department_id) ||
                     data.currentUser.qa_type_id === 2) && (
                     <AccordionItem value="mech">
                       <AccordionTrigger className="px-6 font-extrabold">
@@ -397,7 +398,6 @@ const SampleWorkflowForm = ({
                           }
                           signUsers={data.mechUsers}
                           qr={qr}
-
                         />{" "}
                       </AccordionContent>
                     </AccordionItem>
@@ -408,7 +408,6 @@ const SampleWorkflowForm = ({
                 data.sample_micro_history[0].to_status_id === 1 ||
                 data.sample_micro_history[0].to_status_id === 1) &&
                 (data.currentUser.department_id === 3 ||
-                  data.currentUser.department_id === 6 ||
                   data.currentUser.department_id === 1) && (
                   <div className="mb-3 w-full flex-col">
                     <SamplesEditForm

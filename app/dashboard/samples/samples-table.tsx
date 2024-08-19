@@ -89,7 +89,7 @@ const SampleTable = ({ data, user }: { data: RegisterType; user: User }) => {
           <tbody>
             {data.data.map((packageItem, key) => (
               <tr key={packageItem.id}>
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-slate-400 px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <Link
                     className="hover:text-primary"
                     href={`samples/${packageItem.id}`}
@@ -99,19 +99,19 @@ const SampleTable = ({ data, user }: { data: RegisterType; user: User }) => {
                     </h5>
                   </Link>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-slate-400 px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem.sample_name}
                   </h5>
                 </td>
                 {user.role_id !== 4 && (
-                  <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                  <td className="border-b border-slate-400 px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-black dark:text-white">
                       {packageItem?.registration?.company_name ?? "---"}
                     </h5>
                   </td>
                 )}
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-slate-400 px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem.sample_test_types.length === 2
                       ? user.role_id === 4
@@ -124,13 +124,13 @@ const SampleTable = ({ data, user }: { data: RegisterType; user: User }) => {
                         : "Mech"}
                   </h5>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-slate-400 px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem?.status_data.name ?? "---"}
                   </h5>
                 </td>
 
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="border-b border-slate-400 px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
                     <Link
                       className="hover:text-primary"

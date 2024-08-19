@@ -1015,6 +1015,13 @@ const MyDocument = ({
                   >
                     Authorized Signatory{" "}
                   </Text>
+                  {detail.authorized_sign && (
+                    <Image
+                      src={SIGN_IMAGES[detail.authorized_sign.id.toString()] ?? "/images/signs/vasantha.png"}
+                      style={{ width: 150, height: 50 }}
+
+                    />
+                  )}
                   <Text
                     style={{
                       fontWeight: "bold",
@@ -1022,6 +1029,7 @@ const MyDocument = ({
                       marginBottom: "8px",
                     }}
                   >
+                    
                     {detail.authorized_sign
                       ? `${detail.authorized_sign.first_name} ${detail.authorized_sign.last_name}`
                       : ""}
@@ -1031,13 +1039,7 @@ const MyDocument = ({
                       ? `${detail.authorized_sign.designation ?? ""} `
                       : ""}
                   </Text>
-                  {detail.authorized_sign && (
-                    <Image
-                      src={SIGN_IMAGES[detail.authorized_sign.id.toString()] ?? "/images/signs/vasantha.png"}
-                      style={{ width: 150, height: 80 }}
-
-                    />
-                  )}
+               
                 </View>
               ))}
             </View>

@@ -19,7 +19,7 @@ type Props = {
   test_type_id: number;
   sample_history: SampleHistory;
   current_step: number;
-  openModal: (type:string) => void;
+  openModal: (type: string) => void;
   actionFn: (
     prevState: any,
     data: FormData,
@@ -37,9 +37,8 @@ type Props = {
     { fieldErrors: null; type: string; message: string | undefined } | undefined
   >;
   formAction: (data: FormData) => void;
-  signUsers:   User[]
-  qr:string;
-
+  signUsers: User[];
+  qr: string;
 };
 
 const CombineWorkflow = ({
@@ -254,7 +253,6 @@ const CombineWorkflow = ({
             openModal={openModal}
             signUsers={signUsers}
             qr={qr}
-
           />
         )}
         {current_step === 9 && (
@@ -272,39 +270,50 @@ const CombineWorkflow = ({
             openModal={openModal}
             signUsers={signUsers}
             qr={qr}
-
           />
         )}
         {current_step === 10 && (
           <div className="mb-3 text-center">
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <EmailPopup
-        filename={data.sample.sample_id}
-        data={data}
-        qr={qr?qr:""}
-        isDraft= { false}
-        
-      />
+              <EmailPopup
+                filename={data.sample.sample_id}
+                data={data}
+                qr={qr ? qr : ""}
+                isDraft={false}
+              />
               <button
                 type="button"
-                onClick={()=>openModal && openModal("Original")}
+                onClick={() => openModal && openModal("Original")}
                 className="flex w-1/5 justify-center rounded bg-primary p-2 font-medium text-gray"
-              > 
+              >
                 Print Original
               </button>
-          
+
               <button
                 type="button"
-                onClick={()=>openModal && openModal("Copy")}
+                onClick={() => openModal && openModal("Copy")}
                 className="flex w-1/5 justify-center rounded bg-primary p-2 font-medium text-gray"
-              > 
+              >
                 Print Copy
               </button>
               {/* <EmailPopup  filename={data.sample.sample_id} pdf={}/> */}
             </div>
+
             <h4 className="text-title-xl2 font-bold">
               Sample WorkFlow Completed
             </h4>
+            {([1,2].includes(data.currentUser.department_id) || data.currentUser.role_id===9)  && (
+              <WorkFlowForm
+                test_type_id={test_type_id}
+                rejectActionData={actionFnReject}
+                currentStep={current_step}
+                actionData={formAction}
+                assign={data?.sample?.assigned_to}
+                status={data?.sample?.status != "Submitted" ? "Submitted" : ""}
+                status_id={9}
+                buttonName="Go Back"
+              />
+            )}
           </div>
         )}
       </div>

@@ -27,14 +27,14 @@ const ProductTable = ({ data }: { data: ProductType }) => {
           <tbody>
             {data.map((packageItem, key) => (
               <tr key={packageItem.id}>
-                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-slate-400 py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {packageItem.product_name}
                   </h5>
                   
                 </td>
                 
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                <td className="border-b border-slate-400 py-5 px-4 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
                     <Link
                       className="hover:text-primary"
