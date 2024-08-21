@@ -30,13 +30,13 @@ type Props = {
 
 type FormValues = {
   email: string;
-  to: string;
-  subject: string;
-  message: string;
+  // to: string;
+  // subject: string;
+  // message: string;
+  email_type: string;
   filename: string;
   attachment?: string;
 };
-
 
 type InitialState = {
   fieldErrors?: {} | null;
@@ -57,7 +57,7 @@ function EmailPopup({ filename, data, qr, isDraft, to = "" }: Props) {
     <>
       <button
         type="button"
-        className="flex w-1/5 justify-center rounded bg-primary p-2 font-medium text-gray disabled:bg-slate-500 "
+        className="flex w-1/5 justify-center rounded bg-primary p-2 font-medium text-gray disabled:bg-slate-500"
         onClick={() => setIsOpen(true)}
       >
         {isDraft ? "Send Draft Mail" : "Send Mail"}
@@ -109,16 +109,11 @@ const convertBlobToBase64 = (blob: Blob | File): Promise<string> => {
 
 const EmailForm = ({ filename, data, isDraft, qr, to }: Props) => {
   const { register, handleSubmit } = useForm<FormValues>({
-    defaultValues: { to },
+    defaultValues: { email:to },
   });
   let close = useClose();
-  const [state, setState] = useState<InitialState | undefined>(
-    initialState,
-  );
+  const [state, setState] = useState<InitialState | undefined>(initialState);
 
-  const myPdf = pdf(
-    MyDocument({ data, isDraft, qr, reportType: "Original" }),
-  ).toBlob();
 
   useEffect(() => {
     if (state?.type === null) return;
@@ -138,14 +133,18 @@ const EmailForm = ({ filename, data, isDraft, qr, to }: Props) => {
     }
   }, [state]);
 
-
-  const handleSubmission = async (data: FormValues) => {
+  const handleSubmission = async (formData: FormValues) => {
+    const myPdf = pdf(
+      MyDocument({ data, isDraft, qr, reportType: formData.email_type ==="ORIGINAL" ? "Original" : "Copy" }),
+    ).toBlob();
+  
     if (myPdf) {
       const pdfBlob = await myPdf;
-      data.attachment = await convertBlobToBase64(pdfBlob);
+      formData.attachment = await convertBlobToBase64(pdfBlob);
     }
-    console.log(data);
-    await sentMail(data);
+    console.log(formData);
+    const res = await sentMail(formData);
+    setState(res);
     close();
   };
   return (
@@ -189,7 +188,10 @@ const EmailForm = ({ filename, data, isDraft, qr, to }: Props) => {
             {isDraft ? (
               <option value={"DRAFT"}>Draft</option>
             ) : (
-              <option value={"ORIGINAL"}>Original</option>
+              <>
+                <option value={"ORIGINAL"}>Original</option>
+                <option value={"COPY"}>Copy</option>
+              </>
             )}
           </Select>
         </div>

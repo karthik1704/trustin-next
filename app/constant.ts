@@ -1,7 +1,7 @@
 //Prod
 
-export const SERVER_API_URL = "http://13.201.194.87:8000";
-export const PDF_URL = "http://13.201.194.87"
+export const SERVER_API_URL = "https://libkesapi.vimkes.com";
+export const PDF_URL = "https://libkes.vimkes.com"
 
 // //Local
 
