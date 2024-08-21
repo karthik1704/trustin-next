@@ -280,6 +280,8 @@ const CombineWorkflow = ({
                 data={data}
                 qr={qr ? qr : ""}
                 isDraft={false}
+                to={data.sample.registration.contact_email}
+
               />
               <button
                 type="button"

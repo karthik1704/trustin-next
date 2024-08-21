@@ -1,7 +1,7 @@
 "use client";
 import { useFormState } from "react-dom";
 
-import { Data } from "./typings";
+import { Data, EmailStatus } from "./typings";
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StatusStepper from "./status-stepper1";
@@ -288,12 +288,7 @@ const SampleWorkflowForm = ({
           Print
         </button>
       </div> */}
-      <EmailPopup
-        filename={data.sample.sample_id}
-        data={data}
-        qr={qr}
-        isDraft={data.sample.status_id === 8 ? true : false}
-      />
+
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {/* <h2>This is a modal</h2>
         <p>Modal content goes here...</p> */}
@@ -321,6 +316,9 @@ const SampleWorkflowForm = ({
           {(data.currentUser.department_id === 2 ||
             data.currentUser.department_id === 1) && (
             <TabsTrigger value="history">History</TabsTrigger>
+          )}
+          {data.sample.emails.length && (
+            <TabsTrigger value="emails">Email Status</TabsTrigger>
           )}
         </TabsList>
         <TabsContent value="status">
@@ -807,6 +805,11 @@ const SampleWorkflowForm = ({
             </Accordion>
           </div>
         </TabsContent>
+        <TabsContent value="emails">
+          <div className="min-h-28">
+            <EmailTable emails={data.sample.emails}/>
+          </div>
+        </TabsContent>
       </Tabs>
     </div>
   );
@@ -949,6 +952,76 @@ const HistoryTable = ({ history }: { history: History }) => {
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {h?.to_status?.name ?? "---"}
+                  </h5>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+const EmailTable = ({ emails }: { emails: EmailStatus }) => {
+  return (
+    <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      <div className="max-w-full overflow-x-auto">
+        <table className="w-full table-auto">
+          <thead>
+            <tr className="bg-gray-2 text-left dark:bg-meta-4">
+              <th className="w-[200px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                Date
+              </th>
+              <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                Subject
+              </th>
+              <th className="min-w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                To
+              </th>
+              <th className="min-w-[130px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                Sent by
+              </th>
+              <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                Status
+              </th>
+              <th className="min-w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                reason
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {emails?.map((h, idx) => (
+              <tr key={h.id}>
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                  <h5 className="font-medium text-black dark:text-white">
+                    {new Date(h.timestamp).toLocaleString()}
+                  </h5>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                  <h5 className="font-medium text-black dark:text-white">
+                    {h.subject}
+                  </h5>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                  <h5 className="font-medium text-black dark:text-white">
+                    {h.recipient}{" "}
+                  </h5>
+                </td>
+
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                  <h5 className="font-medium text-black dark:text-white">
+                    {`${h?.emailed_user.first_name} ${h?.emailed_user.last_name}`}
+                  </h5>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                  <h5 className="font-medium text-black dark:text-white">
+                    {h?.sent ? "Success" : "Failed"}
+                  </h5>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                  <h5 className="font-medium text-black dark:text-white">
+                    {h?.reason ?? "---"}
                   </h5>
                 </td>
               </tr>

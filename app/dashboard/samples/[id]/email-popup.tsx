@@ -34,6 +34,7 @@ type FormValues = {
   // subject: string;
   // message: string;
   email_type: string;
+  sample_id:number;
   filename: string;
   attachment?: string;
 };
@@ -57,7 +58,7 @@ function EmailPopup({ filename, data, qr, isDraft, to = "" }: Props) {
     <>
       <button
         type="button"
-        className="flex w-1/5 justify-center rounded bg-primary p-2 font-medium text-gray disabled:bg-slate-500"
+        className="flex w-1/6 justify-center rounded bg-primary p-2 font-medium text-gray disabled:bg-slate-500"
         onClick={() => setIsOpen(true)}
       >
         {isDraft ? "Send Draft Mail" : "Send Mail"}
@@ -79,7 +80,7 @@ function EmailPopup({ filename, data, qr, isDraft, to = "" }: Props) {
               data={data}
               qr={qr}
               isDraft={isDraft}
-              to=""
+              to={to}
             />
           </DialogPanel>
         </div>
@@ -109,11 +110,10 @@ const convertBlobToBase64 = (blob: Blob | File): Promise<string> => {
 
 const EmailForm = ({ filename, data, isDraft, qr, to }: Props) => {
   const { register, handleSubmit } = useForm<FormValues>({
-    defaultValues: { email:to },
+    defaultValues: { email: to },
   });
   let close = useClose();
   const [state, setState] = useState<InitialState | undefined>(initialState);
-
 
   useEffect(() => {
     if (state?.type === null) return;
@@ -135,13 +135,24 @@ const EmailForm = ({ filename, data, isDraft, qr, to }: Props) => {
 
   const handleSubmission = async (formData: FormValues) => {
     const myPdf = pdf(
-      MyDocument({ data, isDraft, qr, reportType: formData.email_type ==="ORIGINAL" ? "Original" : "Copy" }),
+      MyDocument({
+        data,
+        isDraft,
+        qr,
+        reportType:
+          formData.email_type === "DRAFT"
+            ? "Draft"
+            : formData.email_type === "ORIGINAL"
+              ? "Original"
+              : "Copy",
+      }),
     ).toBlob();
-  
+
     if (myPdf) {
       const pdfBlob = await myPdf;
       formData.attachment = await convertBlobToBase64(pdfBlob);
     }
+    formData.sample_id = data.sample.id;
     console.log(formData);
     const res = await sentMail(formData);
     setState(res);

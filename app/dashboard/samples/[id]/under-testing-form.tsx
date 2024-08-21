@@ -287,16 +287,19 @@ const UnderTestingForm = ({
           <button
             type="button"
             onClick={() => openModal && openModal("Draft")}
-            className="align-items: flex-end m-1 justify-center rounded bg-primary p-2 font-medium text-gray"
+            className="flex w-1/6 justify-center rounded bg-primary p-2 font-medium text-gray disabled:bg-slate-500"
           >
             Print Draft
           </button>
-          <EmailPopup
-            filename={data.sample.sample_id}
-            data={data}
-            qr={qr ? qr : ""}
-            isDraft={currentStep === 8 ? true : false}
-          />
+          {currentStep === 8 && (
+            <EmailPopup
+              filename={data.sample.sample_id}
+              data={data}
+              qr={qr ? qr : ""}
+              isDraft={currentStep === 8 ? true : false}
+              to={data.sample.registration.contact_email}
+            />
+          )}
         </div>
       )}
 

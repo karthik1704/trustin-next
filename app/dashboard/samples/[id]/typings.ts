@@ -65,7 +65,24 @@ export type SampleWorkflow = {
   updated_at: string;
 }[];
 
+export type EmailStatus = {
+  id: number;
+  recipient: string;
+  sample_id: number;
+  subject: string;
+  sent: boolean;
+  sent_by: number;
+  timestamp: string;
+  reason: string | null;
+  emailed_user: {
+    id: number;
+    first_name: string;
+    last_name: string;
+  };
+}[]
+
 export type Sample = {
+  emails: EmailStatus;
   id: number;
   sample_id: string;
   sample_name: string;
@@ -102,6 +119,7 @@ export type Sample = {
   sample_test_parameters: SampleTestParameters[];
   sample_test_types: SampleTestType[];
   registration: {
+    contact_email: string | undefined;
     sampled_by: string;
     manufactured_by: string;
     code: string;
@@ -182,7 +200,7 @@ export type SampleDetailSchema = {
   test_type_id: number;
   assigned_to?: number;
   authorized_sign_id: number;
-  sign_verified:boolean;
+  sign_verified: boolean;
   testing_start_date: string;
   testing_end_date: string;
   sample_issued: number;
