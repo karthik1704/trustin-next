@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   row: { flexDirection: "row", fontSize: "12px" },
   cell: {
-    padding: 3,
+     padding: 3,
     backgroundColor: "#ffffff",
     borderBottomWidth: 1,
     borderBottomColor: "#000000",
@@ -92,19 +92,14 @@ const styles = StyleSheet.create({
 });
 
 // Create PDF component
-const MyDocument = ({
-  data,
-  isDraft,
-  qr,
-  reportType = "Copy",
+const InvoiceDocument = ({
+  data
+
 }: {
-  data: Data;
-  isDraft: boolean;
-  qr: string;
-  reportType: string;
+  data: {};
+
 }) => {
-  console.log(data);
-  console.log(qr);
+
 
   return (
     <Document>
@@ -129,7 +124,7 @@ const MyDocument = ({
           </Text>
         </View> */}
         <View style={styles.section}>
-          <Header nabl_logo={data.sample.nabl_logo} />
+          <Header  />
           {/* <View>
             <Text>Invoice Number: 123456</Text>
             <Text>Date: January 1, 2024</Text>
@@ -174,7 +169,7 @@ const MyDocument = ({
             >
               ULR No.
             </Text>
-            <Text style={{ padding: 2, marginLeft: 4, width: "28%" }}>
+            <Text style={{ padding: 2, marginLeft: 4 }}>
               {data.sample.ulr_no ?? "N/A"}
             </Text>
           </View>
@@ -218,7 +213,7 @@ const MyDocument = ({
               >
                 Discipline
               </Text>
-              <Text style={{ padding: 2, marginLeft: 4, width: "28%" }}>
+              <Text style={{ padding: 2, marginLeft: 4 }}>
                 {" "}
                 {data.sample.disicipline ?? "N/A"}
               </Text>
@@ -269,7 +264,7 @@ const MyDocument = ({
               >
                 Group
               </Text>
-              <Text style={{ padding: 2, marginLeft: 4, width: "28%" }}>
+              <Text style={{ padding: 2, marginLeft: 4 }}>
                 {" "}
                 {data.sample.group ?? "N/A"}
               </Text>
@@ -320,7 +315,7 @@ const MyDocument = ({
               >
                 Test Report No.
               </Text>
-              <Text style={{ padding: 2, marginLeft: 4, width: "28%" }}>
+              <Text style={{ padding: 2, marginLeft: 4 }}>
                 {" "}
                 {data.sample.report_no ?? "N/A"}
               </Text>
@@ -504,6 +499,10 @@ const MyDocument = ({
             </View>
           </View>
           <View fixed>
+            {/* <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
+              <Text>Customer Information</Text>
+            </View> */}
+
             <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
               <Text
                 style={{
@@ -759,6 +758,7 @@ const MyDocument = ({
               </Text>
             </View> */}
           </View>
+
           <View
             style={{
               marginTop: 10,
@@ -767,516 +767,7 @@ const MyDocument = ({
               flexDirection: "column",
             }}
           ></View>
-          {/* <View > */}
-          <View
-            style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}
-            fixed
-          >
-            <Text
-              style={{
-                textAlign: "center",
-                fontSize: 10,
-                fontWeight: "extrabold",
-              }}
-            >
-              Test Result
-            </Text>
-          </View>
-          <View
-            style={[
-              styles.row,
-              styles.tableBody,
-              { fontSize: "10px", textAlign: "center" },
-            ]}
-            fixed
-          >
-            <Text
-              style={[
-                styles.cell,
-                styles.firstCell,
-                { width: "30%", fontSize: "10px" },
-              ]}
-            >
-              Parameter Name
-            </Text>
-            {/* <Text style={[styles.cell, { width: "15%" }]}>Parameter Code</Text> */}
-            <Text style={[styles.cell, { width: "25%" }]}>Method</Text>
-            <View style={[styles.cell, { width: "35%" }]}>
-              <Text style={{ paddingBottom: 1 }}>Specification Limits</Text>
-              <View style={{ flexDirection: "row", textAlign: "center" }}>
-                <Text
-                  style={{
-                    width: "50%",
-                    borderRightWidth: "1px",
-                    borderRightColor: "#000",
-                  }}
-                >
-                  Min
-                </Text>
-                <Text style={{ width: "50%" }}>Max</Text>
-              </View>
-            </View>
-            <Text style={[styles.cell, { width: "20%" }]}>Result Obtained</Text>
-            <Text style={[styles.cell, styles.lastCell, { width: "15%" }]}>
-              Status
-            </Text>
-          </View>
-          {/* Table Body */}
-          {/* {data?.sample.sample_test_parameters.map((item, index) => (
-              <View
-                key={index}
-                style={[styles.row, { fontSize: "10px" }]}
-                break={index === 2 || (index > 2 && (index - 3) % 7 === 0)}
-             >
-                <Text style={[styles.cell, styles.firstCell, { width: "30%" }]}>
-                  {item.test_parameter.testing_parameters}
-                </Text>
-                
-                <Text style={[styles.cell, { width: "25%" }]}>
-                  {item.test_parameter.method_or_spec}
-                </Text>
-                <View
-                  style={[
-                    styles.cell,
-                    {
-                      width: "35%",
-                      flexDirection: "row",
-                      alignItems: "stretch",
-                    },
-                  ]}
-                >
-                  {item.test_parameter.test_type_id === 1 ? (
-                    <Text> {item.specification_limits} </Text>
-                  ) : (
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        flex: 1,
-                        alignItems: "stretch",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          width: "50%",
-                          borderRightWidth: "1px",
-                          borderRightColor: "#000",
-                          height: "100%",
-                          alignSelf: "stretch",
-                          lineHeight: "auto",
-                        }}
-                      >
-                        {" "}
-                        {item.min_limits}{" "}
-                      </Text>
-                      <Text
-                        style={{
-                          width: "50%",
-                        }}
-                      >
-                        {" "}
-                        {item.max_limits}{" "}
-                      </Text>
-                    </View>
-                  )}
-                </View>
-                <Text style={[styles.cell, { width: "20%" }]}>
-                  {item.value ?? "Pending"}
-                </Text>
-                <Text style={[styles.cell, styles.lastCell, { width: "15%" }]}>
-                  {item.result ? "Pass" : "Fail"}
-                </Text>
-              </View>
-            ))} */}
-          {/* <View> */}
-          {/* First 3 Items */}
-          {data?.sample.sample_test_parameters
-            .slice(0, 3)
-            .map((item, index) => (
-              <View key={index} style={[styles.row, { fontSize: "10px" }]}>
-                <Text style={[styles.cell, styles.firstCell, { width: "30%" }]}>
-                  {item.test_parameter.testing_parameters}
-                </Text>
-
-                <Text style={[styles.cell, { width: "25%" }]}>
-                  {item.test_parameter.method_or_spec}
-                </Text>
-                <View
-                  style={[
-                    styles.cell,
-                    {
-                      width: "35%",
-                      flexDirection: "row",
-                      alignItems: "stretch",
-                    },
-                  ]}
-                >
-                  {item.test_parameter.test_type_id === 1 ? (
-                    <Text> {item.specification_limits} </Text>
-                  ) : (
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        flex: 1,
-                        alignItems: "stretch",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          width: "50%",
-                          borderRightWidth: "1px",
-                          borderRightColor: "#000",
-                          height: "100%",
-                          alignSelf: "stretch",
-                          lineHeight: "auto",
-                        }}
-                      >
-                        {" "}
-                        {item.min_limits}{" "}
-                      </Text>
-                      <Text
-                        style={{
-                          width: "50%",
-                        }}
-                      >
-                        {" "}
-                        {item.max_limits}{" "}
-                      </Text>
-                    </View>
-                  )}
-                </View>
-                <Text style={[styles.cell, { width: "20%" }]}>
-                  {item.value ?? "Pending"}
-                </Text>
-                <Text style={[styles.cell, styles.lastCell, { width: "15%" }]}>
-                  {item.result ? "Pass" : "Fail"}
-                </Text>
-              </View>
-            ))}
-          {/* </View> */}
-          <View break /> {/* Force a page break */}
-          {/* </View> */}
-          <Footer />
-        </View>
-      </Page>
-      {!!data?.sample.sample_test_parameters.slice(3).length && (
-        <Page style={{ fontFamily: "Cambria" }}>
-          <View style={styles.section}>
-            <Header nabl_logo={data.sample.nabl_logo} />
-            <View
-              style={{
-                border: "1 solid #000",
-                display: "flex",
-                flexDirection: "row",
-                fontWeight: "bold",
-                fontSize: "10px",
-                padding: 2,
-              }}
-              fixed
-            >
-              <Text
-                style={{
-                  borderRight: "1 solid #000",
-                  width: 140,
-                  padding: 1,
-                }}
-              >
-                Sample ID No.
-              </Text>
-              <Text
-                style={{
-                  borderRight: "1 solid #000",
-                  width: 140,
-                  padding: 2,
-                  marginLeft: 4,
-                }}
-              >
-                {data.sample.sample_id}
-              </Text>
-
-              <Text
-                style={{
-                  borderRight: "1 solid #000",
-                  width: 100,
-                  padding: 1,
-                }}
-              >
-                ULR No.
-              </Text>
-              <Text style={{ padding: 2, marginLeft: 4, width: "28%" }}>
-                {data.sample.ulr_no ?? "N/A"}
-              </Text>
-            </View>
-
-            <View fixed>
-              <View
-                style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}
-              >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    fontSize: "10px",
-                    fontWeight: "extrabold",
-                  }}
-                >
-                  Sample Details
-                </Text>
-              </View>
-
-              <View
-                style={{
-                  border: "1 solid #000",
-                  display: "flex",
-                  flexDirection: "row",
-                  fontWeight: "bold",
-                  fontSize: "10px",
-                  padding: 2,
-                }}
-              >
-                <Text
-                  style={{
-                    borderRight: "1 solid #000",
-                    width: 140,
-                    padding: 2,
-                  }}
-                >
-                  Sample Name
-                </Text>
-                <Text
-                  style={{
-                    borderRight: "1 solid #000",
-                    width: 140,
-                    padding: 2,
-                    marginLeft: 4,
-                  }}
-                >
-                  {data.sample.sample_name}
-                </Text>
-
-                <Text
-                  style={{
-                    borderRight: "1 solid #000",
-                    width: 100,
-                    padding: 2,
-                  }}
-                >
-                  Test Method / Specification
-                </Text>
-                <Text style={{ padding: 2, marginLeft: 4 }}>
-                  {data.sample.sample_detail.length === 2
-                    ? "Micro, Mech"
-                    : data.sample.sample_detail[0].test_type_id === 1
-                      ? "Micro"
-                      : "Mech"}
-                </Text>
-              </View>
-              <View
-                style={{
-                  border: "1 solid #000",
-                  display: "flex",
-                  flexDirection: "row",
-                  fontWeight: "bold",
-                  fontSize: "10px",
-                  padding: 2,
-                }}
-              >
-                <Text
-                  style={{
-                    borderRight: "1 solid #000",
-                    width: 140,
-                    padding: 2,
-                  }}
-                >
-                  Batch No.
-                </Text>
-                <Text
-                  style={{
-                    borderRight: "1 solid #000",
-                    width: 140,
-                    padding: 2,
-                    marginLeft: 4,
-                  }}
-                >
-                  {data.sample.batch_or_lot_no}
-                </Text>
-                <Text
-                  style={{
-                    borderRight: "1 solid #000",
-                    width: 100,
-                    padding: 2,
-                  }}
-                >
-                  Mfg Date
-                </Text>
-                <Text style={{ padding: 2, marginLeft: 4 }}>
-                  {data.sample.manufactured_date}
-                </Text>
-              </View>
-              <View
-                style={{
-                  border: "1 solid #000",
-                  display: "flex",
-                  flexDirection: "row",
-                  fontWeight: "bold",
-                  fontSize: "10px",
-                  padding: 2,
-                }}
-              >
-                <Text
-                  style={{
-                    borderRight: "1 solid #000",
-                    width: 140,
-                    padding: 2,
-                  }}
-                >
-                  Batch Size
-                </Text>
-                <Text
-                  style={{
-                    padding: 2,
-                    borderRight: "1 solid #000",
-                    width: 140,
-                    marginLeft: 4,
-                  }}
-                >
-                  {data.sample.batch_size}
-                </Text>
-
-                <Text
-                  style={{
-                    borderRight: "1 solid #000",
-                    width: 100,
-                    padding: 2,
-                  }}
-                >
-                  Exp Date
-                </Text>
-                <Text style={{ padding: 2, marginLeft: 4 }}>
-                  {" "}
-                  {data.sample.expiry_date}
-                </Text>
-              </View>
-              <View
-                style={{
-                  border: "1 solid #000",
-                  display: "flex",
-                  flexDirection: "row",
-                  fontWeight: "bold",
-                  fontSize: "10px",
-                  padding: 2,
-                }}
-              >
-                <Text
-                  style={{
-                    borderRight: "1 solid #000",
-                    width: 140,
-                    padding: 2,
-                  }}
-                >
-                  Manufactured by
-                </Text>
-                <Text
-                  style={{
-                    padding: 2,
-                    borderRight: "1 solid #000",
-                    width: 140,
-                    marginLeft: 4,
-                  }}
-                >
-                  {data.sample.registration.manufactured_by ?? "N/A"}
-                </Text>
-
-                <Text
-                  style={{
-                    borderRight: "1 solid #000",
-                    width: 100,
-                    padding: 2,
-                  }}
-                >
-                  Sampled By
-                </Text>
-                <Text style={{ padding: 2, marginLeft: 4 }}>
-                  {" "}
-                  {data.sample.registration.sampled_by}
-                </Text>
-              </View>
-              <View
-                style={{
-                  border: "1 solid #000",
-                  display: "flex",
-                  flexDirection: "row",
-                  fontWeight: "bold",
-                  fontSize: "10px",
-                  padding: 2,
-                }}
-              >
-                <Text
-                  style={{
-                    borderRight: "1 solid #000",
-                    width: 140,
-                    padding: 2,
-                  }}
-                >
-                  Description
-                </Text>
-                <Text style={{ padding: 2, width: "65%", marginLeft: 4 }}>
-                  {data.sample.description}
-                </Text>
-              </View>
-              <View
-                style={{
-                  border: "1 solid #000",
-                  display: "flex",
-                  flexDirection: "row",
-                  fontWeight: "bold",
-                  fontSize: "10px",
-                  padding: 2,
-                }}
-              >
-                <Text
-                  style={{
-                    borderRight: "1 solid #000",
-                    width: 140,
-                    padding: 2,
-                  }}
-                >
-                  Quantity Received
-                </Text>
-                <Text style={{ padding: 2, marginLeft: 4 }}>
-                  {data.sample.received_quantity ?? "---"}
-                </Text>
-              </View>
-              <View
-                style={{
-                  border: "1 solid #000",
-                  display: "flex",
-                  flexDirection: "row",
-                  fontWeight: "bold",
-                  fontSize: "10px",
-                  padding: 2,
-                }}
-              >
-                <Text
-                  style={{
-                    borderRight: "1 solid #000",
-                    width: 140,
-                    padding: 2,
-                  }}
-                >
-                  Product Name
-                </Text>
-                <Text style={{ padding: 2, marginLeft: 4 }}>
-                  {data?.sample?.registration?.product_data?.product_name}
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                marginTop: 10,
-                display: "flex",
-                justifyContent: "flex-end",
-                flexDirection: "column",
-              }}
-            ></View>
+          <View>
             <View
               style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}
               fixed
@@ -1291,6 +782,7 @@ const MyDocument = ({
                 Test Result
               </Text>
             </View>
+
             <View
               style={[
                 styles.row,
@@ -1332,87 +824,125 @@ const MyDocument = ({
                 Status
               </Text>
             </View>
+            {/* Table Body */}
+            {data?.sample.sample_test_parameters.map((item, index) => (
+              <View
+                key={index}
+                style={[styles.row, { fontSize: "10px" }]}
+                break={
+                  index === 2 || // Break after the 3rd item (index 2)
+                  (index > 2 && (index - 3) % 6 === 0) // Break every 7 items after the first 3
+                }
+              >
+                {/* <Text style={{ ...styles.cell, width: '25%' }}>{item.test_parameter.testing_parameters}</Text>
+          <Text style={{ ...styles.cell, width: '15%' }}>{item.test_parameter.parameter_code}</Text>
+          <Text style={{ ...styles.cell, width: '20%' }}>{item.test_parameter.method_or_spec}</Text>
+          <Text style={{ ...styles.cell, width: '20%' }}>{item.value}</Text>
+          <Text style={{ ...styles.cell, width: '20%' }}>{item.result ? "Pass" : "Fail"}</Text> */}
 
-            <View>
-              {/* Subsequent Items (7 per page) */}
-              {data?.sample.sample_test_parameters
-                .slice(3)
-                .map((item, index) => (
-                  <View
-                    key={index}
-                    style={[styles.row, { fontSize: "10px" }]}
-                    break={index > 0 && index % 7 === 0} // Break after every 7 items
-                  >
-                    <Text
-                      style={[styles.cell, styles.firstCell, { width: "30%" }]}
-                    >
-                      {item.test_parameter.testing_parameters}
-                    </Text>
-                    {/* <Text style={[styles.cell, { width: "15%" }]}>
+                <Text style={[styles.cell, styles.firstCell, { width: "30%" }]}>
+                  {item.test_parameter.testing_parameters}
+                </Text>
+                {/* <Text style={[styles.cell, { width: "15%" }]}>
                 {item.test_parameter.parameter_code}
               </Text> */}
-                    <Text style={[styles.cell, { width: "25%" }]}>
-                      {item.test_parameter.method_or_spec}
-                    </Text>
-                    <View
-                      style={[
-                        styles.cell,
-                        {
-                          width: "35%",
-                          flexDirection: "row",
-                          alignItems: "stretch",
-                        },
-                      ]}
-                    >
-                      {item.test_parameter.test_type_id === 1 ? (
-                        <Text> {item.specification_limits} </Text>
-                      ) : (
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            flex: 1,
-                            alignItems: "stretch",
-                          }}
-                        >
-                          <Text
-                            style={{
-                              width: "50%",
-                              borderRightWidth: "1px",
-                              borderRightColor: "#000",
-                              height: "100%",
-                              alignSelf: "stretch",
-                              lineHeight: "auto",
-                            }}
-                          >
-                            {" "}
-                            {item.min_limits}{" "}
-                          </Text>
-                          <Text
-                            style={{
-                              width: "50%",
-                            }}
-                          >
-                            {" "}
-                            {item.max_limits}{" "}
-                          </Text>
-                        </View>
-                      )}
+                <Text style={[styles.cell, { width: "25%" }]}>
+                  {item.test_parameter.method_or_spec}
+                </Text>
+                <View style={[styles.cell, { width: "35%",  flexDirection: "row", alignItems: 'stretch'  }]}>
+                  {item.test_parameter.test_type_id === 1 ? (
+                    <Text> {item.specification_limits} </Text>
+                  ) : (
+                    <View style={{ flexDirection: "row", flex: 1, alignItems: 'stretch' }}>
+                      <Text
+                        style={{
+                          width: "50%",
+                          borderRightWidth: "1px",
+                          borderRightColor: "#000",
+                          height:'100%',
+                           alignSelf: "stretch",
+                           lineHeight: 'auto'
+                        }}
+                      >
+                        {" "}
+                        {item.min_limits}{" "}
+                      </Text>
+                      <Text
+                        style={{
+                          width: "50%",
+                        }}
+                      >
+                        {" "}
+                        {item.max_limits}{" "}
+                      </Text>
                     </View>
-                    <Text style={[styles.cell, { width: "20%" }]}>
-                      {item.value ?? "Pending"}
-                    </Text>
-                    <Text
-                      style={[styles.cell, styles.lastCell, { width: "15%" }]}
-                    >
-                      {item.result ? "Pass" : "Fail"}
-                    </Text>
-                  </View>
-                ))}
-            </View>
-            <Footer />
+                  )}
+                </View>
+                <Text style={[styles.cell, { width: "20%" }]}>
+                  {item.value ?? "Pending"}
+                </Text>
+                <Text style={[styles.cell, styles.lastCell, { width: "15%" }]}>
+                  {item.result ? "Pass" : "Fail"}
+                </Text>
+              </View>
+            ))}
           </View>
-        </Page>
-      )}
+
+          {/* <View style={{ marginTop: 5, padding: 2 }}>
+            <View
+              style={{
+                border: "1 solid #000",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                fontWeight: "extrabold",
+                fontSize: "14px",
+                padding: 2
+              }}
+            >
+              <Text style={{ borderRight: "1 solid #000" }}>
+                Parameter Name
+              </Text>
+              <Text style={{ borderRight: "1 solid #000" }}>
+                Parameter Code
+              </Text>
+              <Text style={{ borderRight: "1 solid #000" }}>Method</Text>
+              <Text style={{ borderRight: "1 solid #000" }}>Value</Text>
+              <Text>Result</Text>
+            </View>
+            {data?.sample.sample_test_parameters.map((item, index) => (
+              <View
+                key={index}
+                style={{
+                  border: "1 solid #000",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                  fontWeight: "bold",
+                  fontSize: "12px",
+                  gap: 1,
+                }}
+              >
+                <Text style={{ borderRight: "1 solid #000" }}>
+                  {item.test_parameter.testing_parameters}
+                </Text>
+                <Text style={{ borderRight: "1 solid #000" }}>
+                  {item.test_parameter.parameter_code}
+                </Text>
+                <Text style={{ borderRight: "1 solid #000" }}>
+                  {item.test_parameter.method_or_spec}
+                </Text>
+                <Text style={{ borderRight: "1 solid #000" }}>
+                  {item.value}
+                </Text>
+                <Text>{item.result ? "Pass" : "Fail"}</Text>
+              </View>
+            ))}
+          </View> */}
+
+          <Footer />
+        </View>
+      </Page>
       <Page style={{ fontFamily: "Cambria" }}>
         <View style={styles.section}>
           <Header nabl_logo={data.sample.nabl_logo} />
@@ -1482,11 +1012,9 @@ const MyDocument = ({
                   </Text>
                   {detail.authorized_sign && (
                     <Image
-                      src={
-                        SIGN_IMAGES[detail.authorized_sign.id.toString()] ??
-                        "/images/signs/vasantha.png"
-                      }
+                      src={SIGN_IMAGES[detail.authorized_sign.id.toString()] ?? "/images/signs/vasantha.png"}
                       style={{ width: 150, height: 50 }}
+
                     />
                   )}
                   <Text
@@ -1496,6 +1024,7 @@ const MyDocument = ({
                       marginBottom: "8px",
                     }}
                   >
+                    
                     {detail.authorized_sign
                       ? `${detail.authorized_sign.first_name} ${detail.authorized_sign.last_name}`
                       : ""}
@@ -1505,6 +1034,7 @@ const MyDocument = ({
                       ? `${detail.authorized_sign.designation ?? ""} `
                       : ""}
                   </Text>
+               
                 </View>
               ))}
             </View>
@@ -1567,16 +1097,11 @@ const MyDocument = ({
               NABL Accredited Laboratory vide cert. No: TC-5410 valid upto
               30/03/2026, CDSCO Registration No: TLIMD/2020/000002
             </Text>
-            {isDraft && (
-              <Text style={{ fontWeight: "bold", textAlign: "center" }}>
-                * This is Draft report, you can&apos;t use this for
-                certification purpose. *
-              </Text>
-            )}
+           
           </View>
-          <View style={{ height: "200px" }}>
+          {/* <View style={{ height: "200px" }}>
             <Image src={qr} style={{ width: 100, height: 100 }} />
-          </View>
+          </View> */}
           <Footer />
         </View>
       </Page>
@@ -1584,7 +1109,7 @@ const MyDocument = ({
   );
 };
 
-const Header = ({ nabl_logo }: { nabl_logo: boolean }) => {
+const Header = () => {
   return (
     <View
       style={{
@@ -1603,12 +1128,7 @@ const Header = ({ nabl_logo }: { nabl_logo: boolean }) => {
           justifyContent: "flex-start",
         }}
       >
-        {nabl_logo && (
-          <Image
-            src="/images/pdf/nabl_logo.png"
-            style={{ width: 150, height: 80 }}
-          />
-        )}
+       
       </View>
 
       <View
@@ -1629,7 +1149,7 @@ const Header = ({ nabl_logo }: { nabl_logo: boolean }) => {
             marginTop: "5px",
           }}
         >
-          Test Report
+          Invoice
         </Text>
       </View>
 
@@ -1689,4 +1209,4 @@ const Footer = () => {
   );
 };
 
-export default MyDocument;
+export default InvoiceDocument;

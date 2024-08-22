@@ -21,7 +21,7 @@ const QuotationTable = ({ data }: { data: Data }) => {
     params.set("sort_by", column);
     params.set("sort_order", newSortOrder);
     params.set("page", "1");
-    router.push(`/dashboard/registrations?${params.toString()}`);
+    router.push(`/dashboard/quotations?${params.toString()}`);
   };
 
   return (

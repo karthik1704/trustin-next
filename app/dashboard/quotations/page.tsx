@@ -20,7 +20,7 @@ async function getData(
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
   console.log(access_token);
-  
+
   const page = parseInt((params?.page as string) || "1");
   const size = parseInt((params?.size as string) || "10");
   const search = params?.search || "";
@@ -49,8 +49,8 @@ async function getData(
   return response.data;
 }
 
-export type Quotation={
- id: number;
+export type Quotation = {
+  id: number;
 }[];
 
 export type Data = {
@@ -67,28 +67,33 @@ const FrontDeskPage = async ({
   searchParams?: { [key: string]: string | string[] | undefined };
 }) => {
   // const data = await getData(searchParams);
-  const data = {}
+  const data = {
+    data: [],
+    total: 1,
+    page: 1,
+    size: 1,
+  };
   return (
     <>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-title-md2 font-semibold text-black dark:text-white">
-        Quotations
+          Quotations
         </h2>
         <Link
           href="quotations/new"
           className="inline-flex items-center justify-center rounded-md border border-black px-5 py-4 text-center font-medium text-black hover:bg-opacity-90 dark:border-white dark:text-white lg:px-8 xl:px-10"
         >
-          New Quotations
+          New Quotation
         </Link>
       </div>
       <div className="flex flex-col gap-10">
         <Search path="/dashboard/front-desk" />
 
-        <FrontDeskTable data={data ?? []} />
+        <FrontDeskTable data={data} />
         <Pagination
-          total={data.total ?? 1}
-          page={data.page ?? 1}
-          size={data.size ?? 1}
+          total={data.total}
+          page={data.page}
+          size={data.size}
           path="/dashboard/quotations"
         />
       </div>

@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { updateCustomers } from "../actions";
 import { SERVER_API_URL } from "@/app/constant";
-import QuotationEditForm from "./front-desk-edit-form";
+import QuotationEditForm from "./quotation-edit-form";
 import { Customer, Data } from "./typings";
 
 export const metadata: Metadata = {
