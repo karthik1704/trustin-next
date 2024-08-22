@@ -1,5 +1,5 @@
 "use client";
-import MyDocument from "@/components/Print/InvoicePDF";
+import MyDocument from "@/components/Print/ReportPDF";
 import { Data } from "./page";
 
 import dynamic from "next/dynamic";

@@ -15,7 +15,8 @@ import {
   Users,
   ClipboardPlus,
   TestTube2,
-  SwatchBook
+  SwatchBook,
+  BadgeIndianRupee 
 } from "lucide-react";
 import { MenuType } from "@/app/dashboard/layout";
 
@@ -50,6 +51,11 @@ const adminMenuList = [
     name: "Test Parameters",
     pathname: "parameters",
     icon: <TestTubes />,
+  },
+  {
+    name: "Quotations",
+    pathname: "quotations",
+    icon: <BadgeIndianRupee />,
   },
 ];
 

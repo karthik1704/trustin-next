@@ -28,7 +28,7 @@ import {
 import ReactDOMServer from "react-dom/server";
 // import Modal from 'react-modal';
 import Modal from "@/components/Modal/Modal";
-import MyDocument from "@/components/Print/InvoicePDF";
+import MyDocument from "@/components/Print/ReportPDF";
 // Make sure to bind modal to your app element (https://reactcommunity.org/react-modal/accessibility/)
 
 // import { PDFDocument, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
@@ -162,34 +162,7 @@ const generateAndDisplayPDF = () => {
   }
 };
 
-// Create a React component to generate the PDF
-const InvoicePDF = () => {
-  // Styles for the PDF
-  const styles = StyleSheet.create({
-    page: {
-      flexDirection: "row",
-      backgroundColor: "#E4E4E4",
-    },
-    section: {
-      margin: 10,
-      padding: 10,
-      flexGrow: 1,
-    },
-  });
 
-  return (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Text>Section #1</Text>
-        </View>
-        <View style={styles.section}>
-          <Text>Section #2</Text>
-        </View>
-      </Page>
-    </Document>
-  );
-};
 
 const SampleWorkflowForm = ({
   data,
@@ -317,7 +290,7 @@ const SampleWorkflowForm = ({
             data.currentUser.department_id === 1) && (
             <TabsTrigger value="history">History</TabsTrigger>
           )}
-          {data.sample.emails.length && (
+          {!!data.sample.emails.length && (
             <TabsTrigger value="emails">Email Status</TabsTrigger>
           )}
         </TabsList>
