@@ -121,6 +121,7 @@ const RegistrationEditForm = ({
           batch_size: sample.batch_size,
           received_quantity: sample.received_quantity,
           description: sample?.description ?? "",
+          additional_detail: sample?.additional_detail ?? "",
           sample_condition: sample?.sample_condition ?? "",
           sterilization_batch_no: sample?.sterilization_batch_no ?? "",
           test_types: JSON.stringify(
@@ -547,6 +548,7 @@ const RegistrationEditForm = ({
           batch_size: sample.batch_size,
           received_quantity: sample.received_quantity,
           description: sample.description,
+          additional_detail: sample.additional_detail,
           sample_condition: sample.sample_condition,
           sterilization_batch_no: sample.sterilization_batch_no,
           test_params: sample.test_params.map(params=>({...params, id:""})),
@@ -565,6 +567,7 @@ const RegistrationEditForm = ({
       batch_size: "",
       received_quantity: "",
       description: "",
+      additional_detail: "",
       sample_condition: "",
       sterilization_batch_no: "",
       test_params: [],
@@ -1404,6 +1407,17 @@ const RegistrationEditForm = ({
                         </label>
                         <textarea
                           {...form.register(`samples.${index}.description`)}
+                          className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        />
+                      </div>
+                    </div>
+                    <div className="mb-4.5">
+                      <div className="w-full">
+                        <label className="mb-2.5 block text-black dark:text-white">
+                        Additional Details
+                        </label>
+                        <textarea
+                          {...form.register(`samples.${index}.additional_detail`)}
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
                       </div>

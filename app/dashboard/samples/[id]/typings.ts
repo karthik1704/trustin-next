@@ -82,6 +82,7 @@ export type EmailStatus = {
 }[]
 
 export type Sample = {
+  additional_detail: string;
   emails: EmailStatus;
   id: number;
   sample_id: string;

@@ -162,8 +162,6 @@ const generateAndDisplayPDF = () => {
   }
 };
 
-
-
 const SampleWorkflowForm = ({
   data,
   actionFn,
@@ -309,7 +307,7 @@ const SampleWorkflowForm = ({
               >
                 {(data.sample.sample_test_types.length === 2 ||
                   data.sample.sample_test_types[0].test_type_id === 1) &&
-                  ([1, 2, 3, 4].includes(data.currentUser.department_id) ||
+                  ([1, 2, 3].includes(data.currentUser.department_id) ||
                     data.currentUser.qa_type_id === 1) && (
                     <AccordionItem value="micro">
                       <AccordionTrigger className="px-6 font-extrabold">
@@ -342,7 +340,7 @@ const SampleWorkflowForm = ({
                   )}
                 {(data.sample.sample_test_types.length === 2 ||
                   data.sample.sample_test_types[0].test_type_id === 2) &&
-                  ([1, 2, 3, 4].includes(data.currentUser.department_id) ||
+                  ([1, 2, 3].includes(data.currentUser.department_id) ||
                     data.currentUser.qa_type_id === 2) && (
                     <AccordionItem value="mech">
                       <AccordionTrigger className="px-6 font-extrabold">
@@ -376,8 +374,8 @@ const SampleWorkflowForm = ({
               </Accordion>
 
               {(data.sample.status_id === 1 ||
-                data.sample_micro_history[0].to_status_id === 1 ||
-                data.sample_micro_history[0].to_status_id === 1) &&
+                data.sample_micro_history[0]?.to_status_id === 1 ||
+                data.sample_mech_history[0]?.to_status_id === 1) &&
                 (data.currentUser.department_id === 3 ||
                   data.currentUser.department_id === 1) && (
                   <div className="mb-3 w-full flex-col">
@@ -780,7 +778,7 @@ const SampleWorkflowForm = ({
         </TabsContent>
         <TabsContent value="emails">
           <div className="min-h-28">
-            <EmailTable emails={data.sample.emails}/>
+            <EmailTable emails={data.sample.emails} />
           </div>
         </TabsContent>
       </Tabs>

@@ -67,7 +67,10 @@ type Props = {
   buttonName?: string;
   comment?: string;
   currentStep: number;
-  assigneeData?: { id: number; first_name: string; last_name: string }[] | [];
+  assigneeData?: {
+    qa_type_id: number;
+    role_id: number; id: number; first_name: string; last_name: string 
+}[] | [];
   openModal?: (type: string) => void;
   signUsers?: User[];
   qr?: string | null;
@@ -329,7 +332,7 @@ const UnderTestingForm = ({
               <option value={1}>Yes</option>
             </Select>
             <Select name="assigned_to" label="assignee" register={register}>
-              {assigneeData?.map((assignee) => (
+              {assigneeData?.filter(assignee => assignee.qa_type_id === test_type_id).map((assignee) => (
                 <option value={assignee.id} key={assignee.id}>
                   {assignee.first_name + " " + assignee.last_name}
                 </option>

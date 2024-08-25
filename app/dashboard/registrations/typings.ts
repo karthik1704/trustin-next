@@ -18,6 +18,7 @@ type TestParam = {
   order: number | string;
 };
 type RegistrationSamples = {
+  additional_detail: string;
   sample_name: string;
   batch_or_lot_no: string;
   description: string;
@@ -82,6 +83,7 @@ export type CreateData = {
 };
 
 type RegistrationUpdateSamples = {
+  additional_detail: string;
   id: number | string;
   sample_name: string;
   batch_or_lot_no: string;
@@ -330,6 +332,7 @@ type SampleTestType = {
 };
 
 type RegSample = {
+  additional_detail: string;
   status_id: number;
   // test_type_id: number | string;
   test_types: number[] | string;

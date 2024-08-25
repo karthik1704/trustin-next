@@ -37,7 +37,7 @@ const ECommerce = ({ data, startDate, endDate, sample }: { data: DashboardData, 
       </div>
       <SampleStatusCheck sampleData={sample}/>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-5 2xl:gap-7.5">
-        {data?.dashboard?.customer && (
+        {!!data?.dashboard?.customer && (
           <CardDataStats
             title="Total Customers"
             total={data.dashboard?.customer.toString()}
@@ -46,7 +46,7 @@ const ECommerce = ({ data, startDate, endDate, sample }: { data: DashboardData, 
             <Users className="text-primary dark:text-white" />
           </CardDataStats>
         )}{" "}
-        {data?.dashboard?.product && (
+        {!!data?.dashboard?.product && (
           <CardDataStats
             title="Total Products"
             total={data.dashboard?.product.toString()}
@@ -55,7 +55,7 @@ const ECommerce = ({ data, startDate, endDate, sample }: { data: DashboardData, 
             <Syringe className="text-primary dark:text-white" />
           </CardDataStats>
         )}
-        {data?.dashboard?.registration_count && (
+        {!!data?.dashboard?.registration_count && (
           <CardDataStats
             title="Total Registrations"
             total={data.dashboard?.registration_count.toString()}
@@ -66,7 +66,7 @@ const ECommerce = ({ data, startDate, endDate, sample }: { data: DashboardData, 
             <ClipboardPlus className="text-primary dark:text-white" />
           </CardDataStats>
         )}
-        {data?.dashboard?.followup_count && (
+        {!!data?.dashboard?.followup_count && (
           <CardDataStats
             title="Total Followup"
             total={data.dashboard?.followup_count.toString()}
@@ -75,7 +75,7 @@ const ECommerce = ({ data, startDate, endDate, sample }: { data: DashboardData, 
             <UserCheck className="text-primary dark:text-white" />
           </CardDataStats>
         )}
-        {data?.dashboard?.sample_count && (
+        {!!data?.dashboard?.sample_count && (
           <CardDataStats
             title="Total Samples"
             total={data.dashboard?.sample_count.toString()}
@@ -85,7 +85,7 @@ const ECommerce = ({ data, startDate, endDate, sample }: { data: DashboardData, 
           </CardDataStats>
         )}
       </div>
-      {data?.dashboard?.registration_data && (
+      {!!data?.dashboard?.registration_data && (
         <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
           <RegistrationChart data={data.dashboard?.registration_data} />
           {/* <ChartTwo /> */}
@@ -95,7 +95,7 @@ const ECommerce = ({ data, startDate, endDate, sample }: { data: DashboardData, 
           {/* <ChatCard /> */}
         </div>
       )}
-      {data.dashboard?.followup_count_by_assigned_to && (
+      {!!data.dashboard?.followup_count_by_assigned_to && (
         <FollowupCountTable
           data={data.dashboard?.followup_count_by_assigned_to}
         />

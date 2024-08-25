@@ -1268,6 +1268,52 @@ const MyDocument = ({
                   {data?.sample?.registration?.product_data?.product_name}
                 </Text>
               </View>
+              {/* <View
+                style={{
+                  border: "1 solid #000",
+                  display: "flex",
+                  flexDirection: "row",
+                  fontWeight: "bold",
+                  fontSize: "10px",
+                  padding: 2,
+                }}
+              >
+                <Text
+                  style={{
+                    borderRight: "1 solid #000",
+                    width: 140,
+                    padding: 2,
+                  }}
+                >
+                  Product Name
+                </Text>
+                <Text style={{ padding: 2, marginLeft: 4 }}>
+                  {data?.sample?.registration?.product_data?.product_name}
+                </Text>
+              </View> */}
+              <View
+                style={{
+                  border: "1 solid #000",
+                  display: "flex",
+                  flexDirection: "row",
+                  fontWeight: "bold",
+                  fontSize: "10px",
+                  padding: 2,
+                }}
+              >
+                <Text
+                  style={{
+                    borderRight: "1 solid #000",
+                    width: 140,
+                    padding: 2,
+                  }}
+                >
+                  Additional details
+                </Text>
+                <Text style={{ padding: 2, marginLeft: 4 }}>
+                  {data?.sample?.additional_detail ?? "N/A"}
+                </Text>
+              </View>
             </View>
             <View
               style={{
