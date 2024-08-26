@@ -252,7 +252,7 @@ const UnderTestingForm = ({
       data.currentUser.role_id !== 8 &&
       ![1, 2].includes(data.currentUser.department_id),
     4:
-      data.currentUser.role_id !== 3 &&
+      data.currentUser.role_id !== 4 &&
       ![1, 2].includes(data.currentUser.department_id),
     5:
       data.currentUser.role_id !== 4 &&
