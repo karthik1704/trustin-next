@@ -152,7 +152,6 @@ async function getData(id: string) {
 
   const microUsers = hodUsers.filter(user=>user.qa_type_id===1 && [14,15,30].includes(user.id))
   const mechUsers = users.filter(user=>[24,25,16].includes(user.id) )
-  console.log(users)
   const analyst = users.filter(user=>user.role_id === 4)
   
 
