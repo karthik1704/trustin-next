@@ -496,6 +496,7 @@ const MyDocument = ({
           ></View>
           <TestParameterTable
             parameters={data.sample?.sample_test_parameters?.slice(0, 3)}
+            showStatus={data.sample?.showStatus}
           />
 
           <AuthorizedSign
@@ -568,6 +569,7 @@ const MyDocument = ({
             ></View>
             <TestParameterTable
               parameters={data.sample?.sample_test_parameters?.slice(3)}
+              showStatus={data.sample?.showStatus}
             />
 
             <AuthorizedSign sample_detail={data.sample.sample_detail} />
@@ -690,8 +692,10 @@ const MyDocument = ({
 
 const TestParameterTable = ({
   parameters,
+  showStatus,
 }: {
   parameters: SampleTestParameters[];
+  showStatus: boolean;
 }) => (
   <View>
     <View style={{ marginTop: 5, border: "1 solid #000", padding: 1 }} fixed>
@@ -717,14 +721,16 @@ const TestParameterTable = ({
         style={[
           styles.cell,
           styles.firstCell,
-          { width: "30%", fontSize: "10px" },
+          { width: showStatus ? "30%" : "40%", fontSize: "10px" },
         ]}
       >
         Parameter Name
       </Text>
       {/* <Text style={[styles.cell, { width: "15%" }]}>Parameter Code</Text> */}
-      <Text style={[styles.cell, { width: "25%" }]}>Method</Text>
-      <View style={[styles.cell, { width: "35%" }]}>
+      <Text style={[styles.cell, { width:  "25%"  }]}>
+        Method
+      </Text>
+      <View style={[styles.cell, { width: showStatus ? "35%" : "40%" }]}>
         <Text style={{ paddingBottom: 1 }}>Specification Limits</Text>
         <View style={{ flexDirection: "row", textAlign: "center" }}>
           <Text
@@ -740,9 +746,11 @@ const TestParameterTable = ({
         </View>
       </View>
       <Text style={[styles.cell, { width: "20%" }]}>Result Obtained</Text>
-      <Text style={[styles.cell, styles.lastCell, { width: "15%" }]}>
-        Status
-      </Text>
+      {showStatus && (
+        <Text style={[styles.cell, styles.lastCell, { width: "15%" }]}>
+          Status
+        </Text>
+      )}
     </View>
 
     {/* First 3 Items */}
@@ -752,20 +760,25 @@ const TestParameterTable = ({
           style={[
             styles.cell,
             styles.firstCell,
-            { width: "30%", fontWeight: "bold" },
+            { width:  showStatus ? "30%" : "40%", fontWeight: "bold" },
           ]}
         >
           {item.test_parameter.testing_parameters}
         </Text>
 
-        <Text style={[styles.cell, { width: "25%", fontWeight: "bold" }]}>
+        <Text
+          style={[
+            styles.cell,
+            { width:  "25%", fontWeight: "bold" },
+          ]}
+        >
           {item.test_parameter.method_or_spec}
         </Text>
         <View
           style={[
             styles.cell,
             {
-              width: "35%",
+              width:  showStatus ? "35%" :"40%",
               flexDirection: "row",
               alignItems: "stretch",
               fontWeight: "bold",
@@ -809,15 +822,17 @@ const TestParameterTable = ({
         <Text style={[styles.cell, { width: "20%", fontWeight: "bold" }]}>
           {item.value ?? "Pending"}
         </Text>
-        <Text
-          style={[
-            styles.cell,
-            styles.lastCell,
-            { width: "15%", fontWeight: "bold" },
-          ]}
-        >
-          {item.result ? "Pass" : "Fail"}
-        </Text>
+        {showStatus && (
+          <Text
+            style={[
+              styles.cell,
+              styles.lastCell,
+              { width: "15%", fontWeight: "bold" },
+            ]}
+          >
+            {item.result ? "Pass" : "Fail"}
+          </Text>
+        )}
       </View>
     ))}
   </View>
@@ -1066,7 +1081,7 @@ const SampleDetails = ({
         {data.sample.received_quantity ?? "---"}
       </Text>
     </View>
-   
+
     {/* <View
                 style={{
                   border: "1 solid #000",

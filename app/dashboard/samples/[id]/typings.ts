@@ -82,6 +82,7 @@ export type EmailStatus = {
 }[]
 
 export type Sample = {
+  showStatus: boolean;
   additional_detail: string;
   emails: EmailStatus;
   id: number;
@@ -207,6 +208,7 @@ export type SampleDetailSchema = {
   sample_issued: number;
   issued_to: string;
   samples_received: boolean;
+  show_status: boolean;
   group: string;
   discipline: string;
   // received_quantity: number;

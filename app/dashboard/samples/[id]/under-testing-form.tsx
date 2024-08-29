@@ -67,10 +67,15 @@ type Props = {
   buttonName?: string;
   comment?: string;
   currentStep: number;
-  assigneeData?: {
-    qa_type_id: number;
-    role_id: number; id: number; first_name: string; last_name: string 
-}[] | [];
+  assigneeData?:
+    | {
+        qa_type_id: number;
+        role_id: number;
+        id: number;
+        first_name: string;
+        last_name: string;
+      }[]
+    | [];
   openModal?: (type: string) => void;
   signUsers?: User[];
   qr?: string | null;
@@ -142,10 +147,13 @@ const UnderTestingForm = ({
           ? new Date(formData.testing_end_date).toISOString().split("T")[0]
           : "",
       }),
+      ...(currentStep === 7 && {
+        show_status: formData?.show_status ? 1 : 0,
+      }),
       ...(currentStep === 8 && {
         authorized_sign_id: formData?.authorized_sign_id,
       }),
-      ...(currentStep === 8 && {
+      ...(currentStep === 9 && {
         sign_verified: formData?.sign_verified ? 1 : 0,
       }),
 
@@ -331,12 +339,14 @@ const UnderTestingForm = ({
               <option value={0}>No</option>
               <option value={1}>Yes</option>
             </Select>
-            <Select name="assigned_to" label="assignee" register={register}>
-              {assigneeData?.filter(assignee => assignee.qa_type_id === test_type_id).map((assignee) => (
-                <option value={assignee.id} key={assignee.id}>
-                  {assignee.first_name + " " + assignee.last_name}
-                </option>
-              ))}
+            <Select name="assigned_to" label="assignee" register={register} required>
+              {assigneeData
+                ?.filter((assignee) => assignee.qa_type_id === test_type_id)
+                .map((assignee) => (
+                  <option value={assignee.id} key={assignee.id}>
+                    {assignee.first_name + " " + assignee.last_name}
+                  </option>
+                ))}
             </Select>{" "}
             <div className="mb-6">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -433,6 +443,14 @@ const UnderTestingForm = ({
               <option value={4}>Sample Received </option>
               <option value={5}>Under Testing </option>
               <option value={6}>Under QC Review </option>
+            </Select>
+            <Select
+              label={"Show Status in Report"}
+              name={`show_status`}
+              register={register}
+            >
+              <option value={1}> Yes </option>
+              <option value={0}> No</option>
             </Select>
           </>
         ) : (
