@@ -129,7 +129,7 @@ const UnderTestingForm = ({
         nabl_logo: data.sample.nabl_logo ? 1 : 0,
         under_cdsco: data.sample.under_cdsco ? 1 : 0,
         discipline: formData?.discipline,
-        group: formData?.group,
+        // group: formData?.group,
       }),
       comments: comment,
       ...(currentStep == 3 && {
@@ -148,7 +148,7 @@ const UnderTestingForm = ({
           : "",
       }),
       ...(currentStep === 7 && {
-        show_status: formData?.show_status ? 1 : 0,
+        show_status: data?.sample?.show_status ? 1 : 0,
       }),
       ...(currentStep === 8 && {
         authorized_sign_id: formData?.authorized_sign_id,
@@ -348,7 +348,7 @@ const UnderTestingForm = ({
                   </option>
                 ))}
             </Select>{" "}
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <label className="mb-2.5 block text-black dark:text-white">
                 Group
               </label>
@@ -357,7 +357,7 @@ const UnderTestingForm = ({
                 {...register("group")}
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />{" "}
-            </div>
+            </div> */}
             <div className="mb-6">
               <label className="mb-2.5 block text-black dark:text-white">
                 Discipline

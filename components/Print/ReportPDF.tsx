@@ -132,6 +132,7 @@ const MyDocument = ({
                 borderRight: "1 solid #000",
                 width: 140,
                 padding: 1,
+                fontWeight:"medium"
               }}
             >
               Sample ID No.
@@ -152,6 +153,8 @@ const MyDocument = ({
                 borderRight: "1 solid #000",
                 width: 100,
                 padding: 1,
+                fontWeight:"medium"
+
               }}
             >
               ULR No.
@@ -166,7 +169,7 @@ const MyDocument = ({
                 border: "1 solid #000",
                 display: "flex",
                 flexDirection: "row",
-                fontWeight: "bold",
+               fontWeight:"bold",
                 // fontSize: "10px",
                 padding: 2,
               }}
@@ -176,6 +179,8 @@ const MyDocument = ({
                   borderRight: "1 solid #000",
                   width: 140,
                   padding: 1,
+                                    fontWeight:"medium",
+
                 }}
               >
                 Sample Received Date
@@ -196,6 +201,8 @@ const MyDocument = ({
                   borderRight: "1 solid #000",
                   width: 100,
                   padding: 1,
+                  fontWeight:"medium"
+
                 }}
               >
                 Discipline
@@ -210,7 +217,7 @@ const MyDocument = ({
                 border: "1 solid #000",
                 display: "flex",
                 flexDirection: "row",
-                fontWeight: "bold",
+                fontWeight:"bold",
                 // fontSize: "10px",
                 padding: 2,
               }}
@@ -220,6 +227,8 @@ const MyDocument = ({
                   borderRight: "1 solid #000",
                   width: 140,
                   padding: 1,
+                  fontWeight:"medium",
+
                 }}
               >
                 Analysis Start Date
@@ -242,7 +251,7 @@ const MyDocument = ({
                     )}
               </Text>
 
-              <Text
+              {/* <Text
                 style={{
                   borderRight: "1 solid #000",
                   width: 100,
@@ -254,6 +263,20 @@ const MyDocument = ({
               <Text style={{ padding: 2, marginLeft: 4, width: "28%" }}>
                 {" "}
                 {data.sample.group ?? "N/A"}
+              </Text> */}
+               <Text
+                style={{
+                  borderRight: "1 solid #000",
+                  width: 100,
+                  padding: 1,
+                  fontWeight:"medium",
+                }}
+              >
+                Test Report No.
+              </Text>
+              <Text style={{ padding: 2, marginLeft: 4, width: "28%" }}>
+                {" "}
+                {data.sample.report_no ?? "N/A"}
               </Text>
             </View>
             <View
@@ -261,7 +284,8 @@ const MyDocument = ({
                 border: "1 solid #000",
                 display: "flex",
                 flexDirection: "row",
-                fontWeight: "bold",
+                fontWeight:"bold",
+
                 // fontSize: "10px",
                 padding: 2,
               }}
@@ -271,6 +295,7 @@ const MyDocument = ({
                   borderRight: "1 solid #000",
                   width: 140,
                   padding: 1,
+                  fontWeight:"medium",
                 }}
               >
                 Analysis Completed Date
@@ -292,27 +317,26 @@ const MyDocument = ({
                       data.sample.sample_detail[0].testing_end_date,
                     )}
               </Text>
-
               <Text
                 style={{
                   borderRight: "1 solid #000",
                   width: 100,
                   padding: 1,
+                  fontWeight: "medium"
                 }}
               >
-                Test Report No.
+                Report Type.
               </Text>
-              <Text style={{ padding: 2, marginLeft: 4, width: "28%" }}>
-                {" "}
-                {data.sample.report_no ?? "N/A"}
-              </Text>
+              <Text style={{ padding: 2, marginLeft: 4 }}> {reportType}</Text>
+
+             
             </View>
             <View
               style={{
                 border: "1 solid #000",
                 display: "flex",
                 flexDirection: "row",
-                fontWeight: "bold",
+                fontWeight:"bold",
                 // fontSize: "10px",
                 padding: 2,
               }}
@@ -322,6 +346,7 @@ const MyDocument = ({
                   borderRight: "1 solid #000",
                   width: 140,
                   padding: 1,
+                  fontWeight:"medium",
                 }}
               >
                 Report Date
@@ -342,28 +367,7 @@ const MyDocument = ({
                   borderRight: "1 solid #000",
                   width: 100,
                   padding: 1,
-                }}
-              >
-                Report Type.
-              </Text>
-              <Text style={{ padding: 2, marginLeft: 4 }}> {reportType}</Text>
-            </View>
-
-            <View
-              style={{
-                border: "1 solid #000",
-                display: "flex",
-                flexDirection: "row",
-                fontWeight: "bold",
-                // fontSize: "10px",
-                padding: 2,
-              }}
-            >
-              <Text
-                style={{
-                  borderRight: "1 solid #000",
-                  width: 140,
-                  padding: 1,
+                  fontWeight:"medium",
                 }}
               >
                 Customer Ref No.
@@ -371,7 +375,22 @@ const MyDocument = ({
               <Text style={{ padding: 1, marginLeft: 4 }}>
                 {data.sample.registration.customer_reference_no ?? "---"}
               </Text>
+
+              
             </View>
+
+            {/* <View
+              style={{
+                border: "1 solid #000",
+                display: "flex",
+                flexDirection: "row",
+                fontWeight: "bold",
+                // fontSize: "10px",
+                padding: 2,
+              }}
+            >
+              
+            </View> */}
             <View
               style={{
                 border: "1 solid #000",
@@ -387,6 +406,7 @@ const MyDocument = ({
                   borderRight: "1 solid #000",
                   width: 140,
                   padding: 1,
+                  fontWeight:"medium",
                 }}
               >
                 Name of the customer
@@ -410,6 +430,7 @@ const MyDocument = ({
                   borderRight: "1 solid #000",
                   width: 140,
                   padding: 1,
+                  fontWeight:"medium",
                 }}
               >
                 Address
@@ -433,6 +454,7 @@ const MyDocument = ({
                   borderRight: "1 solid #000",
                   width: 140,
                   padding: 1,
+                  fontWeight:"medium",
                 }}
               >
                 Manufacturing License No.
@@ -456,6 +478,7 @@ const MyDocument = ({
                   borderRight: "1 solid #000",
                   width: 140,
                   padding: 1,
+                  fontWeight:"medium",
                 }}
               >
                 Contact Person Name
@@ -476,6 +499,7 @@ const MyDocument = ({
                   borderRight: "1 solid #000",
                   width: 100,
                   padding: 1,
+                  fontWeight:"medium",
                 }}
               >
                 Contact Number
@@ -496,7 +520,7 @@ const MyDocument = ({
           ></View>
           <TestParameterTable
             parameters={data.sample?.sample_test_parameters?.slice(0, 3)}
-            showStatus={data.sample?.showStatus}
+            showStatus={data.sample?.show_status}
           />
 
           <AuthorizedSign
@@ -510,7 +534,7 @@ const MyDocument = ({
         </View>
       </Page>
       {!!data?.sample.sample_test_parameters.slice(3).length && (
-        <Page style={{ fontFamily: "Cambria" }}>
+        <Page style={styles.page}>
           <View style={styles.section}>
             <Header nabl_logo={data.sample.nabl_logo} />
             <View
@@ -569,7 +593,7 @@ const MyDocument = ({
             ></View>
             <TestParameterTable
               parameters={data.sample?.sample_test_parameters?.slice(3)}
-              showStatus={data.sample?.showStatus}
+              showStatus={data.sample?.show_status}
             />
 
             <AuthorizedSign sample_detail={data.sample.sample_detail} />
@@ -577,7 +601,7 @@ const MyDocument = ({
           </View>
         </Page>
       )}
-      <Page style={{ fontFamily: "Cambria" }}>
+      <Page style={styles.page}>
         <View style={styles.section}>
           <Header nabl_logo={data.sample.nabl_logo} />
           <View
@@ -586,13 +610,14 @@ const MyDocument = ({
               fontSize: 12,
               padding: 2,
               marginTop: "16px",
+              fontWeight:"bold"
             }}
           >
-            <Text style={{ fontWeight: "bold", textAlign: "left" }}>
+            <Text style={{ fontWeight: "medium", textAlign: "left" }}>
               Statement of confirmity:
             </Text>
             <Text style={{ marginLeft: 20, textAlign: "left", fontSize: 10 }}>
-              The Submitted sample passed as per abouve Test Method /
+              The Submitted sample passes as per above Test Method /
               Specifications with respect to the above test only.
             </Text>
           </View>
@@ -604,14 +629,15 @@ const MyDocument = ({
             }}
           >
             <Text
-              style={{ fontWeight: "thin", textAlign: "left", fontSize: "7px" }}
+              style={{ fontWeight:"bold", textAlign: "left", fontSize: "7px" }}
             >
-              <Text style={{ textDecoration: "underline", fontWeight: "bold" }}>
+              <Text style={{ textDecoration: "underline", fontWeight: "medium" }}>
                 Abbrevations:
               </Text>{" "}
-              The Submitted sample passed as per abouve Test Method /
-              Specifications with respect to the above test only.
+              ISO: Iternaltional Organization for Standardization; EN: European Standard;
             </Text>
+
+            <Text style={{fontSize:10, fontWeight:"medium", textAlign:"center", marginTop:4}}>...End of Report...</Text>
           </View>
 
           <AuthorizedSign sample_detail={data.sample.sample_detail} />
@@ -873,6 +899,7 @@ const SampleDetails = ({
           borderRight: "1 solid #000",
           width: 140,
           padding: 2,
+          fontWeight:"medium",
         }}
       >
         Sample Name
@@ -893,6 +920,7 @@ const SampleDetails = ({
           borderRight: "1 solid #000",
           width: 100,
           padding: 2,
+          fontWeight:"medium",
         }}
       >
         Test Method / Specification
@@ -920,6 +948,7 @@ const SampleDetails = ({
           borderRight: "1 solid #000",
           width: 140,
           padding: 2,
+          fontWeight:"medium",
         }}
       >
         Batch No.
@@ -939,6 +968,7 @@ const SampleDetails = ({
           borderRight: "1 solid #000",
           width: 100,
           padding: 2,
+          fontWeight:"medium",
         }}
       >
         Mfg Date
@@ -962,6 +992,7 @@ const SampleDetails = ({
           borderRight: "1 solid #000",
           width: 140,
           padding: 2,
+          fontWeight:"medium",
         }}
       >
         Batch Size
@@ -982,6 +1013,7 @@ const SampleDetails = ({
           borderRight: "1 solid #000",
           width: 100,
           padding: 2,
+          fontWeight:"medium",
         }}
       >
         Exp Date
@@ -1006,6 +1038,7 @@ const SampleDetails = ({
           borderRight: "1 solid #000",
           width: 140,
           padding: 2,
+          fontWeight:"medium",
         }}
       >
         Manufactured by
@@ -1016,6 +1049,7 @@ const SampleDetails = ({
           borderRight: "1 solid #000",
           width: 140,
           marginLeft: 4,
+          
         }}
       >
         {data.sample.registration.manufactured_by ?? "N/A"}
@@ -1026,6 +1060,7 @@ const SampleDetails = ({
           borderRight: "1 solid #000",
           width: 100,
           padding: 2,
+          fontWeight:"medium",
         }}
       >
         Sampled By
@@ -1050,9 +1085,10 @@ const SampleDetails = ({
           borderRight: "1 solid #000",
           width: 140,
           padding: 2,
+          fontWeight:"medium",
         }}
       >
-        Description
+        Sample Description
       </Text>
       <Text style={{ padding: 2, width: "65%", marginLeft: 4 }}>
         {data.sample.description}
@@ -1073,6 +1109,7 @@ const SampleDetails = ({
           borderRight: "1 solid #000",
           width: 140,
           padding: 2,
+          fontWeight:"medium",
         }}
       >
         Quantity Received
@@ -1120,6 +1157,7 @@ const SampleDetails = ({
           borderRight: "1 solid #000",
           width: 140,
           padding: 2,
+          fontWeight:"medium",
         }}
       >
         Additional details
@@ -1175,7 +1213,7 @@ const AuthorizedSign = ({
           >
             Authorized Signatory
           </Text>
-          {detail.authorized_sign && (
+          {detail.sign_verified && detail.authorized_sign && (
             <Image
               src={
                 SIGN_IMAGES[detail.authorized_sign.id.toString()] ??
@@ -1192,7 +1230,7 @@ const AuthorizedSign = ({
               fontSize: "10px",
             }}
           >
-            {detail.authorized_sign
+            {detail.sign_verified && detail.authorized_sign
               ? `${detail.authorized_sign.first_name} ${detail.authorized_sign.last_name}`
               : ""}
           </Text>
@@ -1203,7 +1241,7 @@ const AuthorizedSign = ({
               fontSize: "8px",
             }}
           >
-            {detail.authorized_sign
+            {detail.sign_verified && detail.authorized_sign
               ? `${detail.authorized_sign.designation ?? ""} `
               : ""}
           </Text>
@@ -1302,12 +1340,12 @@ const Footer = () => {
           <Text style={{ fontSize: "6px", fontWeight: "medium", padding: 1 }}>
             {" "}
             R.K Complex First Floor, Plot No.303/B, B-Block, Thiruneermalai
-            Road,
+            Road, Parvathy Puram, Chrompet, Chennai-600044, Tamilnadu, India.
           </Text>
-          <Text style={{ fontSize: "6px", fontWeight: "medium", padding: 1 }}>
+          {/* <Text style={{ fontSize: "6px", fontWeight: "medium", padding: 1 }}>
             {" "}
-            Parvathy Puram, Chrompet, Chennai-600044, Tamilnadu, India.
-          </Text>
+            
+          </Text> */}
           <Text style={{ fontSize: "6px", fontWeight: "medium", padding: 1 }}>
             Ph: 044-22731006, Email: customercare@trustingroup.in,
             web:www.trustingroup.in

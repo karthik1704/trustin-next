@@ -82,7 +82,7 @@ export type EmailStatus = {
 }[]
 
 export type Sample = {
-  showStatus: boolean;
+  show_status: boolean;
   additional_detail: string;
   emails: EmailStatus;
   id: number;
