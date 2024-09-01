@@ -5,6 +5,7 @@ import { Sample } from "@/app/dashboard/samples/[id]/typings";
 import { User } from "@/types/user";
 import QRCode from "qrcode";
 import ShowPDF from "./show-pdf";
+import { isMobileDevice } from "@/lib/is-mobile";
 
 export const metadata: Metadata = {
   title: "Download PDF | Trustin",
@@ -51,11 +52,12 @@ const CustomerPDFPrint = async ({
 }) => {
   const data = await getData(id);
   const qrcode = await generateQRCode(`${PDF_URL}/pdf/${id}`)
-
+  const  isMobile = await isMobileDevice()
+  console.log(isMobile)
   return <div 
   className="w-full h-full"
   >
-    <ShowPDF data={data} qr={qrcode as string}/>
+    <ShowPDF data={data} qr={qrcode as string} isMobile={isMobile}/>
   </div>;
 };
 

@@ -152,6 +152,8 @@ const UnderTestingForm = ({
       }),
       ...(currentStep === 8 && {
         authorized_sign_id: formData?.authorized_sign_id,
+        statement_of_conformity: data.sample.statement_of_conformity ?? "",
+        reason: data.sample.reason ?? "",
       }),
       ...(currentStep === 9 && {
         sign_verified: formData?.sign_verified ? 1 : 0,
@@ -339,7 +341,12 @@ const UnderTestingForm = ({
               <option value={0}>No</option>
               <option value={1}>Yes</option>
             </Select>
-            <Select name="assigned_to" label="assignee" register={register} required>
+            <Select
+              name="assigned_to"
+              label="assignee"
+              register={register}
+              required
+            >
               {assigneeData
                 ?.filter((assignee) => assignee.qa_type_id === test_type_id)
                 .map((assignee) => (
@@ -481,6 +488,26 @@ const UnderTestingForm = ({
               <option value={0}> No </option>
               <option value={1}> Yes </option>
             </Select>
+            <div className="mb-6">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Reason
+              </label>
+              <input
+                type="text"
+                {...register("reason")}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />{" "}
+            </div>
+            <div className="mb-6">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Statement of confirmity
+              </label>
+              <input
+                type="text"
+                {...register("statement_of_conformity")}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />{" "}
+            </div>
           </>
         )}
         <div className="mb-6">

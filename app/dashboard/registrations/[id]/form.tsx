@@ -121,6 +121,7 @@ const RegistrationEditForm = ({
           batch_size: sample.batch_size,
           received_quantity: sample.received_quantity,
           description: sample?.description ?? "",
+          test_method: sample?.test_method ?? "",
           additional_detail: sample?.additional_detail ?? "",
           sample_condition: sample?.sample_condition ?? "",
           sterilization_batch_no: sample?.sterilization_batch_no ?? "",
@@ -548,10 +549,14 @@ const RegistrationEditForm = ({
           batch_size: sample.batch_size,
           received_quantity: sample.received_quantity,
           description: sample.description,
+          test_method: sample.test_method,
           additional_detail: sample.additional_detail,
           sample_condition: sample.sample_condition,
           sterilization_batch_no: sample.sterilization_batch_no,
-          test_params: sample.test_params.map(params=>({...params, id:""})),
+          test_params: sample.test_params.map((params) => ({
+            ...params,
+            id: "",
+          })),
         });
       }
       return;
@@ -568,6 +573,7 @@ const RegistrationEditForm = ({
       received_quantity: "",
       description: "",
       additional_detail: "",
+      test_method: "",
       sample_condition: "",
       sterilization_batch_no: "",
       test_params: [],
@@ -1030,7 +1036,6 @@ const RegistrationEditForm = ({
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
-           
           </div>
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
@@ -1205,14 +1210,13 @@ const RegistrationEditForm = ({
               />
             </div>
           </div>
-         
-              <input
-                readOnly={true}
-                type="hidden"
-                {...form.register("status")}
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              />
-        
+
+          <input
+            readOnly={true}
+            type="hidden"
+            {...form.register("status")}
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          />
 
           <Tabs defaultValue="samples" className="w-full">
             <TabsList>
@@ -1400,6 +1404,21 @@ const RegistrationEditForm = ({
                         />
                       </div>
                     </div>
+
+                    <div className="mb-4.5">
+                      <div className="w-full">
+                        <label className="mb-2.5 block text-black dark:text-white">
+                          Test Method
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Enter Test Method"
+                          {...form.register(`samples.${index}.test_method`)}
+                          className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        />
+                      </div>
+                    </div>
                     <div className="mb-4.5">
                       <div className="w-full">
                         <label className="mb-2.5 block text-black dark:text-white">
@@ -1414,10 +1433,12 @@ const RegistrationEditForm = ({
                     <div className="mb-4.5">
                       <div className="w-full">
                         <label className="mb-2.5 block text-black dark:text-white">
-                        Additional Details
+                          Additional Details
                         </label>
                         <textarea
-                          {...form.register(`samples.${index}.additional_detail`)}
+                          {...form.register(
+                            `samples.${index}.additional_detail`,
+                          )}
                           className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
                       </div>
@@ -1436,10 +1457,13 @@ const RegistrationEditForm = ({
 
                 <button
                   type="button"
-                  className="relative flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:border-slate-500 disabled:hover:bg-none disabled:transition-none disabled:animate-none"
+                  className="relative flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:animate-none disabled:border-slate-500 disabled:transition-none disabled:hover:bg-none"
                   onClick={addSample}
-                  disabled={watchNoOfBatches.toString() === fields.length.toString() ? true : false}
-
+                  disabled={
+                    watchNoOfBatches.toString() === fields.length.toString()
+                      ? true
+                      : false
+                  }
                 >
                   Add Samples
                 </button>

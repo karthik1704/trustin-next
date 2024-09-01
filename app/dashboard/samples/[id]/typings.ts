@@ -82,6 +82,9 @@ export type EmailStatus = {
 }[]
 
 export type Sample = {
+  test_method: string;
+  reason: string | null;
+  statement_of_conformity: string | null;
   show_status: boolean;
   additional_detail: string;
   emails: EmailStatus;

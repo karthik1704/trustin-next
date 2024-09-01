@@ -8,7 +8,12 @@ import { useRouter } from "next/navigation";
 import { createSamples } from "../actions";
 import { SERVER_API_URL } from "@/app/constant";
 import SubmitButton from "@/components/submit-button/submit-button";
-import { Data, SampleTestParameters, SampleTestType, TestParams } from "./typings";
+import {
+  Data,
+  SampleTestParameters,
+  SampleTestType,
+  TestParams,
+} from "./typings";
 import { TestParameter } from "../../registrations/typings";
 
 type Sample = {
@@ -16,6 +21,7 @@ type Sample = {
   batch_or_lot_no: string;
   manufactured_date: string;
   expiry_date: string;
+  test_method: string;
   batch_size: number;
   received_quantity: number;
   description: string;
@@ -23,7 +29,7 @@ type Sample = {
   sterilization_batch_no: string;
   tat: string;
   // test_type_id: string;
-sample_test_types: SampleTestType[];
+  sample_test_types: SampleTestType[];
   test_params: Array<{
     id?: number | null;
     test_params_id: string;
@@ -68,6 +74,7 @@ const SamplesEditForm = ({
       batch_size: data.sample.batch_size,
       received_quantity: data.sample.received_quantity,
       description: data.sample?.description ?? "",
+      test_method: data.sample?.test_method ?? "",
       sample_condition: data.sample?.sample_condition ?? "",
       sterilization_batch_no: data.sample?.sterilization_batch_no ?? "",
       tat: data.sample.tat
@@ -88,7 +95,7 @@ const SamplesEditForm = ({
   // });
 
   const [filterId, setFilterId] = useState<number[]>(
-    data?.sample?.sample_test_types.map(type=>type.test_type_id),
+    data?.sample?.sample_test_types.map((type) => type.test_type_id),
   );
   const [parameters, setParameters] = useState<TestParams[]>([]);
   // const [selectedBatch, setSelectBatch] = useState<{} | null>(null);
@@ -163,8 +170,9 @@ const SamplesEditForm = ({
       }
       if (filterId[0] === 1) {
         const micro_params =
-          data?.test_params.filter((test: any) => test.test_type_id.toString() === "1") ??
-          [];
+          data?.test_params.filter(
+            (test: any) => test.test_type_id.toString() === "1",
+          ) ?? [];
         if (micro_params.length) setParameters(micro_params);
       }
     }
@@ -308,7 +316,7 @@ const SamplesEditForm = ({
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
                   </div>
-                  <div className="">
+                  <div className="mb-4.5">
                     <label className="mb-2.5 block text-black dark:text-white">
                       Sterilization Batch No.
                     </label>
@@ -324,6 +332,20 @@ const SamplesEditForm = ({
                 <div className="mb-4.5">
                   <div className="w-full">
                     <label className="mb-2.5 block text-black dark:text-white">
+                      Test Method
+                    </label>
+                    <input
+                      {...register(`test_method`)}
+                      type="text"
+                      required
+                      placeholder="Enter Test Method"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </div>
+                </div>
+                <div className="mb-4.5">
+                  <div className="w-full">
+                    <label className="mb-2.5 block text-black dark:text-white">
                       Sample Description
                     </label>
                     <textarea
@@ -332,53 +354,6 @@ const SamplesEditForm = ({
                     />
                   </div>
                 </div>
-
-                {/* <div className="w-full xl:w-1/4">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Department
-                </label>
-                <input
-                  type="text"
-                  {...register(`samples.${index}.department`)}
-                  placeholder="Enter Test Type"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                />
-              </div>*/}
-
-                {/* <div className="w-full xl:w-full">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Test Type
-              </label>
-
-              <div className="relative z-20 bg-transparent dark:bg-form-input">
-                <select
-                  {...register(`test_type_id`)}
-                  className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                >
-                  <option value={"1"}>Micro</option>
-                  <option value={"2"}>Mech</option>
-                </select>
-                <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
-                  <svg
-                    className="fill-current"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g opacity="0.8">
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                        fill=""
-                      ></path>
-                    </g>
-                  </svg>
-                </span>
-              </div>
-            </div> */}
               </div>
               {/* // Test Params */}
               <TestParamsForm
@@ -449,7 +424,7 @@ const TestParamsForm = ({
 
   useEffect(() => {
     if (!test_watch) return;
-    const ids: [number | string] = test_watch.map((field:any, idx:number) => {
+    const ids: [number | string] = test_watch.map((field: any, idx: number) => {
       if (field.test_params_id !== "") return field.test_params_id.toString();
     });
     console.log(ids);

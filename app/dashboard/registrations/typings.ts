@@ -18,6 +18,7 @@ type TestParam = {
   order: number | string;
 };
 type RegistrationSamples = {
+  test_method: string;
   additional_detail: string;
   sample_name: string;
   batch_or_lot_no: string;
@@ -91,6 +92,7 @@ type RegistrationUpdateSamples = {
   tat: string | null;
   expiry_date: string | null;
   description: string;
+  test_method: string;
   sample_condition: string;
   sterilization_batch_no: string;
   batch_size: string;
@@ -332,6 +334,7 @@ type SampleTestType = {
 };
 
 type RegSample = {
+  test_method: string;
   additional_detail: string;
   status_id: number;
   // test_type_id: number | string;
