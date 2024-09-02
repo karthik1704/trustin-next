@@ -59,7 +59,7 @@ const ParameterEditForm = ({ data, actionFn }: Props) => {
     if (watchTestType) {
       if (watchTestType === "2") {
         setShowProductSelect(true);
-        setValue("specification_limits","");
+        // setValue("specification_limits","");
       } else {
         setShowProductSelect(false);
         setValue("product_id", "null");
@@ -189,6 +189,18 @@ const ParameterEditForm = ({ data, actionFn }: Props) => {
           <input
             type="text"
             {...register("min_limits")}
+            placeholder="  Method or Specification"
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          />
+        </div>
+        <div className="mb-4.5">
+          <label className="mb-2.5 block text-black dark:text-white">
+          Specification  Limits
+
+          </label>
+          <input
+            type="text"
+            {...register("specification_limits")}
             placeholder="  Method or Specification"
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />

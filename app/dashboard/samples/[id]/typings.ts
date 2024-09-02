@@ -251,6 +251,9 @@ export type Data = {
     id: number;
     first_name: string;
     last_name: string;
+    qa_type_id: number;
+    role_id: number;
+   
   }[];
   mechUsers: User[];
   microUsers: User[];

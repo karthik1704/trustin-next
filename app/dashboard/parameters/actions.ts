@@ -14,7 +14,9 @@ export async function createParameters( formData: any) {
   if (jsonObject.test_type_id !== "2" && jsonObject.product_id !== "null")
     jsonObject.product_id = null as any;
 
-  // console.log(jsonObject);
+  console.log(jsonObject, jsonObject.methods, jsonObject.methods[0].parameters);
+
+  
 
   const access_token = cookies().get("access_token");
   const res = await fetch(`${SERVER_API_URL}/parameters/`, {
@@ -65,9 +67,7 @@ export async function updateParameter(
     jsonObject.max_limits=null as any;
     jsonObject.min_limits=null as any;
   }
-  else {
-    jsonObject.specification_limits=null as any;
-  }
+ 
 
   console.log(jsonObject);
   const access_token = cookies().get("access_token");

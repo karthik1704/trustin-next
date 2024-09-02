@@ -9,6 +9,7 @@ import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
+import { ArrowRightLeft } from "lucide-react";
 import ComboBox2 from "@/components/combo-box/combo-box2";
 
 type InitialState = {
@@ -217,6 +218,27 @@ const TestParamsForm = ({
     control,
     name: arrayFieldName,
   });
+  const [showSpec, setShowSpec] = useState<boolean[]>(fields.map(() => showLimits ?  true : false));
+
+  useEffect(()=>{
+    replace([])
+    setShowSpec([])
+  },[replace, showLimits])
+
+  const handleShowSpec = (idx: number): void => {
+    setShowSpec((prevState) =>
+      prevState.map((value, i) => (i === idx ? !value : value)),
+    );
+  };
+
+  const handleAppend = () => {
+    append({
+      testing_parameters: "",
+      min_limits: "",
+      max_limits: "",
+    });
+    setShowSpec((prevState) => [...prevState, showLimits ?  true : false]); // Add new entry to showSpec array
+  };
 
   return (
     <div className="rounded-sm bg-white px-2 pb-2.5 sm:px-3.5 xl:pb-1">
@@ -236,34 +258,37 @@ const TestParamsForm = ({
               <th className="w-[20px] px-1 py-4 font-medium text-black dark:text-white xl:pl-4">
                 S.NO.
               </th>
-              <th className="min-w-[320px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4">
+              <th className="max-w-[320px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4">
                 Test Parameters
               </th>
               {/* <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 QTY
               </th> */}
-              <th
-                className="min-w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4"
-                colSpan={ 2}
-              >
+              <th className="min-w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4">
                 Specification Limits
               </th>
 
               <th className="w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-6">
+                Switch
+              </th>
+              <th className="w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-6">
                 Remove?
               </th>
             </tr>
-            {!showLimits && (
+            {/* {!showSpec && (
               <tr>
                 <th></th>
                 <th></th>
                 <th className="min-w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4">
                   Min
                 </th>
-                <th className="min-w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4">Max</th>
-                <th ></th>
+                <th className="min-w-[100px] px-2 py-4 font-medium text-black dark:text-white xl:pl-4">
+                  Max
+                </th>
+                <th></th>
+                <th></th>
               </tr>
-            )}
+            )} */}
           </thead>
           <tbody>
             {fields.map((item, idx) => (
@@ -274,6 +299,7 @@ const TestParamsForm = ({
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
+                  {" "}
                   <input
                     type="text"
                     {...register(`${arrayFieldName}.${idx}.testing_parameters`)}
@@ -281,34 +307,50 @@ const TestParamsForm = ({
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </td>
-                {!showLimits ? (
+
+                {showSpec[idx] ? (
                   <>
-                    <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
+                    <td className="flex border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
                       <input
                         type="text"
-                        {...register(`${arrayFieldName}.${idx}.min_limits`)}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                      />
-                    </td>
-                    <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
-                      <input
-                        type="text"
-                        {...register(`${arrayFieldName}.${idx}.max_limits`)}
+                        {...register(
+                          `${arrayFieldName}.${idx}.specification_limits`,
+                        )}
+                        placeholder="Sepcification Limits"
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                       />
                     </td>
                   </>
                 ) : (
-                  <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
-                    <input
-                      type="text"
-                      {...register(
-                        `${arrayFieldName}.${idx}.specification_limits`,
-                      )}
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    />
-                  </td>
+                  <>
+                    <td className="flex border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
+                      <input
+                        type="text"
+                        {...register(`${arrayFieldName}.${idx}.min_limits`)}
+                        placeholder="Min Limits"
+                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                      />
+
+                      <input
+                        type="text"
+                        {...register(`${arrayFieldName}.${idx}.max_limits`)}
+                        placeholder="Max Limits"
+                        className="ml-4 w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                      />
+                    </td>
+                  </>
                 )}
+
+                <td className="border-b border-[#eee] px-2 py-5 pl-6 dark:border-strokedark xl:pl-6">
+                  <button
+                    type="button"
+                    onClick={() => handleShowSpec(idx)}
+                    className="hover:bg-gray-300 focus:ring-gray-400 active:bg-gray-400 disabled:text-slate-200 transform rounded-full bg-transparent p-2 transition-transform duration-300 ease-in-out focus:outline-none focus:ring-2"
+                    disabled={showLimits}
+                  >
+                    <ArrowRightLeft  />
+                  </button>
+                </td>
                 <td className="border-b border-[#eee] px-2 py-5 pl-6 dark:border-strokedark xl:pl-6">
                   <button type="button" onClick={() => remove(idx)}>
                     <Trash2 />
@@ -322,13 +364,7 @@ const TestParamsForm = ({
           <button
             type="button"
             className="mt-2 flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
-            onClick={() =>
-              append({
-                testing_parameters: "",
-                amount: undefined,
-                group_of_test_parameters: "",
-              })
-            }
+            onClick={handleAppend}
           >
             Add Parameter
           </button>
