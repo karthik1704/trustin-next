@@ -1,3 +1,4 @@
+import { StandardKey } from "@/app/constant";
 import { User } from "@/types/user";
 
 export type SampleTestParameters = {
@@ -82,10 +83,11 @@ export type EmailStatus = {
 }[]
 
 export type Sample = {
+  show_status_report: boolean;
+  abbreviations: StandardKey;
   test_method: string;
   reason: string | null;
   statement_of_conformity: string | null;
-  show_status: boolean;
   additional_detail: string;
   emails: EmailStatus;
   id: number;
@@ -200,6 +202,7 @@ export type SampleTestType = {
 };
 
 export type SampleDetailSchema = {
+  authorized_sign_date: string | Date;
   id: number;
   sample_id: number;
   test_type_id: number;
@@ -221,6 +224,7 @@ export type SampleDetailSchema = {
     last_name: string;
   };
   authorized_sign: {
+    authorized_sign_date: string;
     id: number;
     first_name: string;
     last_name: string;

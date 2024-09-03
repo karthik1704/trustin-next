@@ -386,7 +386,34 @@ const SampleWorkflowForm = ({
                   </div>
                 )}
 
-              <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
+              {/* <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
+                <table className="table-auto flex flex-col">
+                  <thead className="flex flex-col">
+                    <tr>
+                      <th>Song</th>
+                      <th>Artist</th>
+                      <th>Year</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
+                      <td>Malcolm Lockyer</td>
+                      <td>1961</td>
+                    </tr>
+                    <tr>
+                      <td>Witchy Woman</td>
+                      <td>The Eagles</td>
+                      <td>1972</td>
+                    </tr>
+                    <tr>
+                      <td>Shining Star</td>
+                      <td>Earth, Wind, and Fire</td>
+                      <td>1975</td>
+                    </tr>
+                  </tbody>
+                </table>
+
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Sample ID:
@@ -439,7 +466,7 @@ const SampleWorkflowForm = ({
                     <strong>{data.sample.status}</strong>
                   </p>
                 </div>
-              </div>
+              </div> */}
 
               <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
                 <div className="w-full xl:w-1/5">

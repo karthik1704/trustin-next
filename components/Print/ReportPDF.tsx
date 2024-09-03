@@ -14,6 +14,7 @@ import {
   SampleTestParameters,
 } from "@/app/dashboard/samples/[id]/typings";
 import { dateFormatter, getLaterDate } from "@/lib/utils";
+import { StandardKey, standards } from "@/app/constant";
 
 // import CambriaBold from '';
 const SIGN_IMAGES: { [key: string]: string } = {
@@ -114,7 +115,7 @@ const MyDocument = ({
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
-          <Header nabl_logo={data.sample.nabl_logo} />
+          {/* <Header nabl_logo={data.sample.nabl_logo} /> */}
 
           <View
             style={{
@@ -512,7 +513,7 @@ const MyDocument = ({
           ></View>
           <TestParameterTable
             parameters={data.sample?.sample_test_parameters?.slice(0, 3)}
-            showStatus={data.sample?.show_status}
+            showStatus={data.sample?.show_status_report}
           />
 
           <AuthorizedSign
@@ -528,7 +529,7 @@ const MyDocument = ({
       {!!data?.sample.sample_test_parameters.slice(3).length && (
         <Page style={styles.page}>
           <View style={styles.section}>
-            <Header nabl_logo={data.sample.nabl_logo} />
+            {/* <Header nabl_logo={data.sample.nabl_logo} /> */}
             <View
               style={{
                 border: "1 solid #000",
@@ -585,7 +586,7 @@ const MyDocument = ({
             ></View>
             <TestParameterTable
               parameters={data.sample?.sample_test_parameters?.slice(3)}
-              showStatus={data.sample?.show_status}
+              showStatus={data.sample?.show_status_report}
             />
 
             <AuthorizedSign sample_detail={data.sample.sample_detail} />
@@ -595,7 +596,7 @@ const MyDocument = ({
       )}
       <Page style={styles.page}>
         <View style={styles.section}>
-          <Header nabl_logo={data.sample.nabl_logo} />
+          {/* <Header nabl_logo={data.sample.nabl_logo} /> */}
           <View
             style={{
               display: "flex",
@@ -629,8 +630,9 @@ const MyDocument = ({
               >
                 Abbrevations:
               </Text>{" "}
-              ISO: Iternaltional Organization for Standardization; EN: European
-              Standard;
+              {data.sample.abbreviations}:{" "}
+              {standards[data.sample.abbreviations]}
+              
             </Text>
 
             <Text
@@ -671,7 +673,7 @@ const MyDocument = ({
                 paddingVertical: 2,
               }}
             >
-              2. No additions, deviations or exclusions from the tesrmethod.
+              2. No additions, deviations or exclusions from the test method.
             </Text>
             <Text
               style={{
@@ -817,6 +819,7 @@ const TestParameterTable = ({
               flexDirection: "row",
               alignItems: "stretch",
               fontWeight: "bold",
+              textAlign: "center",
             },
           ]}
         >
@@ -854,7 +857,12 @@ const TestParameterTable = ({
             </View>
           )}
         </View>
-        <Text style={[styles.cell, { width: "20%", fontWeight: "bold" }]}>
+        <Text
+          style={[
+            styles.cell,
+            { width: "20%", fontWeight: "bold", textAlign: "center" },
+          ]}
+        >
           {item.value ?? "Pending"}
         </Text>
         {showStatus && (
@@ -862,7 +870,7 @@ const TestParameterTable = ({
             style={[
               styles.cell,
               styles.lastCell,
-              { width: "15%", fontWeight: "bold" },
+              { width: "15%", fontWeight: "bold", textAlign: "center" },
             ]}
           >
             {item.result ? "Pass" : "Fail"}
@@ -1247,6 +1255,17 @@ const AuthorizedSign = ({
           >
             {detail.sign_verified && detail.authorized_sign
               ? `${detail.authorized_sign.designation ?? ""} `
+              : ""}
+          </Text>
+          <Text
+            style={{
+              fontWeight: "bold",
+              textAlign: "center", // Center text
+              fontSize: "8px",
+            }}
+          >
+            {detail.sign_verified && detail.authorized_sign
+              ? `${detail.authorized_sign_date ?dateFormatter(detail.authorized_sign_date as string):  ""} `
               : ""}
           </Text>
         </View>

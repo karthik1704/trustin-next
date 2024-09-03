@@ -9,6 +9,7 @@ import ConfrimDialog from "./confrim-dialog";
 import ConfrimDialog2 from "./confrim-dialog2";
 import { User } from "@/types/user";
 import EmailPopup from "./email-popup";
+import { standards } from "@/app/constant";
 
 type Parameters = {
   unit: string;
@@ -148,7 +149,7 @@ const UnderTestingForm = ({
           : "",
       }),
       ...(currentStep === 7 && {
-        show_status: data?.sample?.show_status ? 1 : 0,
+        show_status_report: data?.sample?.show_status_report ? 1 : 0,
       }),
       ...(currentStep === 8 && {
         authorized_sign_id: formData?.authorized_sign_id,
@@ -157,6 +158,9 @@ const UnderTestingForm = ({
       }),
       ...(currentStep === 9 && {
         sign_verified: formData?.sign_verified ? 1 : 0,
+        authorized_sign_date: formData?.authorized_sign_date
+        ? new Date(formData?.authorized_sign_date).toISOString().split("T")[0]
+        : new Date().toISOString().split("T")[0],
       }),
 
       test_params: parameters.map((para) => ({
@@ -174,6 +178,9 @@ const UnderTestingForm = ({
                   para.test_parameter.specification_limits,
               }
             : {
+                specification_limits:
+                  para.specification_limits ??
+                  para.test_parameter.specification_limits,
                 min_limits: para.min_limits ?? para.test_parameter.min_limits,
                 max_limits: para.max_limits ?? para.test_parameter.max_limits,
               }),
@@ -276,7 +283,9 @@ const UnderTestingForm = ({
     8:
       data.currentUser.role_id !== 10 &&
       ![1, 2].includes(data.currentUser.department_id),
-    9: ![1, 2].includes(data.currentUser.department_id) &&  data.currentUser.id!==formData?.authorized_sign_id
+    9:
+      ![1, 2].includes(data.currentUser.department_id) &&
+      data.currentUser.id !== formData?.authorized_sign_id,
   };
 
   return (
@@ -451,11 +460,11 @@ const UnderTestingForm = ({
             </Select>
             <Select
               label={"Show Status in Report"}
-              name={`show_status`}
+              name={`show_status_report`}
               register={register}
             >
-              <option value={1}> Yes </option>
               <option value={0}> No</option>
+              <option value={1}> Yes </option>
             </Select>
           </>
         ) : (
@@ -473,18 +482,6 @@ const UnderTestingForm = ({
                   {assignee.first_name + " " + assignee.last_name}
                 </option>
               ))}
-            </Select>
-          </>
-        )}
-        {currentStep === 9 && (
-          <>
-            <Select
-              label={"Verify Your Sign"}
-              name={`sign_verified`}
-              register={register}
-            >
-              <option value={0}> No </option>
-              <option value={1}> Yes </option>
             </Select>
             <div className="mb-6">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -506,6 +503,42 @@ const UnderTestingForm = ({
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />{" "}
             </div>
+
+            <Select
+              name="abbreviations"
+              label="Abbreviations"
+              register={register}
+            >
+              {Object.entries(standards).map(([abbr, fullName]) => (
+                <option value={abbr} key={abbr}>
+                  {fullName}
+                </option>
+              ))}
+            </Select>
+          </>
+        )}
+        {currentStep === 9 && (
+          <>
+            <Select
+              label={"Verify Your Sign"}
+              name={`sign_verified`}
+              register={register}
+            >
+              <option value={0}> No </option>
+              <option value={1}> Yes </option>
+            </Select>
+            <div className="mb-6">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Signed Date
+              </label>
+              <input
+                type="date"
+                readOnly
+                {...register("authorized_sign_date")}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />{" "}
+            </div>
+           
           </>
         )}
         <div className="mb-6">
@@ -609,30 +642,40 @@ const UnderTestingForm = ({
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                               />
                             ) : (
-                              <div className="flex gap-2">
-                                <div>
-                                  <label>Min</label>
-                                  <input
-                                    type="text"
-                                    required
-                                    {...register(
-                                      `test_params.${index}.min_limits`,
-                                    )}
-                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                  />
+                              <>
+                                <input
+                                  type="text"
+                                  required
+                                  {...register(
+                                    `test_params.${index}.specification_limits`,
+                                  )}
+                                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                />
+                                <div className="flex gap-2">
+                                  <div>
+                                    <label>Min</label>
+                                    <input
+                                      type="text"
+                                      required
+                                      {...register(
+                                        `test_params.${index}.min_limits`,
+                                      )}
+                                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label>Max</label>
+                                    <input
+                                      type="text"
+                                      required
+                                      {...register(
+                                        `test_params.${index}.max_limits`,
+                                      )}
+                                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                    />
+                                  </div>
                                 </div>
-                                <div>
-                                  <label>Max</label>
-                                  <input
-                                    type="text"
-                                    required
-                                    {...register(
-                                      `test_params.${index}.max_limits`,
-                                    )}
-                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                  />
-                                </div>
-                              </div>
+                              </>
                             )}
                           </td>
                           <td className="border-b border-[#eee] px-2 dark:border-strokedark">
@@ -690,6 +733,10 @@ const UnderTestingForm = ({
 
                       <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                         {test_type_id === 1 ? (
+                          <p className="mb-2.5 block py-3 text-sm font-semibold text-black dark:text-white">
+                            {item.specification_limits}
+                          </p>
+                        ) : item.specification_limits ? (
                           <p className="mb-2.5 block py-3 text-sm font-semibold text-black dark:text-white">
                             {item.specification_limits}
                           </p>
