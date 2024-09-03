@@ -688,7 +688,7 @@ const RegistrationEditForm = ({
               {data.frontDesks.map((t) => (
                 <option value={t.id} key={t.id}>
                   {t.customer.company_name} -{" "}
-                  {new Date(t.date_of_received).toDateString()}
+                  {new Date(t.date_of_received.slice(0, 16)).toDateString()}
                 </option>
               ))}
             </Select>

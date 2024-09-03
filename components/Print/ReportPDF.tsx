@@ -632,7 +632,6 @@ const MyDocument = ({
               </Text>{" "}
               {data.sample.abbreviations}:{" "}
               {standards[data.sample.abbreviations]}
-              
             </Text>
 
             <Text
@@ -817,43 +816,57 @@ const TestParameterTable = ({
             {
               width: showStatus ? "35%" : "40%",
               flexDirection: "row",
-              alignItems: "stretch",
+              // alignItems: "stretch",
+              alignItems: "center", // Center vertically
+              justifyContent: "center",
               fontWeight: "bold",
               textAlign: "center",
             },
           ]}
         >
           {item.test_parameter.test_type_id === 1 ? (
-            <Text> {item.specification_limits} </Text>
+            <Text style={{ textAlign: "center", width: "100%", }}>
+              {" "}
+              {item.specification_limits}{" "}
+            </Text>
           ) : (
             <View
               style={{
                 flexDirection: "row",
                 flex: 1,
                 alignItems: "stretch",
+                textAlign: "center",
               }}
             >
-              <Text
-                style={{
-                  width: "50%",
-                  borderRightWidth: "1px",
-                  borderRightColor: "#000",
-                  height: "100%",
-                  alignSelf: "stretch",
-                  lineHeight: "auto",
-                }}
-              >
-                {" "}
-                {item.min_limits}{" "}
-              </Text>
-              <Text
-                style={{
-                  width: "50%",
-                }}
-              >
-                {" "}
-                {item.max_limits}{" "}
-              </Text>
+              {item.specification_limits ? (
+                <Text style={{ textAlign: "center",  width: "100%", }}>
+                  {item.specification_limits}{" "}
+                </Text>
+              ) : (
+                <>
+                  <Text
+                    style={{
+                      width: "50%",
+                      borderRightWidth: "1px",
+                      borderRightColor: "#000",
+                      height: "100%",
+                      alignSelf: "stretch",
+                      lineHeight: "auto",
+                    }}
+                  >
+                    {" "}
+                    {item.min_limits}{" "}
+                  </Text>
+                  <Text
+                    style={{
+                      width: "50%",
+                    }}
+                  >
+                    {" "}
+                    {item.max_limits}{" "}
+                  </Text>
+                </>
+              )}
             </View>
           )}
         </View>
@@ -1265,7 +1278,7 @@ const AuthorizedSign = ({
             }}
           >
             {detail.sign_verified && detail.authorized_sign
-              ? `${detail.authorized_sign_date ?dateFormatter(detail.authorized_sign_date as string):  ""} `
+              ? `${detail.authorized_sign_date ? dateFormatter(detail.authorized_sign_date as string) : ""} `
               : ""}
           </Text>
         </View>

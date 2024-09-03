@@ -1,6 +1,6 @@
 "use client";
 import Select from "@/components/select-input";
-import React from "react";
+import React, { useState } from "react";
 import { useFieldArray, useForm, Form } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -10,6 +10,7 @@ import ConfrimDialog2 from "./confrim-dialog2";
 import { User } from "@/types/user";
 import EmailPopup from "./email-popup";
 import { standards } from "@/app/constant";
+import { ArrowRightLeft } from "lucide-react";
 
 type Parameters = {
   unit: string;
@@ -120,6 +121,7 @@ const UnderTestingForm = ({
     getValues,
     formState: { isLoading, isSubmitting },
     handleSubmit,
+    setValue,
   } = useForm({
     defaultValues: {
       status: "",
@@ -159,8 +161,8 @@ const UnderTestingForm = ({
       ...(currentStep === 9 && {
         sign_verified: formData?.sign_verified ? 1 : 0,
         authorized_sign_date: formData?.authorized_sign_date
-        ? new Date(formData?.authorized_sign_date).toISOString().split("T")[0]
-        : new Date().toISOString().split("T")[0],
+          ? new Date(formData?.authorized_sign_date).toISOString().split("T")[0]
+          : new Date().toISOString().split("T")[0],
       }),
 
       test_params: parameters.map((para) => ({
@@ -190,10 +192,26 @@ const UnderTestingForm = ({
       })),
     },
   });
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name: "test_params",
   });
+
+  const [showSpec, setShowSpec] = useState<boolean[]>(
+    parameters.map((para) => (para.specification_limits ? true : false)),
+  );
+
+  const handleShowSpec = (idx: number): void => {
+    // update(idx, { min_limits: undefined });
+    // update(idx, { max_limits: undefined });
+    // update(idx, { specification_limits: undefined });
+    setValue(`test_params.${idx}.min_limits`, undefined as any);
+    setValue(`test_params.${idx}.max_limits`, undefined as any);
+    setValue(`test_params.${idx}.specification_limits`, undefined as any);
+    setShowSpec((prevState) =>
+      prevState.map((value, i) => (i === idx ? !value : value)),
+    );
+  };
 
   const [loading, setLoading] = React.useState(false);
   const [state, setState] = React.useState<InitialState | undefined>(
@@ -538,7 +556,6 @@ const UnderTestingForm = ({
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />{" "}
             </div>
-           
           </>
         )}
         <div className="mb-6">
@@ -577,9 +594,15 @@ const UnderTestingForm = ({
                       <th className="min-w-[100px] text-sm font-medium text-black dark:text-white">
                         Specification Limits
                       </th>
+                      {currentStep === 5 && (
+                        <th className="w-[100px] text-sm font-medium text-black dark:text-white">
+                          Switch
+                        </th>
+                      )}
                       <th className="w-1/5 text-sm font-medium text-black dark:text-white">
                         Result Obtained
                       </th>
+
                       <th className="w-[120px] text-sm font-medium text-black dark:text-white">
                         Status
                       </th>
@@ -643,40 +666,54 @@ const UnderTestingForm = ({
                               />
                             ) : (
                               <>
-                                <input
-                                  type="text"
-                                  required
-                                  {...register(
-                                    `test_params.${index}.specification_limits`,
-                                  )}
-                                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                />
-                                <div className="flex gap-2">
-                                  <div>
-                                    <label>Min</label>
-                                    <input
-                                      type="text"
-                                      required
-                                      {...register(
-                                        `test_params.${index}.min_limits`,
-                                      )}
-                                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                    />
+                                {showSpec[index] ? (
+                                  <input
+                                    type="text"
+                                    required
+                                    {...register(
+                                      `test_params.${index}.specification_limits`,
+                                    )}
+                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                  />
+                                ) : (
+                                  <div className="flex gap-2">
+                                    <div>
+                                      <label>Min</label>
+                                      <input
+                                        type="text"
+                                        required
+                                        {...register(
+                                          `test_params.${index}.min_limits`,
+                                        )}
+                                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label>Max</label>
+                                      <input
+                                        type="text"
+                                        required
+                                        {...register(
+                                          `test_params.${index}.max_limits`,
+                                        )}
+                                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      />
+                                    </div>
                                   </div>
-                                  <div>
-                                    <label>Max</label>
-                                    <input
-                                      type="text"
-                                      required
-                                      {...register(
-                                        `test_params.${index}.max_limits`,
-                                      )}
-                                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                    />
-                                  </div>
-                                </div>
+                                )}
                               </>
                             )}
+                          </td>
+
+                          <td className="border-b border-[#eee] px-2 dark:border-strokedark">
+                            <button
+                              type="button"
+                              onClick={() => handleShowSpec(index)}
+                              className="hover:bg-gray-300 focus:ring-gray-400 active:bg-gray-400 transform rounded-full bg-transparent p-2 transition-transform duration-300 ease-in-out focus:outline-none focus:ring-2 disabled:text-slate-200"
+                              disabled={test_type_id === 1}
+                            >
+                              <ArrowRightLeft />
+                            </button>
                           </td>
                           <td className="border-b border-[#eee] px-2 dark:border-strokedark">
                             <input
