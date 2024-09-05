@@ -16,7 +16,9 @@ import {
   ClipboardPlus,
   TestTube2,
   SwatchBook,
-  BadgeIndianRupee 
+  BadgeIndianRupee,
+  Handshake,
+  ReceiptIndianRupee
 } from "lucide-react";
 import { MenuType } from "@/app/dashboard/layout";
 
@@ -101,6 +103,11 @@ const menulist = [
     name: "Samples",
     pathname: "samples",
     icon: <TestTube2 />,
+  },
+  {
+    name: "Invoices",
+    pathname: "invoices",
+    icon: <ReceiptIndianRupee />,
   },
 ];
 
