@@ -52,8 +52,8 @@ const USDExtraSection = ({ note }: { note?: string }) => {
           Payment Terms & Conditions:
         </Text>
         <Text style={{ fontSize: 8, marginLeft: 2, marginVertical: 5 }}>
-          Cheque / Demand Draft should be drawn in favour of &quot;TRUSTIN
-          ANALYTICAL SOLUTIONS PVT LTD&quot; payable at Chennai.
+          Wire Transfer should be drawn in favour of &quot;TRUSTIN ANALYTICAL
+          SOLUTIONS PVT LTD&quot; payable at Chennai.
         </Text>
       </View>
       <View>
