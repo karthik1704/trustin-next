@@ -3,7 +3,7 @@
 export const SERVER_API_URL = "https://libkesapi.vimkes.com";
 export const PDF_URL = "https://libkes.vimkes.com"
 
-// // //Local
+// //Local
 
 // export const SERVER_API_URL = "http://localhost:8000";
 // export const PDF_URL = "http://localhost:3000";
@@ -25,3 +25,5 @@ export const standards:Standards = {
     IP: "Indian Pharmacopoeia",
     USP: "United States Pharmacopeia"
 };
+
+export const logo = "/images/logo/logo.png";
