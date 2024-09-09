@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { SERVER_API_URL } from "@/app/constant";
 
 export const metadata: Metadata = {
-  title: "Add New Quotation | Trustin",
+  title: "Add New Invoice | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
   // other metadata
 };
@@ -56,7 +56,7 @@ const NewFrontDesk = async () => {
   const data: Data = await getData();
   return (
     <>
-      <Breadcrumb pageName="Add New Front Desk" />
+      <Breadcrumb pageName="Add New Invoice" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-1">
         <div className="flex flex-col gap-9">

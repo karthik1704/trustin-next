@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { createInvoice } from "../actions";
 import {
   useFieldArray,
   useForm,
@@ -17,11 +16,15 @@ import ComboBox2 from "@/components/combo-box/combo-box2";
 import { Data } from "./typings";
 import Select from "@/components/select-input";
 import { Trash2 } from "lucide-react";
-
+import { dateFormatter } from "@/lib/utils";
 
 type props = {
   data: Data;
-  actionFn: ()=>void
+  actionFn: (
+    data: FormValues,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
 };
 type InitialState = {
   fieldErrors?: {} | null;
@@ -34,11 +37,53 @@ const initialState: InitialState = {
   type: null,
   message: null,
 };
-const InvoiceAddForm = ({ data, actionFn }: props) => {
-  const form = useForm({
+type FormValues = {
+  company_name: string;
+  discount: number | undefined;
+  invoice_type: string;
+  currency: string;
+  tested_type: string;
+  customer_id: string | number;
+  customer_address: string;
+  customer_email: string;
+  customer_gst: string;
+  customer_ref_no: string;
+  quotation_ref_no: string;
+  sample_id_nos: string;
+  parameters: {
+    id: number;
+    test_parameter: string;
+    sac: string;
+    testing_charge: number;
+    no_of_tested: number;
+    total_testing_charge: number;
+  }[];
+};
+
+const InvoiceEditForm = ({ data, actionFn }: props) => {
+  const form = useForm<FormValues>({
     defaultValues: {
-      discount:0,
-      // parameters: [],
+      company_name: data.invoice.customer.company_name || "",
+      discount: Number(data.invoice.discount) || 0,
+      invoice_type: data.invoice.invoice_type || "",
+      currency: data.invoice.currency || "",
+      tested_type: data.invoice.tested_type || "",
+      customer_id: data.invoice.customer_id || "",
+      customer_address: data.invoice.customer_address || "",
+      customer_email: data.invoice.customer_email || "",
+      customer_gst: data.invoice.customer_gst || "",
+      customer_ref_no: data.invoice.customer_ref_no || "",
+      quotation_ref_no: data.invoice.quotation_ref_no || "",
+      sample_id_nos: data.invoice.sample_id_nos || "",
+      parameters:
+        data.invoice.invoice_parameters?.map((item) => ({
+          id: item.id,
+          test_parameter: item.test_parameter,
+          sac: item.sac,
+          testing_charge: item.testing_charge,
+          no_of_tested: item.no_of_tested,
+          total_testing_charge: item.total_testing_charge,
+        })) || [],
     },
   });
 
@@ -50,31 +95,19 @@ const InvoiceAddForm = ({ data, actionFn }: props) => {
   const watchTestedType = useWatch({
     control: form.control,
     name: "tested_type",
-    defaultValue: "BATCHES",
+    defaultValue: data.invoice.tested_type,
   });
 
   const watchCurrency = useWatch({
     control: form.control,
     name: "currency",
-    defaultValue: "INR",
+    defaultValue: data.invoice.currency,
   });
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
 
-  useEffect(() => {
-    if (!watchCompanyFieldValue) return;
-    console.log(watchCompanyFieldValue);
-    const customer = data.customers.find(
-      (customer) =>
-        customer.id.toString() === watchCompanyFieldValue.toString(),
-    );
-
-    form.setValue("customer_address", customer?.full_address ?? "");
-    form.setValue("customer_email", customer?.email ?? "");
-
-    form.setValue("customer_gst", customer?.gst ?? "");
-  }, [data.customers, form, watchCompanyFieldValue]);
+  const isEditable = data.invoice.status_id === 1;
 
   useEffect(() => {
     if (state?.type === null) return;
@@ -94,7 +127,7 @@ const InvoiceAddForm = ({ data, actionFn }: props) => {
     }
   }, [state, router]);
 
-  const handleForm = async (data) => {
+  const handleForm = async (data: FormValues) => {
     const res = await actionFn(data);
     console.log(res);
     setState(res);
@@ -109,21 +142,14 @@ const InvoiceAddForm = ({ data, actionFn }: props) => {
               <label className="mb-2.5 block text-black dark:text-white">
                 Customer
               </label>
-              <Controller
-                name={`customer_id`}
-                control={form.control}
-                render={({ field: { onChange, value, onBlur } }) => (
-                  <ComboBox2
-                    name={`customer_id`}
-                    data={data.customers.map((t) => ({
-                      name: ` ${t.customer_code} - ${t.company_name}`,
-                      value: t.id,
-                    }))}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                  />
-                )}
+              <input {...form.register("customer_id")} type="hidden" />
+              <input
+                {...form.register("company_name")}
+                type="text"
+                placeholder="Enter Company Name"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                disabled={!isEditable}
+                readOnly={true}
               />
             </div>
           </div>
@@ -137,6 +163,7 @@ const InvoiceAddForm = ({ data, actionFn }: props) => {
                 {...form.register("customer_address")}
                 placeholder="Enter full Address"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                disabled={!isEditable}
               />
             </div>
           </div>
@@ -150,6 +177,7 @@ const InvoiceAddForm = ({ data, actionFn }: props) => {
                 type="text"
                 placeholder="Enter Contact  Email"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                disabled={!isEditable}
               />
             </div>
           </div>
@@ -163,6 +191,7 @@ const InvoiceAddForm = ({ data, actionFn }: props) => {
                 {...form.register("customer_gst")}
                 placeholder="Enter Gst No"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                disabled={!isEditable}
               />
             </div>
           </div>
@@ -176,6 +205,7 @@ const InvoiceAddForm = ({ data, actionFn }: props) => {
                 {...form.register("customer_ref_no")}
                 placeholder="Enter Customer Reference No."
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                disabled={!isEditable}
               />
             </div>
           </div>
@@ -189,6 +219,7 @@ const InvoiceAddForm = ({ data, actionFn }: props) => {
                 {...form.register("quotation_ref_no")}
                 placeholder="Enter Quotation Reference No"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                disabled={!isEditable}
               />
             </div>
           </div>
@@ -201,26 +232,29 @@ const InvoiceAddForm = ({ data, actionFn }: props) => {
                 {...form.register("sample_id_nos")}
                 placeholder="Enter Sample ID Nos"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                disabled={!isEditable}
               />
             </div>
           </div>
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-            <Select
-              name="invoice_type"
-              label="Invoice Type"
-              register={form.register}
-              width={"w-full xl:w-1/2"}
-            >
-              <option value="LOCAL">Local</option>
-              <option value="OTHER_STATE">Other State</option>
-              <option value="OUTSIDE">Outside India</option>
-            </Select>
+            <div className="w-full xl:w-1/2">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Invoice Type
+              </label>
+              <input
+                type="text"
+                {...form.register("invoice_type")}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                readOnly
+              />
+            </div>
             <Select
               name="currency"
               label="Currency Type"
               register={form.register}
               width={"w-full xl:w-1/2"}
+              disabled={!isEditable}
             >
               <option value="INR">INR</option>
               <option value="USD">USD</option>
@@ -233,6 +267,7 @@ const InvoiceAddForm = ({ data, actionFn }: props) => {
               label="Tested Type"
               register={form.register}
               width={"w-full"}
+              disabled={!isEditable}
             >
               <option value="BATCHES">Batches</option>
               <option value="PIECES">Pieces</option>
@@ -247,22 +282,26 @@ const InvoiceAddForm = ({ data, actionFn }: props) => {
             tested_type={watchTestedType}
             currency={watchCurrency}
             form={form}
+            isEditable={isEditable}
+            invoiceType={data.invoice.invoice_type}
           />
 
-          <button
-            type="submit"
-            className="mt-4 flex w-full transform-gpu justify-center rounded bg-primary p-3 font-medium text-gray transition-all duration-300 hover:bg-blue-500 active:scale-95 disabled:bg-slate-500"
-            disabled={form.formState.isSubmitting}
-          >
-            {form.formState.isSubmitting ? "Loading..." : "Submit"}
-          </button>
+          {isEditable && (
+            <button
+              type="submit"
+              className="mt-4 flex w-full transform-gpu justify-center rounded bg-primary p-3 font-medium text-gray transition-all duration-300 hover:bg-blue-500 active:scale-95 disabled:bg-slate-500"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? "Loading..." : "Submit"}
+            </button>
+          )}
         </div>
       </form>
     </UiForm>
   );
 };
 
-export default InvoiceAddForm;
+export default InvoiceEditForm;
 
 const TestParamsForm = ({
   control,
@@ -271,6 +310,8 @@ const TestParamsForm = ({
   tested_type,
   currency,
   form,
+  isEditable,
+  invoiceType
 }: {
   control: any;
   register: any;
@@ -278,6 +319,8 @@ const TestParamsForm = ({
   tested_type: string;
   currency: string;
   form: any;
+  isEditable: boolean;
+  invoiceType: string;
 }) => {
   const { fields, append, remove, replace } = useFieldArray({
     control,
@@ -294,10 +337,11 @@ const TestParamsForm = ({
     defaultValue: 0,
   });
 
-  const [totals, setTotals] = useState<{ key: number; value: number }>({});
+  const [totals, setTotals] = useState<{ [key: number]: number }>({});
   const [subtotal, setSubtotal] = useState<number>(0);
   const [sgst, setSGST] = useState<number>(0);
   const [cgst, setCGST] = useState<number>(0);
+  const [igst, setIGST] = useState<number>(0);
   const [grandTotal, setGrandTotal] = useState<number>(0);
 
   const calculateTotalCharges = useCallback(() => {
@@ -305,7 +349,7 @@ const TestParamsForm = ({
 
     let newSubtotal = 0;
 
-    const updatedTotals = test_watch.reduce((acc, item, idx) => {
+    const updatedTotals = test_watch.reduce((acc: { [x: string]: number; }, item: { testing_charge: any; no_of_tested: any; }, idx: string | number) => {
       const testingCharge = parseFloat(item.testing_charge || "0");
       const noOfTested = parseInt(item.no_of_tested || "0");
       const totalTestingCharge = testingCharge * noOfTested;
@@ -334,15 +378,25 @@ const TestParamsForm = ({
     setSubtotal(newSubtotal);
 
     // Assuming SGST and CGST are percentages, for example, 9% each
-    const sgstAmount = newSubtotal * 0.09;
-    const cgstAmount = newSubtotal * 0.09;
+    // Calculate SGST and CGST based on invoice type
+    let sgstAmount = 0;
+    let cgstAmount = 0;
+    let igstAmount = 0;
+    if (invoiceType === "TAMILNADU_CUSTOMER") {
+      sgstAmount = newSubtotal * 0.09;
+      cgstAmount = newSubtotal * 0.09;
+    } else if (invoiceType === "OTHER_STATE_CUSTOMER") {
+      igstAmount = newSubtotal * 0.18;
+    }
+
     const newGrandTotal =
       newSubtotal + sgstAmount + cgstAmount - (watchDiscount ?? 0);
 
     setSGST(sgstAmount);
     setCGST(cgstAmount);
+    setIGST(igstAmount);
     setGrandTotal(newGrandTotal);
-  }, [test_watch, form, arrayFieldName, watchDiscount]);
+  }, [test_watch, invoiceType, watchDiscount, form, arrayFieldName]);
 
   // Run calculation when the watched fields change
   useEffect(() => {
@@ -352,13 +406,16 @@ const TestParamsForm = ({
   return (
     <div className="rounded-sm border border-stroke bg-white px-2 pb-2.5 pt-2 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-3.5 xl:pb-1">
       <div className="flex justify-end">
-        <button
-          type="button"
-          onClick={() => replace([])}
-          className="hover:text-bule-400 mb-1 flex transform-gpu font-medium text-primary transition-all duration-300 hover:text-blue-400 active:scale-95 disabled:bg-slate-500"
-        >
-          Reset
-        </button>
+        {isEditable && (
+          <button
+            type="button"
+            onClick={() => replace([])}
+            className="hover:text-bule-400 mb-1 flex transform-gpu font-medium text-primary transition-all duration-300 hover:text-blue-400 active:scale-95 disabled:bg-slate-500"
+            disabled={!isEditable}
+          >
+            Reset
+          </button>
+        )}
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
@@ -388,7 +445,7 @@ const TestParamsForm = ({
             </tr>
           </thead>
           <tbody>
-            {fields.map((item, idx:number) => (
+            {fields.map((item, idx: number) => (
               <tr key={item.id}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
                   <h5 className="font-medium text-black dark:text-white">
@@ -397,9 +454,14 @@ const TestParamsForm = ({
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
                   <input
+                    type="hidden"
+                    {...register(`${arrayFieldName}.${idx}.id`)}
+                  />
+                  <input
                     type="text"
                     {...register(`${arrayFieldName}.${idx}.test_parameter`)}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 pl-1 pr-2 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    disabled={!isEditable}
                   />
                 </td>
                 <td className="border-b border-[#eee] px-1 py-3 pl-9 dark:border-strokedark xl:pl-11">
@@ -407,6 +469,7 @@ const TestParamsForm = ({
                     type="text"
                     {...register(`${arrayFieldName}.${idx}.sac`)}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 pl-1 pr-2 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    disabled={!isEditable}
                   />
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
@@ -420,6 +483,7 @@ const TestParamsForm = ({
                       }
                     }}
                     onWheel={(e) => e.preventDefault()}
+                    disabled={!isEditable}
                   />
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-6">
@@ -433,6 +497,7 @@ const TestParamsForm = ({
                       }
                     }}
                     onWheel={(e) => e.preventDefault()}
+                    disabled={!isEditable}
                   />
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-6">
@@ -447,7 +512,11 @@ const TestParamsForm = ({
                   {totals[idx]}
                 </td>
                 <td className="border-b border-[#eee] px-2 py-5 pl-6 dark:border-strokedark xl:pl-6">
-                  <button type="button" onClick={() => remove(idx)}>
+                  <button
+                    type="button"
+                    onClick={() => remove(idx)}
+                    disabled={!isEditable}
+                  >
                     <Trash2 />
                   </button>
                 </td>
@@ -465,6 +534,7 @@ const TestParamsForm = ({
                 {subtotal}
               </td>
             </tr>
+
             <tr>
               <td
                 colSpan={5}
@@ -477,9 +547,11 @@ const TestParamsForm = ({
                   type="number"
                   {...register(`discount`)}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent px-2 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  disabled={!isEditable}
                 />
               </td>
             </tr>
+            {invoiceType === "TAMILNADU_CUSTOMER" && (
             <tr>
               <td
                 colSpan={5}
@@ -492,6 +564,8 @@ const TestParamsForm = ({
                 {cgst}
               </td>
             </tr>
+            )}
+            {invoiceType === "TAMILNADU_CUSTOMER" && (
             <tr>
               <td
                 colSpan={5}
@@ -504,6 +578,21 @@ const TestParamsForm = ({
                 {sgst}
               </td>
             </tr>
+            )}
+            {invoiceType === "OTHER_STATE_CUSTOMER" && (  
+               <tr>
+               <td
+                 colSpan={5}
+                 className="px-4 py-5 text-right font-medium text-black dark:text-white"
+               >
+                 IGST ({18}%):
+               </td>
+               <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
+                  {/* IGST value */}
+                  {igst}
+               </td>
+             </tr>  
+            )}
             <tr>
               <td
                 colSpan={5}
@@ -519,20 +608,23 @@ const TestParamsForm = ({
           </tbody>
         </table>
         <div className="flex gap-4">
-          <button
-            type="button"
-            className="mt-2 flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
-            onClick={() =>
-              append({
-                test_parameter: undefined,
-                sac: undefined,
-                testing_charge: undefined,
-                no_of_tested: undefined,
-              })
-            }
-          >
-            Add Parameter
-          </button>
+          {isEditable && (
+            <button
+              type="button"
+              className="mt-2 flex w-1/5 transform-gpu items-center justify-center rounded border-2 border-primary p-3 font-medium text-black transition-all duration-300 hover:bg-primary hover:text-white active:scale-95 disabled:bg-slate-500"
+              onClick={() =>
+                append({
+                  id: "",
+                  test_parameter: undefined,
+                  sac: undefined,
+                  testing_charge: undefined,
+                  no_of_tested: undefined,
+                })
+              }
+            >
+              Add Parameter
+            </button>
+          )}
         </div>
       </div>
     </div>

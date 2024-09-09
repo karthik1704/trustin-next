@@ -17,12 +17,7 @@ import ComboBox2 from "@/components/combo-box/combo-box2";
 import { Data } from "./page";
 import Select from "@/components/select-input";
 import { Trash2 } from "lucide-react";
-
-type InitialState = {
-  fieldErrors?: {} | null;
-  type?: string | null;
-  message?: any | string | null;
-};
+import { invoiceTypes } from "../constants";
 
 type props = {
   data: Data;
@@ -32,17 +27,41 @@ type InitialState = {
   type?: string | null;
   message?: any | string | null;
 };
+type FormValues = {
+  customer_id: string;
+  customer_address: string;
+  customer_email: string;
+  customer_gst: string;
+  customer_ref_no: string;
+  quotation_ref_no: string;
+  sample_id_nos: string;
+  parameters: {
+    parameter: string;
+    sac: string;
+    testing_charge: number;
+    no_of_tested: number;
+    total_testing_charge: number;
+  }[];
+  discount: number;
+  invoice_type: string;
+  tested_type: string;
+  currency: string;
+};
 
 const initialState: InitialState = {
   fieldErrors: {},
   type: null,
   message: null,
 };
+
 const InvoiceAddForm = ({ data }: props) => {
-  const form = useForm({
+  const form = useForm<FormValues>({
     defaultValues: {
-      discount:0,
-      // parameters: [],
+      discount: 0,
+      invoice_type: "INR",
+      tested_type: "BATCHES",
+      currency: "INR",
+      parameters: [],
     },
   });
 
@@ -61,6 +80,10 @@ const InvoiceAddForm = ({ data }: props) => {
     control: form.control,
     name: "currency",
     defaultValue: "INR",
+  });
+  const watchInvoiceType = useWatch({
+    control: form.control,
+    name: "invoice_type",
   });
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
@@ -98,7 +121,7 @@ const InvoiceAddForm = ({ data }: props) => {
     }
   }, [state, router]);
 
-  const handleForm = async (data) => {
+  const handleForm = async (data: FormValues) => {
     const res = await createInvoice(data);
     console.log(res);
     setState(res);
@@ -216,10 +239,13 @@ const InvoiceAddForm = ({ data }: props) => {
               register={form.register}
               width={"w-full xl:w-1/2"}
             >
-              <option value="LOCAL">Local</option>
-              <option value="OTHER_STATE">Other State</option>
-              <option value="OUTSIDE">Outside India</option>
+              {Object.entries(invoiceTypes).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
             </Select>
+
             <Select
               name="currency"
               label="Currency Type"
@@ -238,6 +264,7 @@ const InvoiceAddForm = ({ data }: props) => {
               register={form.register}
               width={"w-full"}
             >
+              <option value="TESTED">Tested</option>
               <option value="BATCHES">Batches</option>
               <option value="PIECES">Pieces</option>
               <option value="LOCATION">Location</option>
@@ -250,6 +277,7 @@ const InvoiceAddForm = ({ data }: props) => {
             arrayFieldName="parameters"
             tested_type={watchTestedType}
             currency={watchCurrency}
+            invoiceType={watchInvoiceType}
             form={form}
           />
 
@@ -275,12 +303,14 @@ const TestParamsForm = ({
   tested_type,
   currency,
   form,
+  invoiceType,
 }: {
   control: any;
   register: any;
   arrayFieldName: string;
   tested_type: string;
   currency: string;
+  invoiceType: string;
   form: any;
 }) => {
   const { fields, append, remove, replace } = useFieldArray({
@@ -302,6 +332,7 @@ const TestParamsForm = ({
   const [subtotal, setSubtotal] = useState<number>(0);
   const [sgst, setSGST] = useState<number>(0);
   const [cgst, setCGST] = useState<number>(0);
+  const [igst, setIGST] = useState<number>(0);
   const [grandTotal, setGrandTotal] = useState<number>(0);
 
   const calculateTotalCharges = useCallback(() => {
@@ -309,7 +340,7 @@ const TestParamsForm = ({
 
     let newSubtotal = 0;
 
-    const updatedTotals = test_watch.reduce((acc, item, idx) => {
+    const updatedTotals = test_watch.reduce((acc: { [x: string]: number; }, item: { testing_charge: any; no_of_tested: any; }, idx: string | number) => {
       const testingCharge = parseFloat(item.testing_charge || "0");
       const noOfTested = parseInt(item.no_of_tested || "0");
       const totalTestingCharge = testingCharge * noOfTested;
@@ -338,15 +369,25 @@ const TestParamsForm = ({
     setSubtotal(newSubtotal);
 
     // Assuming SGST and CGST are percentages, for example, 9% each
-    const sgstAmount = newSubtotal * 0.09;
-    const cgstAmount = newSubtotal * 0.09;
+    // Calculate SGST and CGST based on invoice type
+    let sgstAmount = 0;
+    let cgstAmount = 0;
+    let igstAmount = 0;
+    if (invoiceType === "TAMILNADU_CUSTOMER") {
+      sgstAmount = newSubtotal * 0.09;
+      cgstAmount = newSubtotal * 0.09;
+    } else if (invoiceType === "OTHER_STATE_CUSTOMER") {
+      igstAmount = newSubtotal * 0.18;
+    }
+
     const newGrandTotal =
-      newSubtotal + sgstAmount + cgstAmount - (watchDiscount ?? 0);
+      newSubtotal + sgstAmount + cgstAmount + igstAmount - (watchDiscount ?? 0);
 
     setSGST(sgstAmount);
     setCGST(cgstAmount);
+    setIGST(igstAmount);
     setGrandTotal(newGrandTotal);
-  }, [test_watch, form, arrayFieldName, watchDiscount]);
+  }, [test_watch, invoiceType, watchDiscount, form, arrayFieldName]);
 
   // Run calculation when the watched fields change
   useEffect(() => {
@@ -392,7 +433,7 @@ const TestParamsForm = ({
             </tr>
           </thead>
           <tbody>
-            {fields.map((item, idx:number) => (
+            {fields.map((item, idx: number) => (
               <tr key={item.id}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-4">
                   <h5 className="font-medium text-black dark:text-white">
@@ -469,6 +510,7 @@ const TestParamsForm = ({
                 {subtotal}
               </td>
             </tr>
+
             <tr>
               <td
                 colSpan={5}
@@ -484,30 +526,49 @@ const TestParamsForm = ({
                 />
               </td>
             </tr>
-            <tr>
-              <td
-                colSpan={5}
-                className="px-4 py-5 text-right font-medium text-black dark:text-white"
-              >
-                CGST ({9}%):
-              </td>
-              <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
-                {/* CGST value */}
-                {cgst}
-              </td>
-            </tr>
-            <tr>
-              <td
-                colSpan={5}
-                className="px-4 py-5 text-right font-medium text-black dark:text-white"
-              >
-                SGST ({9}%):
-              </td>
-              <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
-                {/* SGST value */}
-                {sgst}
-              </td>
-            </tr>
+
+            {invoiceType === "TAMILNADU_CUSTOMER" && (
+              <>
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="px-4 py-5 text-right font-medium text-black dark:text-white"
+                  >
+                    CGST ({9}%):
+                  </td>
+                  <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
+                    {/* CGST value */}
+                    {cgst}
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="px-4 py-5 text-right font-medium text-black dark:text-white"
+                  >
+                    SGST ({9}%):
+                  </td>
+                  <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
+                    {/* SGST value */}
+                    {sgst}
+                  </td>
+                </tr>
+              </>
+            )}
+            {invoiceType === "OTHER_STATE_CUSTOMER" && (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="px-4 py-5 text-right font-medium text-black dark:text-white"
+                >
+                  IGST ({18}%):
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
+                  {/* IGST value */}
+                  {igst}
+                </td>
+              </tr>
+            )}
             <tr>
               <td
                 colSpan={5}

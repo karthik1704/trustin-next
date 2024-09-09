@@ -1,13 +1,19 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import { updateInvoice } from "../actions";
-import { SERVER_API_URL } from "@/app/constant";
-import InvoiceEditForm from "./invoice-edit-form";
-import { Customer, Data } from "./typings";
+import { redirect } from "next/navigation";
+import { PDF_URL, SERVER_API_URL } from "@/app/constant";
+import {
+  patchInvoiceWorkflow,
+  patchInvoiceWorkflowTest,
+  updateInvoice,
+} from "../actions";
+import InvoiceWorkflowForm from "./invoice-workflow-form";
+import { Data } from "./typings";
+import { User } from "@/types/user";
 
 export const metadata: Metadata = {
-  title: "Edit  Quotation | Trustin",
+  title: "Invoice Workflow | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
   // other metadata
 };
@@ -15,27 +21,33 @@ export const metadata: Metadata = {
 async function getData(id: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-  console.log(access_token);
-  const res = await fetch(`${SERVER_API_URL}/customers/all/`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token?.value}`,
-    },
-  });
-  const res1 = await fetch(`${SERVER_API_URL}/invoices/${id}`, {
+
+  const res = await fetch(`${SERVER_API_URL}/invoices/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
 
-
-  const res3 = await fetch(`${SERVER_API_URL}/users/me`, {
+  const res2 = await fetch(`${SERVER_API_URL}/customers/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
+  const res3 = await fetch(`${SERVER_API_URL}/users/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+  const res4 = await fetch(`${SERVER_API_URL}/users/me`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
 
@@ -45,47 +57,77 @@ async function getData(id: string) {
     // throw new Error("Failed to fetch data");
     console.log("error");
   }
-
-  if (!res1.ok) {
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
     console.log("error");
+  }
+  if (!res2.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error2");
   }
   if (!res3.ok) {
-    console.log("error");
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error3");
+  }
+  if (!res4.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error4");
   }
 
-  const customers = await res.json();
-  const invoices = await res1.json();
-  const user = await res3.json();
+  const invoice = await res.json();
+  // const branches = await res2.json();
+  const users: User[] = await res3.json();
+  const currentUser = await res4.json();
 
-  return { customers, invoices,  user };
+  return {
+    invoice,
+    // branches,
+    users: users,
+    currentUser,
+  };
 }
 
-const QuotationsEditPage = async ({
+const EditInvoicePage = async ({
   params: { id },
 }: {
   params: { id: string };
 }) => {
   const data: Data = await getData(id);
-  const updateWithId = updateInvoice.bind(null, id);
+  //   const updateProductWithId = updateProducts.bind(null, id);
+  const patchInvoiceWorkflowWithId = patchInvoiceWorkflow.bind(null, id);
+
+  const updateSampleWithId = updateInvoice.bind(null, id);
+  const patchInvoiceWorkflowTestWithId = patchInvoiceWorkflowTest.bind(
+    null,
+    id,
+  );
+
   return (
     <>
-      <Breadcrumb pageName="Edit Invoice" />
+      <Breadcrumb pageName="Invoice WorkFlow" />
 
-      <div className="grid grid-cols-1 gap-9 sm:grid-cols-1">
+      <div className="grid grid-cols-1 items-center justify-center gap-9 sm:grid-cols-1">
         <div className="flex flex-col gap-9">
           {/* <!-- Contact Form --> */}
-          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            {/* <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Contact Form
-              </h3>
-            </div> */}
-            <InvoiceEditForm data={data} actionFn={updateWithId} />
-          </div>
+          <InvoiceWorkflowForm
+            data={data}
+            actionFn={patchInvoiceWorkflowWithId}
+            actionFnResult={patchInvoiceWorkflowTestWithId}
+            actionUpdateInvoice={updateSampleWithId}
+            qr={""}
+          />
         </div>
       </div>
     </>
   );
 };
 
-export default QuotationsEditPage;
+export default EditInvoicePage;

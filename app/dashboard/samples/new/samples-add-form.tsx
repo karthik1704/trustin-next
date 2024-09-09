@@ -63,6 +63,7 @@ const SamplesAddForm = ({ data }: { data: any }) => {
     name: "batch_id",
   });
 
+
   const [filterId, setFilterId] = useState("1");
   const [parameters, setParameters] = useState<[]>([]);
   const [selectedBatch, setSelectBatch] = useState<{} | null>(null);
