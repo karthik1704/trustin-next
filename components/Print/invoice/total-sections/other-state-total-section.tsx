@@ -64,7 +64,7 @@ const OtherStateTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
           Add: IGST @ 18%
         </Text>
         <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
-          {invoice.sgst}
+          {invoice.igst}
         </Text>
       </View>
       <View style={styles.tableRow}>
