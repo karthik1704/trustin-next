@@ -390,7 +390,7 @@ const TestParamsForm = ({
     }
 
     const newGrandTotal =
-      newSubtotal + sgstAmount + cgstAmount - (watchDiscount ?? 0);
+      newSubtotal + sgstAmount + cgstAmount + igstAmount- (watchDiscount ?? 0);
 
     setSGST(sgstAmount);
     setCGST(cgstAmount);
