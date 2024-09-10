@@ -21,7 +21,7 @@ const InvoiceTable = ({ data }: { data: Data }) => {
     params.set("sort_by", column);
     params.set("sort_order", newSortOrder);
     params.set("page", "1");
-    router.push(`/dashboard/quotations?${params.toString()}`);
+    router.push(`/dashboard/invoices?${params.toString()}`);
   };
 
   console.log(data)
