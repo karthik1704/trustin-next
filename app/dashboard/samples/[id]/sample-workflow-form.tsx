@@ -28,7 +28,7 @@ import {
 import ReactDOMServer from "react-dom/server";
 // import Modal from 'react-modal';
 import Modal from "@/components/Modal/Modal";
-import MyDocument from "@/components/Print/ReportPDF";
+import MyDocument from "@/components/Print/report/ReportPDF";
 // Make sure to bind modal to your app element (https://reactcommunity.org/react-modal/accessibility/)
 
 // import { PDFDocument, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
@@ -621,7 +621,21 @@ const SampleWorkflowForm = ({
                   </p>
                   <p>{data?.sample?.under_cdsco ? "Yes" : "No"}</p>
                 </div>
+
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Discipline:
+                  </p>
+                  <p>{data?.sample?.discipline}</p>
+                </div>
               </div>
+              <div className="w-full xl:w-1/5">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                  Show Status in report
+                </p>
+                <p>{data?.sample?.show_status_report ? "Yes" : "No"}</p>
+              </div>
+
               {/* <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
                 <div className="w-full xl:w-1/5">
                   <p className="mb-2.5 block font-semibold text-black dark:text-white">

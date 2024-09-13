@@ -11,6 +11,7 @@ import { User } from "@/types/user";
 import EmailPopup from "./email-popup";
 import { standards } from "@/app/constant";
 import { ArrowRightLeft } from "lucide-react";
+import MultiSelect from "@/components/multi-select";
 
 type Parameters = {
   unit: string;
@@ -131,7 +132,7 @@ const UnderTestingForm = ({
       ...(currentStep == 2 && {
         nabl_logo: data.sample.nabl_logo ? 1 : 0,
         under_cdsco: data.sample.under_cdsco ? 1 : 0,
-        discipline: formData?.discipline,
+        discipline: data.sample?.discipline,
         // group: formData?.group,
       }),
       comments: comment,
@@ -155,6 +156,7 @@ const UnderTestingForm = ({
       }),
       ...(currentStep === 8 && {
         authorized_sign_id: formData?.authorized_sign_id,
+        abbreviations: data.sample?.abbreviations ?? [],
         statement_of_conformity: data.sample.statement_of_conformity ?? "",
         reason: data.sample.reason ?? "",
       }),
@@ -220,7 +222,7 @@ const UnderTestingForm = ({
   const router = useRouter();
 
   const handleForm = async (data: {}) => {
-    console.log(data);
+    console.log('form data',data);
     const res = await patchFn(data);
     setState(res);
   };
@@ -522,7 +524,7 @@ const UnderTestingForm = ({
               />{" "}
             </div>
 
-            <Select
+            {/* <Select
               name="abbreviations"
               label="Abbreviations"
               register={register}
@@ -532,7 +534,22 @@ const UnderTestingForm = ({
                   {fullName}
                 </option>
               ))}
-            </Select>
+            </Select> */}
+            <div className="mb-6">
+              <label className="mb-2.5 block text-black dark:text-white">
+              Abbreviations
+              </label>
+            <MultiSelect
+              name="abbreviations"
+              control={control}
+              data={Object.entries(standards).map(([abbr, fullName]) => ({
+                value: abbr,
+                name: fullName,
+              }))}
+              
+            />
+            </div>
+              
           </>
         )}
         {currentStep === 9 && (

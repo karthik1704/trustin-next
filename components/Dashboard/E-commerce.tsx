@@ -9,6 +9,7 @@ import CardDataStats from "../CardDataStats";
 import { DashboardData, DashboardInfo } from "@/app/dashboard/page";
 import {
   ClipboardPlus,
+  ReceiptIndianRupee,
   Syringe,
   TestTube2,
   UserCheck,
@@ -82,6 +83,15 @@ const ECommerce = ({ data, startDate, endDate, sample }: { data: DashboardData, 
             pathName={data.menus.includes("samples") ? "samples" : "#"}
           >
             <TestTube2 className="text-primary dark:text-white" />
+          </CardDataStats>
+        )}
+        {!!data?.dashboard?.invoice_count && (
+          <CardDataStats
+            title="Total Invoices"
+            total={data.dashboard?.invoice_count.toString()}
+            pathName={data.menus.includes("invoices") ? "invoices" : "#"}
+          >
+            <ReceiptIndianRupee className="text-primary dark:text-white" />
           </CardDataStats>
         )}
       </div>

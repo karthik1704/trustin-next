@@ -99,7 +99,7 @@ function WorkFlowForm({
     });
     setRejectState(res);
   };
-
+  console.log(status);
   return (
     <form action={actionData}>
       <div className="p-2.5">

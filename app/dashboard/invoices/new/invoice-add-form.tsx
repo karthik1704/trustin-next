@@ -17,7 +17,7 @@ import ComboBox2 from "@/components/combo-box/combo-box2";
 import { Data } from "./page";
 import Select from "@/components/select-input";
 import { Trash2 } from "lucide-react";
-import { invoiceTypes } from "../constants";
+import { invoiceTypes, performaInvoiceTypes } from "../constants";
 
 type props = {
   data: Data;
@@ -31,8 +31,11 @@ type FormValues = {
   customer_id: string;
   customer_address: string;
   customer_email: string;
+  contact_person_name: string;
+  contact_phone: string;
   customer_gst: string;
   customer_ref_no: string;
+  invoice_mode: string;
   quotation_ref_no: string;
   sample_id_nos: string;
   parameters: {
@@ -85,6 +88,10 @@ const InvoiceAddForm = ({ data }: props) => {
     control: form.control,
     name: "invoice_type",
   });
+  const watchInvoice = useWatch({
+    control: form.control,
+    name: "invoice_mode",
+  });
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
@@ -99,7 +106,8 @@ const InvoiceAddForm = ({ data }: props) => {
 
     form.setValue("customer_address", customer?.full_address ?? "");
     form.setValue("customer_email", customer?.email ?? "");
-
+    // form.setValue("contact_person_name", customer?.contact_person_name ?? "");
+    // form.setValue("contact_phone", customer?.contact_phone ?? "");
     form.setValue("customer_gst", customer?.gst ?? "");
   }, [data.customers, form, watchCompanyFieldValue]);
 
@@ -130,6 +138,18 @@ const InvoiceAddForm = ({ data }: props) => {
   return (
     <UiForm {...form}>
       <form onSubmit={form.handleSubmit(handleForm)}>
+        <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+          <Select
+            name="invoice_mode"
+            label="Invoice"
+            register={form.register}
+            width={"w-full"}
+          >
+            <option value="INVOICE">Invoice</option>
+            <option value="PERFORMA_INVOICE">Performa Invoice</option>
+          </Select>
+        </div>
+
         <div className="p-6.5">
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
@@ -163,6 +183,32 @@ const InvoiceAddForm = ({ data }: props) => {
                 readOnly={true}
                 {...form.register("customer_address")}
                 placeholder="Enter full Address"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+          </div>
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Contact Person Name
+              </label>
+              <input
+                {...form.register("contact_person_name")}
+                type="text"
+                placeholder="Enter Contact Person Name"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+          </div>
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Contact Phone Number
+              </label>
+              <input
+                {...form.register("contact_phone")}
+                type="text"
+                placeholder="Enter Contact Phone Number"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
@@ -239,7 +285,11 @@ const InvoiceAddForm = ({ data }: props) => {
               register={form.register}
               width={"w-full xl:w-1/2"}
             >
-              {Object.entries(invoiceTypes).map(([key, value]) => (
+              {Object.entries(
+                watchInvoice === "PERFORMA_INVOICE"
+                  ? performaInvoiceTypes
+                  : invoiceTypes,
+              ).map(([key, value]) => (
                 <option key={key} value={key}>
                   {value}
                 </option>
@@ -278,6 +328,7 @@ const InvoiceAddForm = ({ data }: props) => {
             tested_type={watchTestedType}
             currency={watchCurrency}
             invoiceType={watchInvoiceType}
+            invoiceMode={watchInvoice}
             form={form}
           />
 
@@ -304,6 +355,7 @@ const TestParamsForm = ({
   currency,
   form,
   invoiceType,
+  invoiceMode,
 }: {
   control: any;
   register: any;
@@ -311,6 +363,7 @@ const TestParamsForm = ({
   tested_type: string;
   currency: string;
   invoiceType: string;
+  invoiceMode:string,
   form: any;
 }) => {
   const { fields, append, remove, replace } = useFieldArray({
@@ -328,7 +381,7 @@ const TestParamsForm = ({
     defaultValue: 0,
   });
 
-  const [totals, setTotals] = useState<{ key: number; value: number }>({});
+  const [totals, setTotals] = useState<{ [key: number]: number }>({});
   const [subtotal, setSubtotal] = useState<number>(0);
   const [sgst, setSGST] = useState<number>(0);
   const [cgst, setCGST] = useState<number>(0);
@@ -340,55 +393,64 @@ const TestParamsForm = ({
 
     let newSubtotal = 0;
 
-    const updatedTotals = test_watch.reduce((acc: { [x: string]: number; }, item: { testing_charge: any; no_of_tested: any; }, idx: string | number) => {
-      const testingCharge = parseFloat(item.testing_charge || "0");
-      const noOfTested = parseInt(item.no_of_tested || "0");
-      const totalTestingCharge = testingCharge * noOfTested;
+    const updatedTotals = test_watch.reduce(
+      (
+        acc: { [x: string]: number },
+        item: { testing_charge: string; no_of_tested: string },
+        idx: string | number,
+      ) => {
+        const testingCharge = parseFloat(item.testing_charge || "0");
+        const noOfTested = parseInt(item.no_of_tested || "0");
+        const totalTestingCharge = (testingCharge * noOfTested).toFixed(2);
 
-      // Only set the value if it has changed
-      if (
-        form.getValues(`${arrayFieldName}.${idx}.total_testing_charge`) !==
-        totalTestingCharge
-      ) {
-        form.setValue(
-          `${arrayFieldName}.${idx}.total_testing_charge`,
-          totalTestingCharge,
-        );
-      }
+        // Only set the value if it has changed
 
-      // Add the total charge to the running subtotal
-      newSubtotal += totalTestingCharge;
+        // Add the total charge to the running subtotal
+        newSubtotal += parseFloat(totalTestingCharge);
 
-      // Update the total for each row
-      acc[idx] = totalTestingCharge;
-      return acc;
-    }, {});
+        // Update the total for each row
+        acc[idx] = parseFloat(totalTestingCharge);
+        return acc;
+      },
+      {},
+    );
 
     // Update the subtotal, SGST, CGST, and grand total
     setTotals(updatedTotals);
-    setSubtotal(newSubtotal);
+    setSubtotal(parseFloat(newSubtotal.toFixed(2)));
 
     // Assuming SGST and CGST are percentages, for example, 9% each
     // Calculate SGST and CGST based on invoice type
     let sgstAmount = 0;
     let cgstAmount = 0;
     let igstAmount = 0;
-    if (invoiceType === "TAMILNADU_CUSTOMER") {
-      sgstAmount = newSubtotal * 0.09;
-      cgstAmount = newSubtotal * 0.09;
-    } else if (invoiceType === "OTHER_STATE_CUSTOMER") {
-      igstAmount = newSubtotal * 0.18;
+    if (invoiceMode === "INVOICE"){
+      if (invoiceType === "TAMILNADU_CUSTOMER") {
+        sgstAmount = parseFloat((newSubtotal * 0.09).toFixed(2));
+        cgstAmount = parseFloat((newSubtotal * 0.09).toFixed(2));
+      } else if (invoiceType === "OTHER_STATE_CUSTOMER") {
+        igstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
+      }
+    }
+   
+    if (invoiceMode === "PERFORMA_INVOICE"){
+      if (invoiceType === "PERFORMA_TAMILNADU_CUSTOMER") {
+        sgstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
+        cgstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
+      } else if (invoiceType === "PERFORMA_OTHER_STATE_CUSTOMER") {
+        igstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
+      }
     }
 
-    const newGrandTotal =
-      newSubtotal + sgstAmount + cgstAmount + igstAmount - (watchDiscount ?? 0);
+    const newGrandTotal = Math.round(
+      newSubtotal + sgstAmount + cgstAmount + igstAmount - (watchDiscount ?? 0),
+    );
 
     setSGST(sgstAmount);
     setCGST(cgstAmount);
     setIGST(igstAmount);
     setGrandTotal(newGrandTotal);
-  }, [test_watch, invoiceType, watchDiscount, form, arrayFieldName]);
-
+  }, [invoiceMode,test_watch, invoiceType, watchDiscount]);
   // Run calculation when the watched fields change
   useEffect(() => {
     calculateTotalCharges();

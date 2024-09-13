@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Data } from "./page";
 import { dateTimeFormatter } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { invoiceTypes } from "./constants";
 
 const params = new URLSearchParams(window.location.search);
 const SortBy = params.get("sort_by") || "id";
@@ -76,7 +77,7 @@ const InvoiceTable = ({ data }: { data: Data }) => {
                 </td>
                 <td className="border-b border-slate-400 px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {packageItem?.invoice_type ?? ""}{" "}
+                    {invoiceTypes[packageItem?.invoice_type as keyof typeof invoiceTypes] ?? ""}
                   </p>
                 </td>
                 <td className="border-b border-slate-400 px-4 py-5 dark:border-strokedark">

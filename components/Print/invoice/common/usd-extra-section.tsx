@@ -1,6 +1,8 @@
-import { View, Text } from "@react-pdf/renderer";
+/* eslint-disable jsx-a11y/alt-text */
+import { View, Text, Image } from "@react-pdf/renderer";
 
 import { StyleSheet } from "@react-pdf/renderer";
+import { SIGN_IMAGES } from "./signs";
 
 const styles = StyleSheet.create({
   row: {
@@ -21,7 +23,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const USDExtraSection = ({ note }: { note?: string }) => {
+const USDExtraSection = ({ note, authorized_sign_id }: { note?: string, authorized_sign_id: number|null }) => {
   return (
     <View>
       {note && (
@@ -39,7 +41,8 @@ const USDExtraSection = ({ note }: { note?: string }) => {
         style={{ textAlign: "right", justifyContent: "flex-end", marginTop: 3 }}
       >
         <Text>For Trustin Analytical Solutions Pvt. Ltd</Text>
-      </View>
+        {authorized_sign_id && <Image src={SIGN_IMAGES[authorized_sign_id]} style={{width: 100, height: 100}} />}
+        </View>
       <View style={{ marginTop: 80, marginBottom: 20 }}>
         <Text
           style={{

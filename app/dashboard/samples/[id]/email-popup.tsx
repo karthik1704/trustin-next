@@ -14,7 +14,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { pdf } from "@react-pdf/renderer";
 import { sentMail } from "../actions";
-import MyDocument from "@/components/Print/ReportPDF";
+import MyDocument from "@/components/Print/report/mail-report-pdf";
 import { Data } from "./typings";
 import Select from "@/components/select-input";
 import { toast } from "sonner";
@@ -208,7 +208,7 @@ const EmailForm = ({ filename, data, isDraft, qr, to }: Props) => {
         </div>
       </div>
 
-      <input type="hidden" value={filename} {...register("filename")} />
+      <input type="hidden" value={filename.split("/").join("-")} {...register("filename")} />
 
       <div className="flex gap-4">
         <button

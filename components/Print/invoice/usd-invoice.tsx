@@ -157,11 +157,11 @@ const USDInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => (
             parameters={invoiceData.invoice.invoice_parameters}
             currency={invoiceData.invoice.currency}
             invoice_type={invoiceData.invoice.invoice_type}
-            tested_type={invoiceData.invoice.tested_type}
+            tested_type={invoiceData.invoice.tested_type }
             invoice={invoiceData.invoice}
           />
           <USDTotalSection invoice={invoiceData.invoice} />
-          <USDExtraSection />
+          <USDExtraSection note={invoiceData.invoice.note} authorized_sign_id={invoiceData.invoice.authorized_sign_id } />
         </View>
         <Footer />
       </View>

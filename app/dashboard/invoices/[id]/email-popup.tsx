@@ -14,7 +14,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { pdf } from "@react-pdf/renderer";
 import { sentMail } from "../actions";
-import MyDocument from "@/components/Print/ReportPDF";
+import MyDocument from "@/components/Print/report/ReportPDF";
 import { Data } from "./typings";
 import Select from "@/components/select-input";
 import { toast } from "sonner";

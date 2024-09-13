@@ -45,6 +45,8 @@ type FormValues = {
   tested_type: string;
   customer_id: string | number;
   customer_address: string;
+  contact_person_name: string;
+  contact_phone: string;
   customer_email: string;
   customer_gst: string;
   customer_ref_no: string;
@@ -70,6 +72,8 @@ const InvoiceEditForm = ({ data, actionFn }: props) => {
       tested_type: data.invoice.tested_type || "",
       customer_id: data.invoice.customer_id || "",
       customer_address: data.invoice.customer_address || "",
+      contact_person_name: data.invoice.contact_person_name || "",
+      contact_phone: data.invoice.contact_phone || "",
       customer_email: data.invoice.customer_email || "",
       customer_gst: data.invoice.customer_gst || "",
       customer_ref_no: data.invoice.customer_ref_no || "",
@@ -164,6 +168,32 @@ const InvoiceEditForm = ({ data, actionFn }: props) => {
                 placeholder="Enter full Address"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                 disabled={!isEditable}
+              />
+            </div>
+          </div>
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Contact Person Name
+              </label>
+              <input
+                {...form.register("contact_person_name")}
+                type="text"
+                placeholder="Enter Contact Person Name"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+          </div>
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Contact Phone Number
+              </label>
+              <input
+                {...form.register("contact_phone")}
+                type="text"
+                placeholder="Enter Contact Phone Number"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
           </div>
@@ -349,33 +379,25 @@ const TestParamsForm = ({
 
     let newSubtotal = 0;
 
-    const updatedTotals = test_watch.reduce((acc: { [x: string]: number; }, item: { testing_charge: any; no_of_tested: any; }, idx: string | number) => {
+    const updatedTotals = test_watch.reduce((acc: { [x: string]: number; }, item: { testing_charge: string; no_of_tested: string; }, idx: string | number) => {
       const testingCharge = parseFloat(item.testing_charge || "0");
       const noOfTested = parseInt(item.no_of_tested || "0");
-      const totalTestingCharge = testingCharge * noOfTested;
+      const totalTestingCharge = (testingCharge * noOfTested).toFixed(2);
 
       // Only set the value if it has changed
-      if (
-        form.getValues(`${arrayFieldName}.${idx}.total_testing_charge`) !==
-        totalTestingCharge
-      ) {
-        form.setValue(
-          `${arrayFieldName}.${idx}.total_testing_charge`,
-          totalTestingCharge,
-        );
-      }
+     
 
       // Add the total charge to the running subtotal
-      newSubtotal += totalTestingCharge;
+      newSubtotal += parseFloat(totalTestingCharge);
 
       // Update the total for each row
-      acc[idx] = totalTestingCharge;
+      acc[idx] = parseFloat(totalTestingCharge);
       return acc;
     }, {});
 
     // Update the subtotal, SGST, CGST, and grand total
     setTotals(updatedTotals);
-    setSubtotal(newSubtotal);
+    setSubtotal(parseFloat(newSubtotal.toFixed(2)));
 
     // Assuming SGST and CGST are percentages, for example, 9% each
     // Calculate SGST and CGST based on invoice type
@@ -383,20 +405,24 @@ const TestParamsForm = ({
     let cgstAmount = 0;
     let igstAmount = 0;
     if (invoiceType === "TAMILNADU_CUSTOMER") {
-      sgstAmount = newSubtotal * 0.09;
-      cgstAmount = newSubtotal * 0.09;
+      sgstAmount = parseFloat((newSubtotal * 0.09).toFixed(2));
+      cgstAmount = parseFloat((newSubtotal * 0.09).toFixed(2));
     } else if (invoiceType === "OTHER_STATE_CUSTOMER") {
-      igstAmount = newSubtotal * 0.18;
+      igstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
     }
 
-    const newGrandTotal =
-      newSubtotal + sgstAmount + cgstAmount + igstAmount- (watchDiscount ?? 0);
+    // const newGrandTotal = parseFloat((
+    //   newSubtotal + sgstAmount + cgstAmount + igstAmount - (watchDiscount ?? 0)
+    // ).toFixed(2));
+    const newGrandTotal = Math.round(
+      newSubtotal + sgstAmount + cgstAmount + igstAmount - (watchDiscount ?? 0)
+    );
 
     setSGST(sgstAmount);
     setCGST(cgstAmount);
     setIGST(igstAmount);
     setGrandTotal(newGrandTotal);
-  }, [test_watch, invoiceType, watchDiscount, form, arrayFieldName]);
+  }, [test_watch, invoiceType, watchDiscount]);
 
   // Run calculation when the watched fields change
   useEffect(() => {

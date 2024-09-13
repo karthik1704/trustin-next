@@ -120,8 +120,12 @@ const UnderTestingForm = ({
       // assigned_to: data?.currentUser?.id ?? "",
 
       comments: comment,
+      ...(currentStep == 2 && {
+        authorized_sign_id: data.invoice?.authorized_sign_id ?? "",
+      }),
       ...(currentStep == 3 && {
         lut_arn: data.invoice?.lut_arn ?? "",
+        note: data.invoice?.note ?? "",
       }),
     },
   });
@@ -240,6 +244,18 @@ const UnderTestingForm = ({
         <input type="hidden" {...register("status_id")} />
 
         {currentStep === 3 && (
+         
+       
+            <input
+              type="hidden"
+              {...register("authorized_sign_id")}
+              value={data.currentUser?.id}
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            />
+          )}
+
+        {currentStep === 3 && (<>
+          {data.invoice.invoice_type === "USD" ? (
           <div className="mb-6">
             <label className="mb-2.5 block text-black dark:text-white">
               LUT ARN
@@ -249,7 +265,18 @@ const UnderTestingForm = ({
               {...register("lut_arn")}
               className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
+          </div>):<input type="hidden" {...register("lut_arn")} value=""/>}
+          <div className="mb-6">
+            <label className="mb-2.5 block text-black dark:text-white">
+              Notes
+            </label>
+            <input
+              type="text"
+              {...register("note")}
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            />
           </div>
+          </>
         )}
       
 

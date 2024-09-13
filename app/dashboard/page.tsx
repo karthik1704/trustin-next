@@ -23,6 +23,7 @@ export type FollowupData = {
 };
 
 export type DashboardInfo = {
+  invoice_count: any;
   customer: number;
   product: number;
   registration_count: number;

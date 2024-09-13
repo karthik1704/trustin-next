@@ -67,7 +67,10 @@ export type Invoices = {
   sgst: string;
   cgst: string;
   currency: string;
-  tested_type: string;
+  tested_type:  "BATCHES" | "TESTED" | "PIECES" | "LOCATION";
+  customer: {
+    company_name: string;
+  }
 }[];
 
 export type Data = {

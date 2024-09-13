@@ -72,15 +72,15 @@ type Props = {
 };
 
 type Workflow = {
-  id: number;
-  invoice_status_id: number;
   assigned_to: number | null;
-  status: string;
   assignee: { first_name: string; last_name: string } | null;
   department: { id: number; name: string } | null;
+  id: number;
+  invoice_status_id: number;
   role: { id: number; name: string } | null;
+  status: string;
   updated_at: string;
-}[];
+};
 
 type History = {
   id: number;

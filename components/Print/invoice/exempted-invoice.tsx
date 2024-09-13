@@ -162,7 +162,7 @@ const ExemptedInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => (
             invoice={invoiceData.invoice}
           />
           <ExemptedTotalSection invoice={invoiceData.invoice} />
-          <ExtraSection />
+          <ExtraSection note={invoiceData.invoice.note} authorized_sign_id={invoiceData.invoice.authorized_sign_id } />
         </View>
         <Footer />
       </View>

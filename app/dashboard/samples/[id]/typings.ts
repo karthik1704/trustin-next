@@ -84,7 +84,8 @@ export type EmailStatus = {
 
 export type Sample = {
   show_status_report: boolean;
-  abbreviations: StandardKey;
+  abbreviations: StandardKey[];
+  discipline: string | null;
   test_method: string;
   reason: string | null;
   statement_of_conformity: string | null;
@@ -114,7 +115,6 @@ export type Sample = {
   sample_issued: number | null;
   issued_to: string | null;
   report_no: string | null;
-  disicipline: string | null;
   group: string | null;
   sample_condition: string;
   sterilization_batch_no: string;

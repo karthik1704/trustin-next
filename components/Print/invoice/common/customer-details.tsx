@@ -53,6 +53,8 @@ interface CustomerDetailsProps {
       customer_ref_no: string;
       sample_id_nos: string;
       quotation_ref_no: string;
+      contact_person_name: string;
+      contact_phone: string;
     };
   };
 }
@@ -67,6 +69,14 @@ const CustomerDetails: React.FC<CustomerDetailsProps> = ({ invoiceData }) => {
       <View style={styles.row}>
         <Text style={styles.label}>Customer Name</Text>
         <Text style={styles.value}>{invoiceData.invoice.customer.company_name}</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>Contact Person Name</Text>
+        <Text style={styles.value}>{invoiceData.invoice.contact_person_name}</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>Phone Number</Text>
+        <Text style={styles.value}>{invoiceData.invoice.contact_phone}</Text>
       </View>
       <View style={[styles.row, {paddingHorizontal:0, paddingBottom:0}]}>
         <Text style={[styles.label, {width:141}]}>Customer Address</Text>
