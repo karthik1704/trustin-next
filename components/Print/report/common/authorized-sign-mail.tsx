@@ -31,6 +31,9 @@ const AuthorizedSignMail = ({
         alignItems: "flex-end",
         flexDirection: "column",
         fontSize: 10,
+        width: "100%",
+
+
       }}
       fixed
     >
@@ -39,6 +42,7 @@ const AuthorizedSignMail = ({
           display: "flex",
           justifyContent: "space-between",
           flexDirection: "row-reverse",
+          width: "100%",
         }}
       >
         {sample_detail.map((detail) => (

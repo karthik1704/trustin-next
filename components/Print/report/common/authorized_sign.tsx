@@ -22,42 +22,47 @@ const AuthorizedSign = ({
     marginTop?: number;
     height?: number;
   }) => (
+    <View style={{ position: "absolute",
+      bottom: 3,
+      left: 0,
+      right: 0,
+      padding: 1,}}>
     <View
       style={{
-        position: "absolute",
-        bottom: 3,
-        left: 0,
-        right: 0,
-        padding: 1,
+       
         marginTop: marginTop,
         display: "flex",
         justifyContent: "flex-end",
         alignItems: "flex-end",
         flexDirection: "column",
         fontSize: 10,
+        width: "100%",
+
       }}
       fixed
     >
       <View
         style={{
           display: "flex",
-          justifyContent: "space-between",
           flexDirection: "row-reverse",
+          justifyContent: "space-between",
+          width: "100%",
         }}
       >
-        {sample_detail.map((detail) => (
+        {sample_detail.slice(0, 2).map((detail, index) => (
           <View
             key={detail.id}
             style={{
               display: "flex",
               justifyContent: "center",
-              alignItems: "center", // Center items horizontally
+              alignItems: 'center',
+              flex: 1,
             }}
           >
             <Text
               style={{
                 fontWeight: "medium",
-                textAlign: "center", // Center text
+                textAlign: "center",
                 marginBottom: "8px",
               }}
             >
@@ -75,7 +80,7 @@ const AuthorizedSign = ({
             <Text
               style={{
                 fontWeight: "bold",
-                textAlign: "center", // Center text
+                textAlign: "center",
                 marginBottom: "4px",
                 fontSize: "10px",
               }}
@@ -87,7 +92,7 @@ const AuthorizedSign = ({
             <Text
               style={{
                 fontWeight: "bold",
-                textAlign: "center", // Center text
+                textAlign: "center",
                 fontSize: "8px",
               }}
             >
@@ -98,7 +103,7 @@ const AuthorizedSign = ({
             <Text
               style={{
                 fontWeight: "bold",
-                textAlign: "center", // Center text
+                textAlign: "center",
                 fontSize: "8px",
               }}
             >
@@ -109,6 +114,7 @@ const AuthorizedSign = ({
           </View>
         ))}
       </View>
+    </View>
     </View>
   );
             
