@@ -52,6 +52,7 @@ async function getData(
 
 export type Invoices = {
   id: number;
+  invoice_mode: "INVOICE" | "PERFORMA_INVOICE";
   invoice_code: string;
   invoice_type: string;
   customer_id: number;

@@ -38,6 +38,7 @@ const initialState: InitialState = {
   message: null,
 };
 type FormValues = {
+  invoice_mode: 'INVOICE' | 'PERFORMA_INVOICE';
   company_name: string;
   discount: number | undefined;
   invoice_type: string;
@@ -65,6 +66,7 @@ type FormValues = {
 const InvoiceEditForm = ({ data, actionFn }: props) => {
   const form = useForm<FormValues>({
     defaultValues: {
+      invoice_mode: data.invoice.invoice_mode || "",
       company_name: data.invoice.customer.company_name || "",
       discount: Number(data.invoice.discount) || 0,
       invoice_type: data.invoice.invoice_type || "",
@@ -142,6 +144,16 @@ const InvoiceEditForm = ({ data, actionFn }: props) => {
       <form onSubmit={form.handleSubmit(handleForm)}>
         <div className="p-6.5">
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <Select
+              name="invoice_mode"
+              label="Invoice"
+              register={form.register}
+              width={"w-full"}
+              disabled={true}
+            >
+              <option value="INVOICE">Invoice</option>
+              <option value="PERFORMA_INVOICE">Performa Invoice</option>
+            </Select>
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
                 Customer
@@ -181,6 +193,7 @@ const InvoiceEditForm = ({ data, actionFn }: props) => {
                 type="text"
                 placeholder="Enter Contact Person Name"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                disabled={!isEditable}
               />
             </div>
           </div>
@@ -194,6 +207,7 @@ const InvoiceEditForm = ({ data, actionFn }: props) => {
                 type="text"
                 placeholder="Enter Contact Phone Number"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                disabled={!isEditable}
               />
             </div>
           </div>
@@ -605,7 +619,35 @@ const TestParamsForm = ({
               </td>
             </tr>
             )}
-            {invoiceType === "OTHER_STATE_CUSTOMER" && (  
+            {invoiceType === "PERFORMA_TAMILNADU_CUSTOMER" && (
+            <tr>
+              <td
+                colSpan={5}
+                className="px-4 py-5 text-right font-medium text-black dark:text-white"
+              >
+                CGST ({18}%):
+              </td>
+              <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
+                {/* CGST value */}
+                {cgst}
+              </td>
+            </tr>
+            )}
+            {invoiceType === "PERFORMA_TAMILNADU_CUSTOMER" && (
+            <tr>
+              <td
+                colSpan={5}
+                className="px-4 py-5 text-right font-medium text-black dark:text-white"
+              >
+                SGST ({18}%):
+              </td>
+              <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
+                {/* SGST value */}
+                {sgst}
+              </td>
+            </tr>
+            )}
+            {(invoiceType === "OTHER_STATE_CUSTOMER" || invoiceType === "PERFORMA_OTHER_STATE_CUSTOMER") && (  
                <tr>
                <td
                  colSpan={5}

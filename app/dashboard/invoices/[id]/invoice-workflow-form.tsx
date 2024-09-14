@@ -20,7 +20,7 @@ import {
 } from "@react-pdf/renderer";
 
 import { Data } from "./typings";
-import { invoiceTypes } from '../constants';
+import { invoiceTypes, performaInvoiceTypes } from '../constants';
 import CombineWorkflow from "./combine-workflow";
 import EmailPopup from "./email-popup";
 import InvoiceEditForm from "./invoice-edit-form";
@@ -30,21 +30,44 @@ import ExemptedInvoice from "@/components/Print/invoice/exempted-invoice";
 import TamilNaduInvoice from "@/components/Print/invoice/tamilnadu-invoice";
 import USDInvoice from "@/components/Print/invoice/usd-invoice";
 import OtherStateInvoice from "@/components/Print/invoice/other-state-invoice";
+import PerformaUSDInvoice from "@/components/Print/invoice/performa/performa-usd-invoice";
+import PerformaExemptedInvoice from "@/components/Print/invoice/performa/performa-exempted-invoice";
+import PerformaTamilNaduInvoice from "@/components/Print/invoice/performa/performa-tamilnadu-invoice";
+import PerformaOtherStateInvoice from "@/components/Print/invoice/performa/performa-other-state-invoice";
 
-const InvoiceComponent = ({ type, invoiceData }: { type: string; invoiceData: Data }) => {
-  switch (type) {
+const InvoiceComponent = ({ type, invoiceData, invoice_mode }: { type: string; invoiceData: Data, invoice_mode:"INVOICE" | "PERFORMA_INVOICE" }) => {
+
+  if(invoice_mode === "INVOICE"){
+    switch (type) {
     
-    case "USD":
-      return <USDInvoice invoiceData={invoiceData} />;
-    case "EXEMPTED_CUSTOMER":
-      return <ExemptedInvoice invoiceData={invoiceData} />;
-    case "TAMILNADU_CUSTOMER":
-      return <TamilNaduInvoice invoiceData={invoiceData} />;
-    case "OTHER_STATE_CUSTOMER":
-      return <OtherStateInvoice invoiceData={invoiceData} />;
-    default:
-      console.log("invoice type not found");
-      return null;
+      case "USD":
+        return <USDInvoice invoiceData={invoiceData} />;
+      case "EXEMPTED_CUSTOMER":
+        return <ExemptedInvoice invoiceData={invoiceData} />;
+      case "TAMILNADU_CUSTOMER":
+        return <TamilNaduInvoice invoiceData={invoiceData} />;
+      case "OTHER_STATE_CUSTOMER":
+        return <OtherStateInvoice invoiceData={invoiceData} />;
+      default:
+        console.log("invoice type not found");
+        return null;
+    }
+  }
+  if(invoice_mode === "PERFORMA_INVOICE"){
+    switch (type) {
+    
+      case "PERFORMA_USD":
+          return <PerformaUSDInvoice invoiceData={invoiceData} />;
+      case "PERFORMA_EXEMPTED_CUSTOMER":
+        return <PerformaExemptedInvoice invoiceData={invoiceData} />;
+      case "PERFORMA_TAMILNADU_CUSTOMER":
+        return <PerformaTamilNaduInvoice invoiceData={invoiceData} />;
+      case "PERFORMA_OTHER_STATE_CUSTOMER":
+        return <PerformaOtherStateInvoice invoiceData={invoiceData} />;
+      default:
+        console.log("invoice type not found");
+        return null;
+    }
   }
 };
 
@@ -147,7 +170,7 @@ const InvoiceWorkflowForm = ({
     }
   }, [state, router]);
 
-  const {invoice_type} = data.invoice;
+  const {invoice_type,invoice_mode} = data.invoice;
 
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -158,7 +181,7 @@ const InvoiceWorkflowForm = ({
           height="600"
           // showToolbar={data.sample.status_id > 7 ? true : false}
         >
-          <InvoiceComponent type={invoice_type} invoiceData={data} />
+          <InvoiceComponent type={invoice_type} invoiceData={data} invoice_mode={invoice_mode} />
         </PDFViewer>
         {/* <PDFDownloadLink document={< MyDocument/>} fileName="somename.pdf">
       {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}

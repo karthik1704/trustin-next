@@ -75,6 +75,7 @@ export type Invoice = {
   grand_total: number;
   id: number;
   igst: number;
+  invoice_mode: "INVOICE" | "PERFORMA_INVOICE";
   invoice_code: string;
   invoice_history: History[];
   invoice_parameters: InvoiceParameter[];

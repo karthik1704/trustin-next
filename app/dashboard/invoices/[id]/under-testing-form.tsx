@@ -121,7 +121,7 @@ const UnderTestingForm = ({
 
       comments: comment,
       ...(currentStep == 2 && {
-        authorized_sign_id: data.invoice?.authorized_sign_id ?? "",
+        authorized_sign_id: data.currentUser?.id ?? "",
       }),
       ...(currentStep == 3 && {
         lut_arn: data.invoice?.lut_arn ?? "",
@@ -243,13 +243,13 @@ const UnderTestingForm = ({
         <input type="hidden" {...register("status")} />
         <input type="hidden" {...register("status_id")} />
 
-        {currentStep === 3 && (
+        {currentStep === 2 && (
          
        
             <input
               type="hidden"
               {...register("authorized_sign_id")}
-              value={data.currentUser?.id}
+              
               className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           )}

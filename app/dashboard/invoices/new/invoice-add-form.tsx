@@ -94,6 +94,7 @@ const InvoiceAddForm = ({ data }: props) => {
   });
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
+  const [contact,setContact]=useState<[]>()
   const router = useRouter();
 
   useEffect(() => {
@@ -103,7 +104,7 @@ const InvoiceAddForm = ({ data }: props) => {
       (customer) =>
         customer.id.toString() === watchCompanyFieldValue.toString(),
     );
-
+  
     form.setValue("customer_address", customer?.full_address ?? "");
     form.setValue("customer_email", customer?.email ?? "");
     // form.setValue("contact_person_name", customer?.contact_person_name ?? "");
@@ -138,6 +139,9 @@ const InvoiceAddForm = ({ data }: props) => {
   return (
     <UiForm {...form}>
       <form onSubmit={form.handleSubmit(handleForm)}>
+        
+
+        <div className="p-6.5">
         <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
           <Select
             name="invoice_mode"
@@ -149,8 +153,6 @@ const InvoiceAddForm = ({ data }: props) => {
             <option value="PERFORMA_INVOICE">Performa Invoice</option>
           </Select>
         </div>
-
-        <div className="p-6.5">
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -187,6 +189,7 @@ const InvoiceAddForm = ({ data }: props) => {
               />
             </div>
           </div>
+         
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -617,7 +620,35 @@ const TestParamsForm = ({
                 </tr>
               </>
             )}
-            {invoiceType === "OTHER_STATE_CUSTOMER" && (
+                 {invoiceType === "PERFORMA_TAMILNADU_CUSTOMER" && (
+            <tr>
+              <td
+                colSpan={5}
+                className="px-4 py-5 text-right font-medium text-black dark:text-white"
+              >
+                CGST ({18}%):
+              </td>
+              <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
+                {/* CGST value */}
+                {cgst}
+              </td>
+            </tr>
+            )}
+            {invoiceType === "PERFORMA_TAMILNADU_CUSTOMER" && (
+            <tr>
+              <td
+                colSpan={5}
+                className="px-4 py-5 text-right font-medium text-black dark:text-white"
+              >
+                SGST ({18}%):
+              </td>
+              <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
+                {/* SGST value */}
+                {sgst}
+              </td>
+            </tr>
+            )}
+            {(invoiceType === "OTHER_STATE_CUSTOMER" || invoiceType === "PERFORMA_OTHER_STATE_CUSTOMER") && (
               <tr>
                 <td
                   colSpan={5}
