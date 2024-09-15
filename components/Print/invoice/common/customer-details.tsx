@@ -57,11 +57,12 @@ interface CustomerDetailsProps {
       contact_phone: string;
     };
   };
+  fixed?: boolean;
 }
 
-const CustomerDetails: React.FC<CustomerDetailsProps> = ({ invoiceData }) => {
+const CustomerDetails: React.FC<CustomerDetailsProps> = ({ invoiceData, fixed=false }) => {
   return (
-    <View>
+    <View fixed> 
       <View style={styles.container}>
         <Text style={styles.headerText}>Customer Details</Text>
       </View>

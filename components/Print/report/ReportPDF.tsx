@@ -180,7 +180,7 @@ const MyDocument = ({
               </Text>
               <Text style={{ padding: 2, marginLeft: 4, width: "28%" }}>
                 {" "}
-                {data.sample.disicipline ?? "N/A"}
+                {data.sample.discipline ?? "N/A"}
               </Text>
             </View>
             <View
@@ -553,7 +553,7 @@ const MyDocument = ({
               </Text>
             </View>
 
-            <SampleDetails data={data} />
+            {/* <SampleDetails data={data} /> */}
             <View
               style={{
                 marginTop: 5,
@@ -574,13 +574,17 @@ const MyDocument = ({
       )}
       <Page style={styles.page}>
         <View style={styles.section}>
+        <Text style={{textAlign:'right'}}
+            render={({ pageNumber, totalPages }) =>
+              `Page ${pageNumber} of ${totalPages}`
+            }
+            fixed
+          />
           {/* <Header nabl_logo={data.sample.nabl_logo} /> */}
           <Statements data={data.sample} isDraft={isDraft} />
-          <View style={{ height: "200px" }}>
-            <Image src={qr} style={{ width: 100, height: 100 }} />
-          </View>
+          
 
-          <AuthorizedSign sample_detail={data.sample.sample_detail} />
+          <AuthorizedSign sample_detail={data.sample.sample_detail} qr={qr}/>
 
           {/* <Footer /> */}
         </View>

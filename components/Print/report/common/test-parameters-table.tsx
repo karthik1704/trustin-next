@@ -113,7 +113,7 @@ const TestParameterTable = ({
             {item.test_parameter.testing_parameters}
           </Text>
   
-          <Text style={[styles.cell, { width: "25%", fontWeight: "bold" }]}>
+          <Text style={[styles.cell, { width: "25%", fontWeight: "bold", textAlign: "center" }]}>
             {item.test_parameter.method_or_spec}
           </Text>
           <View
@@ -192,7 +192,7 @@ const TestParameterTable = ({
                 { width: "15%", fontWeight: "bold", textAlign: "center" },
               ]}
             >
-              {item.result ? "Pass" : "Fail"}
+              {item.result ? "Passes" : "Failed"}
             </Text>
           )}
         </View>

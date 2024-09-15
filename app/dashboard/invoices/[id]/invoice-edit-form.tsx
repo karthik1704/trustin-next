@@ -98,12 +98,18 @@ const InvoiceEditForm = ({ data, actionFn }: props) => {
     name: "customer_id",
   });
 
+  const watchInvoiceMode = useWatch({
+    control: form.control,
+    name: "invoice_mode",
+    defaultValue: data.invoice.invoice_mode,
+  });
+
   const watchTestedType = useWatch({
     control: form.control,
     name: "tested_type",
     defaultValue: data.invoice.tested_type,
   });
-
+  
   const watchCurrency = useWatch({
     control: form.control,
     name: "currency",
@@ -328,6 +334,7 @@ const InvoiceEditForm = ({ data, actionFn }: props) => {
             form={form}
             isEditable={isEditable}
             invoiceType={data.invoice.invoice_type}
+            invoiceMode={watchInvoiceMode}
           />
 
           {isEditable && (
@@ -355,7 +362,8 @@ const TestParamsForm = ({
   currency,
   form,
   isEditable,
-  invoiceType
+  invoiceType,
+  invoiceMode
 }: {
   control: any;
   register: any;
@@ -365,6 +373,7 @@ const TestParamsForm = ({
   form: any;
   isEditable: boolean;
   invoiceType: string;
+  invoiceMode: string;
 }) => {
   const { fields, append, remove, replace } = useFieldArray({
     control,
@@ -393,21 +402,27 @@ const TestParamsForm = ({
 
     let newSubtotal = 0;
 
-    const updatedTotals = test_watch.reduce((acc: { [x: string]: number; }, item: { testing_charge: string; no_of_tested: string; }, idx: string | number) => {
-      const testingCharge = parseFloat(item.testing_charge || "0");
-      const noOfTested = parseInt(item.no_of_tested || "0");
-      const totalTestingCharge = (testingCharge * noOfTested).toFixed(2);
+    const updatedTotals = test_watch.reduce(
+      (
+        acc: { [x: string]: number },
+        item: { testing_charge: string; no_of_tested: string },
+        idx: string | number,
+      ) => {
+        const testingCharge = parseFloat(item.testing_charge || "0");
+        const noOfTested = parseInt(item.no_of_tested || "0");
+        const totalTestingCharge = (testingCharge * noOfTested).toFixed(2);
 
-      // Only set the value if it has changed
-     
+        // Only set the value if it has changed
 
-      // Add the total charge to the running subtotal
-      newSubtotal += parseFloat(totalTestingCharge);
+        // Add the total charge to the running subtotal
+        newSubtotal += parseFloat(totalTestingCharge);
 
-      // Update the total for each row
-      acc[idx] = parseFloat(totalTestingCharge);
-      return acc;
-    }, {});
+        // Update the total for each row
+        acc[idx] = parseFloat(totalTestingCharge);
+        return acc;
+      },
+      {},
+    );
 
     // Update the subtotal, SGST, CGST, and grand total
     setTotals(updatedTotals);
@@ -418,25 +433,33 @@ const TestParamsForm = ({
     let sgstAmount = 0;
     let cgstAmount = 0;
     let igstAmount = 0;
-    if (invoiceType === "TAMILNADU_CUSTOMER") {
-      sgstAmount = parseFloat((newSubtotal * 0.09).toFixed(2));
-      cgstAmount = parseFloat((newSubtotal * 0.09).toFixed(2));
-    } else if (invoiceType === "OTHER_STATE_CUSTOMER") {
-      igstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
+    if (invoiceMode === "INVOICE"){
+      if (invoiceType === "TAMILNADU_CUSTOMER") {
+        sgstAmount = parseFloat((newSubtotal * 0.09).toFixed(2));
+        cgstAmount = parseFloat((newSubtotal * 0.09).toFixed(2));
+      } else if (invoiceType === "OTHER_STATE_CUSTOMER") {
+        igstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
+      }
+    }
+   
+    if (invoiceMode === "PERFORMA_INVOICE"){
+      if (invoiceType === "PERFORMA_TAMILNADU_CUSTOMER") {
+        sgstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
+        cgstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
+      } else if (invoiceType === "PERFORMA_OTHER_STATE_CUSTOMER") {
+        igstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
+      }
     }
 
-    // const newGrandTotal = parseFloat((
-    //   newSubtotal + sgstAmount + cgstAmount + igstAmount - (watchDiscount ?? 0)
-    // ).toFixed(2));
     const newGrandTotal = Math.round(
-      newSubtotal + sgstAmount + cgstAmount + igstAmount - (watchDiscount ?? 0)
+      newSubtotal + sgstAmount + cgstAmount + igstAmount - (watchDiscount ?? 0),
     );
 
     setSGST(sgstAmount);
     setCGST(cgstAmount);
     setIGST(igstAmount);
     setGrandTotal(newGrandTotal);
-  }, [test_watch, invoiceType, watchDiscount]);
+  }, [invoiceMode,test_watch, invoiceType, watchDiscount]);
 
   // Run calculation when the watched fields change
   useEffect(() => {

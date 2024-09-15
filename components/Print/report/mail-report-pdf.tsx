@@ -547,7 +547,7 @@ const MyDocument = ({
               </Text>
             </View>
 
-            <SampleDetails data={data} />
+            {/* <SampleDetails data={data} /> */}
             <View
               style={{
                 marginTop: 5,

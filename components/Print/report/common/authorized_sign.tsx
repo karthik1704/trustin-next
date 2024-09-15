@@ -17,10 +17,12 @@ const AuthorizedSign = ({
     sample_detail,
     marginTop = 100,
     height = 50,
+    qr
   }: {
     sample_detail: SampleDetailSchema[];
     marginTop?: number;
     height?: number;
+    qr:string
   }) => (
     <View style={{ position: "absolute",
       bottom: 3,
@@ -59,6 +61,9 @@ const AuthorizedSign = ({
               flex: 1,
             }}
           >
+            <View style={{ height: "100px" }}>
+            <Image src={qr} style={{ width: 50, height: 50 }} />
+          </View>
             <Text
               style={{
                 fontWeight: "medium",

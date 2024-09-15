@@ -37,20 +37,23 @@ const styles = StyleSheet.create({
   page: {
     fontFamily: "Cambria",
     backgroundColor: "#FFFFFF",
-    padding: 5,
+    // padding: 5,
     fontSize: "10px",
     position: "relative",
     flexDirection: "column",
     justifyContent: "space-between",
-  },
-  section: {
-    margin: 10,
-    // marginTop: 0,
-    padding: 10,
-    flexGrow: 1,
     borderStyle: "solid",
     borderWidth: 1,
     borderColor: "#000",
+    // padding: 10,
+    paddingBottom:65,
+  },
+  section: {
+    // margin: 10,
+    // marginTop: 0,
+    // padding: 10,
+    flexGrow: 1,
+   
   },
   header: {
     flexDirection: "row",
@@ -105,7 +108,7 @@ const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => (
     <Page size="A4" style={styles.page}>
       <View style={styles.section}>
         <Header />
-        <View>
+        <View >
           <View
             style={{
               border: "1 solid #000",
@@ -153,7 +156,7 @@ const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => (
             </Text>
           </View>
 
-          <CustomerDetails invoiceData={invoiceData} />
+          <CustomerDetails invoiceData={invoiceData} fixed/>
           <TamilInvoiceParameterTable
             parameters={invoiceData.invoice.invoice_parameters}
             currency={invoiceData.invoice.currency}

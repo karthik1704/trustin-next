@@ -17,10 +17,12 @@ const AuthorizedSignMail = ({
     sample_detail,
     marginTop = 100,
     height = 50,
+    qr    
   }: {
     sample_detail: SampleDetailSchema[];
     marginTop?: number;
     height?: number;
+    qr:string
   }) => (
     <View
       style={{
@@ -37,6 +39,9 @@ const AuthorizedSignMail = ({
       }}
       fixed
     >
+    <View style={{ height: "100px" }}>
+    <Image src={qr} style={{ width: 50, height: 50 }} />
+  </View>
       <View
         style={{
           display: "flex",

@@ -54,6 +54,12 @@ const Header = ({ nabl_logo }: { nabl_logo: boolean }) => {
         >
           <Image src={logo} style={{ width: 120, height: 80 }} />
         </View>
+        <Text style={{textAlign:'right'}}
+            render={({ pageNumber, totalPages }) =>
+              `Page ${pageNumber} of ${totalPages}`
+            }
+            fixed
+          />
       </View>
     );
   };

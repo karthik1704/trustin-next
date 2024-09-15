@@ -1,5 +1,5 @@
 "use client";
-import MyDocument from "@/components/Print/report/ReportPDF";
+import MyDocument from "@/components/Print/report/mail-report-pdf";
 import { Data } from "./page";
 import { CloudDownload } from 'lucide-react';
 

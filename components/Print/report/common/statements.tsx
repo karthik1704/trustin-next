@@ -36,9 +36,14 @@ const Statements = ({ data, isDraft }: { data: Sample; isDraft: boolean }) => {
           <Text style={{ textDecoration: "underline", fontWeight: "medium" }}>
             Abbrevations:
           </Text>{" "}
-          {  data.abbreviations && data.abbreviations.length ? data.abbreviations
-            .map((abbreviation) => ` ${abbreviation}: ${standards[abbreviation]}`)
-            .join(", "):""}
+          {data.abbreviations && data.abbreviations.length
+            ? data.abbreviations
+                .map(
+                  (abbreviation) =>
+                    ` ${abbreviation}: ${standards[abbreviation]}`,
+                )
+                .join(", ")
+            : ""}
         </Text>
 
         <View
@@ -46,7 +51,7 @@ const Statements = ({ data, isDraft }: { data: Sample; isDraft: boolean }) => {
             marginTop: 20,
             display: "flex",
             flexDirection: "column",
-            fontSize: 10,
+            fontSize: 8,
           }}
         >
           <Text
@@ -56,18 +61,12 @@ const Statements = ({ data, isDraft }: { data: Sample; isDraft: boolean }) => {
               paddingVertical: 2,
             }}
           >
-            Note : 1. No external service provider used in this report
+            Note : 1. No external service provider used in this report, 2. No
+            additions, deviations or exclusions from the test method, 3. For
+            Terms and Conditions, please refer our website -
+            www.trustingroup.in.
           </Text>
-          <Text
-            style={{
-              fontWeight: "bold",
-              textAlign: "left",
-              textIndent: 30,
-              paddingVertical: 2,
-            }}
-          >
-            2. No additions, deviations or exclusions from the test method.
-          </Text>
+
           <Text
             style={{
               fontWeight: "bold",
@@ -108,7 +107,7 @@ const Statements = ({ data, isDraft }: { data: Sample; isDraft: boolean }) => {
             }}
           >
             NABL Accredited Laboratory vide cert. No: TC-5410 valid upto
-            30/03/2026, CDSCO Registration No: TLIMD/2020/000002
+            30/03/2026, CDSCO Registration No: TL/MD/2020/000002
           </Text>
           {isDraft && (
             <Text style={{ fontWeight: "bold", textAlign: "center" }}>
