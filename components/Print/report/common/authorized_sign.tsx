@@ -61,9 +61,9 @@ const AuthorizedSign = ({
               flex: 1,
             }}
           >
-            <View style={{ height: "100px" }}>
+            {/* <View style={{ height: "100px" }}>
             <Image src={qr} style={{ width: 50, height: 50 }} />
-          </View>
+          </View> */}
             <Text
               style={{
                 fontWeight: "medium",
