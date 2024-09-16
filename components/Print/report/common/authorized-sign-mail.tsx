@@ -2,6 +2,7 @@
 import { View, Text, Image } from "@react-pdf/renderer";
 import { SampleDetailSchema } from "@/app/dashboard/samples/[id]/typings";
 import { dateFormatter } from "@/lib/utils";
+import React from "react";
 
 const SIGN_IMAGES: { [key: string]: string } = {
     "24": "/images/signs/mahendren.png",
@@ -50,7 +51,8 @@ const AuthorizedSignMail = ({
           width: "100%",
         }}
       >
-        {sample_detail.map((detail) => (
+        {sample_detail.map((detail, index) => (
+          <React.Fragment key={detail.id}>
           <View
             key={detail.id}
             style={{
@@ -111,7 +113,21 @@ const AuthorizedSignMail = ({
                 ? `${detail.authorized_sign_date ? dateFormatter(detail.authorized_sign_date as string) : ""} `
                 : ""}
             </Text>
+          </View> 
+          {index < sample_detail.length - 1 && (
+            <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1,
+              height: "100px",
+            }}
+          >
+            <Image src={qr} style={{ width: "50px", height: "50px" }} />
           </View>
+          )}
+          </React.Fragment>
         ))}
       </View>
     </View>

@@ -2,36 +2,33 @@
 import { View, Text, Image } from "@react-pdf/renderer";
 import { SampleDetailSchema } from "@/app/dashboard/samples/[id]/typings";
 import { dateFormatter } from "@/lib/utils";
+import React from "react";
 
 const SIGN_IMAGES: { [key: string]: string } = {
-    "24": "/images/signs/mahendren.png",
-    "25": "/images/signs/senthil-kumar.png",
-    "16": "/images/signs/vasantha.png",
-    "14": "/images/signs/tamil vannan.png",
-    "15": "/images/signs/sabari.png",
-    "30": "/images/signs/dhanraj.png",
-  };
-
+  "24": "/images/signs/mahendren.png",
+  "25": "/images/signs/senthil-kumar.png",
+  "16": "/images/signs/vasantha.png",
+  "14": "/images/signs/tamil vannan.png",
+  "15": "/images/signs/sabari.png",
+  "30": "/images/signs/dhanraj.png",
+};
 
 const AuthorizedSign = ({
-    sample_detail,
-    marginTop = 100,
-    height = 50,
-    qr
-  }: {
-    sample_detail: SampleDetailSchema[];
-    marginTop?: number;
-    height?: number;
-    qr:string
-  }) => (
-    <View style={{ position: "absolute",
-      bottom: 3,
-      left: 0,
-      right: 0,
-      padding: 1,}}>
+  sample_detail,
+  marginTop = 50,
+  height = 50,
+  qr,
+}: {
+  sample_detail: SampleDetailSchema[];
+  marginTop?: number;
+  height?: number;
+  qr: string;
+}) => (
+  <View
+    style={{ position: "absolute", bottom: 20, left: 0, right: 0, padding: 1 }}
+  >
     <View
       style={{
-       
         marginTop: marginTop,
         display: "flex",
         justifyContent: "flex-end",
@@ -39,7 +36,6 @@ const AuthorizedSign = ({
         flexDirection: "column",
         fontSize: 10,
         width: "100%",
-
       }}
       fixed
     >
@@ -51,19 +47,17 @@ const AuthorizedSign = ({
           width: "100%",
         }}
       >
-        {sample_detail.slice(0, 2).map((detail, index) => (
+        {sample_detail.map((detail, index) => (
+          <React.Fragment key={detail.id}>
           <View
             key={detail.id}
             style={{
               display: "flex",
               justifyContent: "center",
-              alignItems: 'center',
+              alignItems: "center",
               flex: 1,
             }}
           >
-            {/* <View style={{ height: "100px" }}>
-            <Image src={qr} style={{ width: 50, height: 50 }} />
-          </View> */}
             <Text
               style={{
                 fontWeight: "medium",
@@ -117,10 +111,25 @@ const AuthorizedSign = ({
                 : ""}
             </Text>
           </View>
+          {index < sample_detail.length - 1 && (
+            <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1,
+              height: "100px",
+            }}
+          >
+            <Image src={qr} style={{ width: "50px", height: "50px" }} />
+          </View>
+          )}
+        </React.Fragment>
         ))}
+        
       </View>
     </View>
-    </View>
-  );
-            
+  </View>
+);
+
 export default AuthorizedSign;

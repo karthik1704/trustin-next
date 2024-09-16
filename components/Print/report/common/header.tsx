@@ -4,13 +4,14 @@ import { View, Text, Image } from "@react-pdf/renderer";
 
 const Header = ({ nabl_logo }: { nabl_logo: boolean }) => {
     return (
+      <View style={{display:'flex',flexDirection:'column',          borderBottom: "1px solid #000",
+      }}>
       <View
         style={{
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
-          borderBottom: "1px solid #000",
         }}
         fixed
       >
@@ -53,15 +54,20 @@ const Header = ({ nabl_logo }: { nabl_logo: boolean }) => {
           }}
         >
           <Image src={logo} style={{ width: 120, height: 80 }} />
+         
         </View>
-        <Text style={{textAlign:'right'}}
+       
+      </View>
+      <Text style={{textAlign:'right'}}
             render={({ pageNumber, totalPages }) =>
               `Page ${pageNumber} of ${totalPages}`
             }
             fixed
           />
+
       </View>
     );
   };
 
 export default Header;
+          

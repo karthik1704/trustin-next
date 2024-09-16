@@ -89,7 +89,7 @@ const MyDocument = ({
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
           <Header nabl_logo={data.sample.nabl_logo} />
-
+        
           <View
             style={{
               border: "1 solid #000",
@@ -495,13 +495,14 @@ const MyDocument = ({
           /> */}
 
           <View break />
-          <Footer sample_detail={data.sample.sample_detail}/>
+          <Footer sample_detail={data.sample.sample_detail} qr={qr}/>
         </View>
       </Page>
       {!!data?.sample.sample_test_parameters.slice(3).length && (
         <Page style={styles.page}>
           <View style={styles.section}>
             <Header nabl_logo={data.sample.nabl_logo} />
+            
             <View
               style={{
                 border: "1 solid #000",
@@ -562,21 +563,22 @@ const MyDocument = ({
             />
 
             {/* <AuthorizedSign sample_detail={data.sample.sample_detail} /> */}
-            <Footer sample_detail={data.sample.sample_detail}/>
+            <Footer sample_detail={data.sample.sample_detail} qr={qr}/>
           </View>
         </Page>
       )}
       <Page style={styles.page}>
         <View style={styles.section}>
           <Header nabl_logo={data.sample.nabl_logo} />
+         
           <Statements data={data.sample} isDraft={isDraft} />
 
           
-          <View style={{ height: "200px" }}>
+          {/* <View style={{ height: "200px" }}>
             <Image src={qr} style={{ width: 100, height: 100 }} />
-          </View>
+          </View> */}
           {/* <AuthorizedSign sample_detail={data.sample.sample_detail} /> */}
-          <Footer sample_detail={data.sample.sample_detail}/>
+          <Footer sample_detail={data.sample.sample_detail} qr={qr}/>
         </View>
       </Page>
     </Document>

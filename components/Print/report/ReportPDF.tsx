@@ -492,6 +492,7 @@ const MyDocument = ({
           <AuthorizedSign
             sample_detail={data.sample.sample_detail}
             marginTop={5}
+            qr={qr}
           />
 
           <View break />
@@ -567,7 +568,7 @@ const MyDocument = ({
               showStatus={data.sample?.show_status_report}
             />
 
-            <AuthorizedSign sample_detail={data.sample.sample_detail} />
+            <AuthorizedSign sample_detail={data.sample.sample_detail} qr={qr}/>
             {/* <Footer /> */}
           </View>
         </Page>

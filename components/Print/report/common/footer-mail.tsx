@@ -2,7 +2,7 @@ import { SampleDetailSchema } from "@/app/dashboard/samples/[id]/typings";
 import { View, Text } from "@react-pdf/renderer";
 import AuthorizedSignMail from "./authorized-sign-mail";
 
-const Footer = ({sample_detail}:{sample_detail:SampleDetailSchema[]}) => {
+const Footer = ({sample_detail, qr}:{sample_detail:SampleDetailSchema[], qr:string}) => {
   return (
     <View
       style={{
@@ -14,7 +14,7 @@ const Footer = ({sample_detail}:{sample_detail:SampleDetailSchema[]}) => {
       }}
       fixed
     > 
-    <AuthorizedSignMail sample_detail={sample_detail}/>
+    <AuthorizedSignMail sample_detail={sample_detail} qr={qr}/>
     <View style={{ display: "flex", marginBottom: "3px" }}>
         <View style={{ border: "1 solid #000" }}></View>
         <View style={{ border: "1 solid #000" }}></View>

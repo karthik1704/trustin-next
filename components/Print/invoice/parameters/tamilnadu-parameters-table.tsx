@@ -78,7 +78,7 @@ const TamilInvoiceParameterTable: React.FC<InvoiceParameterTableProps> = ({
   tested_type,
   invoice,
 }: InvoiceParameterTableProps) => (
-  <View style={styles.table}>
+  <View style={styles.table} fixed>
     <View style={[styles.tableRow, styles.tableHeader]}>
       <View style={[styles.tableCol, { width: "6%" }]}>
         <Text style={styles.tableCell}>Sl.No</Text>

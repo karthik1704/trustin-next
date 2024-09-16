@@ -75,16 +75,16 @@ const CustomerDetails: React.FC<CustomerDetailsProps> = ({ invoiceData, fixed=fa
         <Text style={styles.label}>Contact Person Name</Text>
         <Text style={styles.value}>{invoiceData.invoice.contact_person_name}</Text>
       </View>
-      <View style={styles.row}>
+      {/* <View style={styles.row}>
         <Text style={styles.label}>Phone Number</Text>
         <Text style={styles.value}>{invoiceData.invoice.contact_phone}</Text>
-      </View>
+      </View> */}
       <View style={[styles.row, {paddingHorizontal:0, paddingBottom:0}]}>
-        <Text style={[styles.label, {width:141}]}>Customer Address</Text>
+        <Text style={[styles.label, {width:152}]}>Customer Address</Text>
         <View style={{ display: 'flex', flexDirection: 'column' }}>
           <Text style={[styles.value, {paddingHorizontal:2}]}>{invoiceData.invoice.customer_address}</Text>
           <View style={styles.emailContainer}>
-            <View style={{width:75, borderRight:'1px solid #000'}}></View>
+            <View style={{width:120, borderRight:'1px solid #000'}}><Text style={{marginLeft:3}}>Ph: {invoiceData.invoice.contact_phone}</Text></View>
             <Text style={{ width: '60%', padding: 1 }}>
               Email-Id: {invoiceData.invoice.customer_email}
             </Text>

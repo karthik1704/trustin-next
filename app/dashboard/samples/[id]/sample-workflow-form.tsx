@@ -118,6 +118,7 @@ const status = [
   "Under QA Review",
   // "Under Report preparation",
   "Draft report/ Report released",
+  "Verify Sign",
   "Done",
 ];
 
