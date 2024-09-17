@@ -101,156 +101,131 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Header />
-        <View>
-          <View
-            style={{
-              border: "1 solid #000",
-              display: "flex",
-              flexDirection: "row",
-              fontWeight: "bold",
-              fontSize: "10px",
-              padding: 2,
-            }}
-            fixed
-          >
-            <Text
-              style={{
-                borderRight: "1 solid #000",
-                width: 140,
-                padding: 1,
-                fontWeight: "medium",
-              }}
-            >
-              Invoice No.
-            </Text>
-            <Text
-              style={{
-                borderRight: "1 solid #000",
-                width: 140,
-                padding: 2,
-                marginLeft: 4,
-              }}
-            >
-              {invoiceData.invoice.invoice_code}
-            </Text>
+const PARAMS_PER_FULL_PAGE = 7;
+const PARAMS_ON_LAST_PAGE = 3;
 
-            <Text
-              style={{
-                borderRight: "1 solid #000",
-                width: 100,
-                padding: 1,
-                fontWeight: "medium",
-              }}
-            >
-              Date
-            </Text>
-            <Text style={{ padding: 2, marginLeft: 4 }}>
-              {dateFormatter(invoiceData.invoice.updated_at)}
-            </Text>
-          </View>
+const splitParametersIntoPages = (parameters: any[]) => {
+  if (parameters.length <= 3) {
+    return [parameters];
+  }
 
-          <CustomerDetails invoiceData={invoiceData} fixed />
-          <TamilInvoiceParameterTable
-            parameters={
-              invoiceData.invoice.invoice_parameters.length <= 3
-                ? invoiceData.invoice.invoice_parameters
-                : invoiceData.invoice.invoice_parameters.slice(0, 7)
-            }
-            currency={invoiceData.invoice.currency}
-            invoice_type={invoiceData.invoice.invoice_type}
-            tested_type={invoiceData.invoice.tested_type}
-            invoice={invoiceData.invoice}
-          />
-          {invoiceData.invoice.invoice_parameters.length <= 3 && (
-            <>
-              <TamilnaduTotalSection invoice={invoiceData.invoice} />
-              <ExtraSection
-                note={invoiceData.invoice.note}
-                authorized_sign_id={invoiceData.invoice.authorized_sign_id}
-              />
-            </>
-          )}
-        </View>
-        <Footer />
-      </View>
-    </Page>
-    {invoiceData.invoice.invoice_parameters.length > 3 && (
-    <Page size="A4" style={styles.page}>
-      <View>
-        <View
-          style={{
-            border: "1 solid #000",
-            display: "flex",
-            flexDirection: "row",
-            fontWeight: "bold",
-            fontSize: "10px",
-            padding: 2,
-          }}
-          fixed
-        >
-          <Text
-            style={{
-              borderRight: "1 solid #000",
-              width: 140,
-              padding: 1,
-              fontWeight: "medium",
-            }}
-          >
-            Invoice No.
-          </Text>
-          <Text
-            style={{
-              borderRight: "1 solid #000",
-              width: 140,
-              padding: 2,
-              marginLeft: 4,
-            }}
-          >
-            {invoiceData.invoice.invoice_code}
-          </Text>
+  const pages = [];
+  const totalParams = parameters.length;
+  const fullPages = Math.floor(
+    (totalParams - PARAMS_ON_LAST_PAGE) / PARAMS_PER_FULL_PAGE,
+  );
 
-          <Text
-            style={{
-              borderRight: "1 solid #000",
-              width: 100,
-              padding: 1,
-              fontWeight: "medium",
-            }}
-          >
-            Date
-          </Text>
-          <Text style={{ padding: 2, marginLeft: 4 }}>
-            {dateFormatter(invoiceData.invoice.updated_at)}
-          </Text>
-        </View>
+  for (let i = 0; i < fullPages; i++) {
+    pages.push(
+      parameters.slice(
+        i * PARAMS_PER_FULL_PAGE,
+        (i + 1) * PARAMS_PER_FULL_PAGE,
+      ),
+    );
+  }
 
-        <CustomerDetails invoiceData={invoiceData} fixed />
-       
-          <TamilInvoiceParameterTable
-            parameters={invoiceData.invoice.invoice_parameters.splice(7)}
-            currency={invoiceData.invoice.currency}
-            invoice_type={invoiceData.invoice.invoice_type}
-            tested_type={invoiceData.invoice.tested_type}
-            invoice={invoiceData.invoice}
-          />
-       
-        {invoiceData.invoice.invoice_parameters.splice(7).length <= 3 && (
-          <>
-            <TamilnaduTotalSection invoice={invoiceData.invoice} />
-            <ExtraSection
-              note={invoiceData.invoice.note}
-              authorized_sign_id={invoiceData.invoice.authorized_sign_id}
-            />
-          </>
-        )}
-      </View>
-    </Page>)}
-  </Document>
-);
+  const remainingParams = totalParams - fullPages * PARAMS_PER_FULL_PAGE;
+  if (remainingParams > PARAMS_ON_LAST_PAGE) {
+    pages.push(
+      parameters.slice(fullPages * PARAMS_PER_FULL_PAGE, -PARAMS_ON_LAST_PAGE),
+    );
+  }
+
+  pages.push(parameters.slice(-PARAMS_ON_LAST_PAGE));
+
+  return pages;
+};
+
+const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => {
+  const parameters = invoiceData.invoice.invoice_parameters;
+  const parameterPages = splitParametersIntoPages(parameters);
+
+  return (
+    <Document>
+      {parameterPages.map((pageParams, index) => {
+        const startingIndex = index * PARAMS_PER_FULL_PAGE;
+        return (
+          <Page key={index} size="A4" style={styles.page}>
+            <View style={styles.section}>
+              <Header />
+              <View>
+                {/* Invoice header */}
+                <View
+                  style={{
+                    border: "1 solid #000",
+                    display: "flex",
+                    flexDirection: "row",
+                    fontWeight: "bold",
+                    fontSize: "10px",
+                    padding: 2,
+                  }}
+                  fixed
+                >
+                  <Text
+                    style={{
+                      borderRight: "1 solid #000",
+                      width: 140,
+                      padding: 1,
+                      fontWeight: "medium",
+                    }}
+                  >
+                    Invoice No.
+                  </Text>
+                  <Text
+                    style={{
+                      borderRight: "1 solid #000",
+                      width: 140,
+                      padding: 2,
+                      marginLeft: 4,
+                    }}
+                  >
+                    {invoiceData.invoice.invoice_code}
+                  </Text>
+
+                  <Text
+                    style={{
+                      borderRight: "1 solid #000",
+                      width: 100,
+                      padding: 1,
+                      fontWeight: "medium",
+                    }}
+                  >
+                    Date
+                  </Text>
+                  <Text style={{ padding: 2, marginLeft: 4 }}>
+                    {dateFormatter(invoiceData.invoice.updated_at)}
+                  </Text>
+                </View>
+
+                <CustomerDetails invoiceData={invoiceData} fixed />
+                <TamilInvoiceParameterTable
+                  parameters={pageParams}
+                  currency={invoiceData.invoice.currency}
+                  invoice_type={invoiceData.invoice.invoice_type}
+                  tested_type={invoiceData.invoice.tested_type}
+                  invoice={invoiceData.invoice}
+                  startingIndex={startingIndex}
+                />
+
+                {index === parameterPages.length - 1 && (
+                  <>
+                    <TamilnaduTotalSection invoice={invoiceData.invoice} />
+                    <ExtraSection
+                      note={invoiceData.invoice.note}
+                      authorized_sign_id={
+                        invoiceData.invoice.authorized_sign_id
+                      }
+                    />
+                  </>
+                )}
+              </View>
+              <Footer />
+            </View>
+          </Page>
+        );
+      })}
+    </Document>
+  );
+};
 
 export default TamilNaduInvoice;

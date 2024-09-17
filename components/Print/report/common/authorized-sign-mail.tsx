@@ -114,7 +114,7 @@ const AuthorizedSignMail = ({
                 : ""}
             </Text>
           </View> 
-          {index < sample_detail.length - 1 && (
+          {index === 0&& (
             <View
             style={{
               display: "flex",
@@ -127,6 +127,18 @@ const AuthorizedSignMail = ({
             <Image src={qr} style={{ width: "50px", height: "50px" }} />
           </View>
           )}
+                    {sample_detail.length ===1 && (
+            <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1,
+            }}
+          >
+          </View>
+          )}
+
           </React.Fragment>
         ))}
       </View>

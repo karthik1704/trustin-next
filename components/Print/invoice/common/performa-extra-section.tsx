@@ -48,7 +48,7 @@ const ExtraSection = ({ note, authorized_sign_id }: { note?: string, authorized_
           </View>
         )}
       </View>
-      <View style={{ marginTop: 40, marginBottom: 20 }}>
+      <View style={{ marginTop: 20, marginBottom: 10 }}>
         <Text
           style={{
             fontSize: 8,

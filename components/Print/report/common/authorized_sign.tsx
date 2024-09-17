@@ -62,7 +62,7 @@ const AuthorizedSign = ({
               style={{
                 fontWeight: "medium",
                 textAlign: "center",
-                marginBottom: "8px",
+                marginBottom: "2px",
               }}
             >
               Authorized Signatory
@@ -80,7 +80,7 @@ const AuthorizedSign = ({
               style={{
                 fontWeight: "bold",
                 textAlign: "center",
-                marginBottom: "4px",
+                marginBottom: "2px",
                 fontSize: "10px",
               }}
             >
@@ -111,7 +111,7 @@ const AuthorizedSign = ({
                 : ""}
             </Text>
           </View>
-          {index < sample_detail.length - 1 && (
+          {index ===0 && (
             <View
             style={{
               display: "flex",
@@ -122,6 +122,17 @@ const AuthorizedSign = ({
             }}
           >
             <Image src={qr} style={{ width: "50px", height: "50px" }} />
+          </View>
+          )}
+          {sample_detail.length ===1 && (
+            <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1,
+            }}
+          >
           </View>
           )}
         </React.Fragment>
