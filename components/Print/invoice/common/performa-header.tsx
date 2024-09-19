@@ -77,7 +77,7 @@ const Header = ({ lut_arn }: { lut_arn?: string }) => {
             textDecoration: "underline",
           }}
         >
-         Performa Tax Invoice
+         Proforma Invoice
         </Text>
       </View>
     </View>

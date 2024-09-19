@@ -41,7 +41,11 @@ const ExtraSection = ({ note, authorized_sign_id }: { note?: string, authorized_
         style={{ textAlign: "right", justifyContent: "flex-end", marginTop: 3 }}
       >
         <Text>For Trustin Analytical Solutions Pvt. Ltd</Text>
-        {authorized_sign_id && <Image src={SIGN_IMAGES[authorized_sign_id]} style={{width: 100, height: 100}} />}
+        {authorized_sign_id && (
+          <View style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
+            <Image src={SIGN_IMAGES[authorized_sign_id] ?? SIGN_IMAGES[24]} style={{width: 150, height: 50}} />
+          </View>
+        )}      
       </View>
       <View style={{ marginTop: 80, marginBottom: 20 }}>
         <Text

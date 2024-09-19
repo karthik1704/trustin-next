@@ -30,10 +30,12 @@
       height: "100%",
     },
     tableCell: {
-      margin: "auto",
+      // margin: "auto",
       marginTop: 5,
       fontSize: 10,
-      padding: 5,
+      textAlign: 'center',
+      paddingVertical: 5,
+      paddingHorizontal: 3,
     },
     tableHeader: {
       backgroundColor: "#FFFFFF",
@@ -117,13 +119,13 @@
             <Text style={styles.tableCell}>{item.sac}</Text>
           </View>
           <View style={[styles.tableCol, { width: "15%" }]}>
-            <Text style={styles.tableCell}>{item.testing_charge}</Text>
+            <Text style={[styles.tableCell, {textAlign:'left'}]}>{item.testing_charge}</Text>
           </View>
           <View style={[styles.tableCol, { width: "15%" }]}>
             <Text style={styles.tableCell}>{item.no_of_tested}</Text>
           </View>
           <View style={[styles.tableCol, { width: "19%" }]}>
-            <Text style={styles.tableCell}>{item.total_testing_charge}</Text>
+            <Text style={[styles.tableCell, {textAlign:'left'}]}>{item.total_testing_charge}</Text>
           </View>
         </View>
       ))}

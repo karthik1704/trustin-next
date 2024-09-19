@@ -81,7 +81,7 @@ const USDTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
            Total ( {currency})
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.grand_total}
         </Text>
       </View>

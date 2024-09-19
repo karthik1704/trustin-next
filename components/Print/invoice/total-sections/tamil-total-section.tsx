@@ -38,7 +38,7 @@ const TamilnaduTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Sub Total ({currency})
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.sub_total}
         </Text>
       </View>
@@ -52,7 +52,7 @@ const TamilnaduTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Discount ({currency})
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.discount}
         </Text>
       </View>
@@ -66,7 +66,7 @@ const TamilnaduTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Add: CGST @ 9%
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.cgst}
         </Text>
       </View>
@@ -79,7 +79,7 @@ const TamilnaduTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Add: SGST @ 9%
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.sgst}
         </Text>
       </View>
@@ -92,7 +92,7 @@ const TamilnaduTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Grand Total (in {currency})
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.grand_total}
         </Text>
       </View>

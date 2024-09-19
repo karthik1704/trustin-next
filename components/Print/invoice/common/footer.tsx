@@ -28,7 +28,7 @@ const Footer = () => (
       PAN No.: AAFCT6714N
     </Text>
 
-    <Text style={styles.text}>adding value by Trust</Text>
+    <Text style={styles.text}>Adding value by Trust</Text>
   </View>
 );
 
