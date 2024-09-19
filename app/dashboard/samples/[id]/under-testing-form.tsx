@@ -134,7 +134,7 @@ const UnderTestingForm = ({
         under_cdsco: data.sample.under_cdsco ? 1 : 0,
         discipline:
           data.sample?.sample_test_types.length === 2
-            ? "Biological"
+            ? "Biological and Mechanical"
             : test_type_id === 1
               ? "Biological"
               : "Mechanical",
