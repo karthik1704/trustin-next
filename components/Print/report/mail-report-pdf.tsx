@@ -84,6 +84,23 @@ const MyDocument = ({
   console.log(data);
   console.log(qr);
 
+  const calculateFirstPageParameters = () => {
+    const sampleDescription = data.sample.description || '';
+    const additionalInfo = data.sample.additional_detail || '';
+    const totalChars = sampleDescription.length + additionalInfo.length;
+
+    if (totalChars > 200) return 1;
+    if (totalChars > 100) return 2;
+    return 3;
+  };
+
+  const firstPageParameterCount = calculateFirstPageParameters();
+  const remainingParameters = data.sample.sample_test_parameters.slice(firstPageParameterCount);
+  const parametersPerPage = 13;
+  const fullPages = Math.floor(remainingParameters.length / parametersPerPage);
+  const lastPageParameters = remainingParameters.slice(fullPages * parametersPerPage);
+
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -485,7 +502,7 @@ const MyDocument = ({
             }}
           ></View>
           <TestParameterTable
-            parameters={data.sample?.sample_test_parameters?.slice(0, 3)}
+            parameters={data.sample?.sample_test_parameters?.slice(0, firstPageParameterCount)}
             showStatus={data.sample?.show_status_report}
           />
 
@@ -498,8 +515,8 @@ const MyDocument = ({
           <Footer sample_detail={data.sample.sample_detail} qr={qr}/>
         </View>
       </Page>
-      {!!data?.sample.sample_test_parameters.slice(3).length && (
-        <Page style={styles.page}>
+      {fullPages > 0 && Array.from({ length: fullPages }).map((_, index) => (
+        <Page style={styles.page} key={`full-page-${index}`}>
           <View style={styles.section}>
             <Header nabl_logo={data.sample.nabl_logo} />
             
@@ -558,7 +575,7 @@ const MyDocument = ({
               }}
             ></View>
             <TestParameterTable
-              parameters={data.sample?.sample_test_parameters?.slice(3)}
+              parameters={remainingParameters.slice(index * parametersPerPage, (index + 1) * parametersPerPage)}
               showStatus={data.sample?.show_status_report}
             />
 
@@ -566,7 +583,78 @@ const MyDocument = ({
             <Footer sample_detail={data.sample.sample_detail} qr={qr}/>
           </View>
         </Page>
-      )}
+      ))}
+      {lastPageParameters.length > 0 && (
+        <Page style={styles.page} >
+        <View style={styles.section}>
+          <Header nabl_logo={data.sample.nabl_logo} />
+          
+          <View
+            style={{
+              border: "1 solid #000",
+              display: "flex",
+              flexDirection: "row",
+              fontWeight: "bold",
+              fontSize: "10px",
+              padding: 2,
+            }}
+            fixed
+          >
+            <Text
+              style={{
+                borderRight: "1 solid #000",
+                width: 140,
+                padding: 1,
+              }}
+            >
+              Sample ID No.
+            </Text>
+            <Text
+              style={{
+                borderRight: "1 solid #000",
+                width: 140,
+                padding: 2,
+                marginLeft: 4,
+              }}
+            >
+              {data.sample.sample_id}
+            </Text>
+
+            <Text
+              style={{
+                borderRight: "1 solid #000",
+                width: 100,
+                padding: 1,
+              }}
+            >
+              ULR No.
+            </Text>
+            <Text style={{ padding: 2, marginLeft: 4, width: "28%" }}>
+              {data.sample.ulr_no ?? "N/A"}
+            </Text>
+          </View>
+
+          {/* <SampleDetails data={data} /> */}
+          <View
+            style={{
+              marginTop: 5,
+              display: "flex",
+              justifyContent: "flex-end",
+              flexDirection: "column",
+            }}
+          ></View>
+          <TestParameterTable
+            parameters={lastPageParameters}
+            showStatus={data.sample?.show_status_report}
+          />
+           {lastPageParameters.length < 8 && (
+              <Statements data={data.sample} isDraft={isDraft} />
+            )}
+          {/* <AuthorizedSign sample_detail={data.sample.sample_detail} /> */}
+          <Footer sample_detail={data.sample.sample_detail} qr={qr}/>
+        </View>
+      </Page>)}
+      {(lastPageParameters.length >= 8 || lastPageParameters.length === 0) && (
       <Page style={styles.page}>
         <View style={styles.section}>
           <Header nabl_logo={data.sample.nabl_logo} />
@@ -581,6 +669,7 @@ const MyDocument = ({
           <Footer sample_detail={data.sample.sample_detail} qr={qr}/>
         </View>
       </Page>
+      )}
     </Document>
   );
 };

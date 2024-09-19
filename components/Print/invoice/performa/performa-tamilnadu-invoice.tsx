@@ -108,7 +108,7 @@ const splitParametersIntoPages = (parameters: any[]) => {
   if (parameters.length <= 3) {
     return [parameters];
   }
-
+ 
   const pages = [];
   const totalParams = parameters.length;
   const fullPages = Math.floor(

@@ -132,7 +132,12 @@ const UnderTestingForm = ({
       ...(currentStep == 2 && {
         nabl_logo: data.sample.nabl_logo ? 1 : 0,
         under_cdsco: data.sample.under_cdsco ? 1 : 0,
-        discipline: data.sample?.discipline,
+        discipline:
+          data.sample?.sample_test_types.length === 2
+            ? "Biological"
+            : test_type_id === 1
+              ? "Biological"
+              : "Mechanical",
         // group: formData?.group,
       }),
       comments: comment,
@@ -222,7 +227,7 @@ const UnderTestingForm = ({
   const router = useRouter();
 
   const handleForm = async (data: {}) => {
-    console.log('form data',data);
+    console.log("form data", data);
     const res = await patchFn(data);
     setState(res);
   };
@@ -397,6 +402,7 @@ const UnderTestingForm = ({
                 Discipline
               </label>
               <input
+                readOnly
                 type="text"
                 {...register("discipline")}
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -537,19 +543,17 @@ const UnderTestingForm = ({
             </Select> */}
             <div className="mb-6">
               <label className="mb-2.5 block text-black dark:text-white">
-              Abbreviations
+                Abbreviations
               </label>
-            <MultiSelect
-              name="abbreviations"
-              control={control}
-              data={Object.entries(standards).map(([abbr, fullName]) => ({
-                value: abbr,
-                name: fullName,
-              }))}
-              
-            />
+              <MultiSelect
+                name="abbreviations"
+                control={control}
+                data={Object.entries(standards).map(([abbr, fullName]) => ({
+                  value: abbr,
+                  name: fullName,
+                }))}
+              />
             </div>
-              
           </>
         )}
         {currentStep === 9 && (
