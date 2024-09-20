@@ -91,6 +91,7 @@ const InvoiceAddForm = ({ data }: props) => {
   const watchInvoice = useWatch({
     control: form.control,
     name: "invoice_mode",
+    defaultValue:"INVOICE",
   });
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
@@ -427,6 +428,7 @@ const TestParamsForm = ({
     let sgstAmount = 0;
     let cgstAmount = 0;
     let igstAmount = 0;
+    
     if (invoiceMode === "INVOICE"){
       if (invoiceType === "TAMILNADU_CUSTOMER") {
         sgstAmount = parseFloat((newSubtotal * 0.09).toFixed(2));

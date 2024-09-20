@@ -8,7 +8,7 @@ const Statements = ({ data, isDraft }: { data: Sample; isDraft: boolean }) => {
       <View
         style={{
           display: "flex",
-          fontSize: 12,
+          fontSize: 8,
           padding: 2,
           marginTop: "16px",
           fontWeight: "bold",
@@ -17,7 +17,7 @@ const Statements = ({ data, isDraft }: { data: Sample; isDraft: boolean }) => {
         <Text style={{ fontWeight: "medium", textAlign: "left" }}>
           Statement of confirmity:
         </Text>
-        <Text style={{ marginLeft: 20, textAlign: "left", fontSize: 10 }}>
+        <Text style={{ marginLeft: 20, textAlign: "left", fontSize: 8 }}>
           {data.statement_of_conformity
             ? data.statement_of_conformity
             : "The Submitted sample passes as per above Test Method / Specifications with respect to the above test only."}
@@ -34,7 +34,7 @@ const Statements = ({ data, isDraft }: { data: Sample; isDraft: boolean }) => {
           style={{ fontWeight: "bold", textAlign: "left", fontSize: "7px" }}
         >
           <Text style={{ textDecoration: "underline", fontWeight: "medium" }}>
-            Abbrevations:
+          Abbreviations:
           </Text>{" "}
           {data.abbreviations && data.abbreviations.length
             ? data.abbreviations

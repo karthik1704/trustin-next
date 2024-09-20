@@ -25,7 +25,7 @@ const AuthorizedSign = ({
   qr: string;
 }) => (
   <View
-    style={{ position: "absolute", bottom: 20, left: 0, right: 0, padding: 1 }}
+    style={{ position: "absolute", bottom: 15, left: 0, right: 0, padding: 1 }}
   >
     <View
       style={{

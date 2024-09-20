@@ -89,14 +89,14 @@ const MyDocument = ({
     const additionalInfo = data.sample.additional_detail || '';
     const totalChars = sampleDescription.length + additionalInfo.length;
 
-    if (totalChars > 200) return 1;
-    if (totalChars > 100) return 2;
+    if (totalChars > 250) return 1;
+    if (totalChars > 150) return 2;
     return 3;
   };
 
   const firstPageParameterCount = calculateFirstPageParameters();
   const remainingParameters = data.sample.sample_test_parameters.slice(firstPageParameterCount);
-  const parametersPerPage = 13;
+  const parametersPerPage = 16;
   const fullPages = Math.floor(remainingParameters.length / parametersPerPage);
   const lastPageParameters = remainingParameters.slice(fullPages * parametersPerPage);
 
@@ -647,14 +647,14 @@ const MyDocument = ({
             parameters={lastPageParameters}
             showStatus={data.sample?.show_status_report}
           />
-           {lastPageParameters.length < 8 && (
+           {lastPageParameters.length < 11 && (
               <Statements data={data.sample} isDraft={isDraft} />
             )}
           {/* <AuthorizedSign sample_detail={data.sample.sample_detail} /> */}
           <Footer sample_detail={data.sample.sample_detail} qr={qr}/>
         </View>
       </Page>)}
-      {(lastPageParameters.length >= 8 || lastPageParameters.length === 0) && (
+      {(lastPageParameters.length >= 10 || lastPageParameters.length === 0) && (
       <Page style={styles.page}>
         <View style={styles.section}>
           <Header nabl_logo={data.sample.nabl_logo} />
