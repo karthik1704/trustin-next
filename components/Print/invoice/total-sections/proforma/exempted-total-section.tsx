@@ -21,8 +21,9 @@ const styles = StyleSheet.create({
 interface TotalSectionProps {
   invoice: Invoice;
 }
+
 const toWords = new ToWords();
-const OtherStateTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
+const ExemptedTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
   const { currency } = invoice;
   return (
     <View>
@@ -35,13 +36,13 @@ const OtherStateTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Sub Total ({currency})
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.sub_total}
         </Text>
       </View>
-      {invoice.discount > 0 && (
-      <View style={styles.tableRow}>
-        <Text
+      {invoice.discount >0 && (
+        <View style={styles.tableRow}>
+          <Text
           style={[
             styles.tableCell,
             { width: "81%", textAlign: "right", borderRightWidth: 1 },
@@ -49,24 +50,11 @@ const OtherStateTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Discount ({currency})
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.discount}
-        </Text>
-      </View>
+          </Text>
+        </View>
       )}
-      <View style={styles.tableRow}>
-        <Text
-          style={[
-            styles.tableCell,
-            { width: "81%", textAlign: "right", borderRightWidth: 1 },
-          ]}
-        >
-          Add: IGST @ 18%
-        </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
-          {invoice.igst}
-        </Text>
-      </View>
       <View style={styles.tableRow}>
         <Text
           style={[
@@ -76,7 +64,7 @@ const OtherStateTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Grand Total (in {currency})
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.grand_total}
         </Text>
       </View>
@@ -94,4 +82,4 @@ const OtherStateTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
   );
 };
 
-export default OtherStateTotalSection;
+export default ExemptedTotalSection;

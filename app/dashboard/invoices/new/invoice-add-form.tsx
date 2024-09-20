@@ -17,7 +17,7 @@ import ComboBox2 from "@/components/combo-box/combo-box2";
 import { Data } from "./page";
 import Select from "@/components/select-input";
 import { Trash2 } from "lucide-react";
-import { invoiceTypes, performaInvoiceTypes } from "../constants";
+import { invoiceTypes, proformaInvoiceTypes } from "../constants";
 
 type props = {
   data: Data;
@@ -150,7 +150,7 @@ const InvoiceAddForm = ({ data }: props) => {
             width={"w-full"}
           >
             <option value="INVOICE">Invoice</option>
-            <option value="PERFORMA_INVOICE">Performa Invoice</option>
+            <option value="PROFORMA_INVOICE">Proforma Invoice</option>
           </Select>
         </div>
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
@@ -289,8 +289,8 @@ const InvoiceAddForm = ({ data }: props) => {
               width={"w-full xl:w-1/2"}
             >
               {Object.entries(
-                watchInvoice === "PERFORMA_INVOICE"
-                  ? performaInvoiceTypes
+                watchInvoice === "PROFORMA_INVOICE"
+                  ? proformaInvoiceTypes
                   : invoiceTypes,
               ).map(([key, value]) => (
                 <option key={key} value={key}>
@@ -436,11 +436,11 @@ const TestParamsForm = ({
       }
     }
    
-    if (invoiceMode === "PERFORMA_INVOICE"){
-      if (invoiceType === "PERFORMA_TAMILNADU_CUSTOMER") {
-        sgstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
-        cgstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
-      } else if (invoiceType === "PERFORMA_OTHER_STATE_CUSTOMER") {
+    if (invoiceMode === "PROFORMA_INVOICE"){
+      if (invoiceType === "PROFORMA_TAMILNADU_CUSTOMER") {
+        sgstAmount = parseFloat((newSubtotal * 0.09).toFixed(2));
+        cgstAmount = parseFloat((newSubtotal * 0.09).toFixed(2));
+      } else if (invoiceType === "PROFORMA_OTHER_STATE_CUSTOMER") {
         igstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
       }
     }
@@ -620,13 +620,13 @@ const TestParamsForm = ({
                 </tr>
               </>
             )}
-                 {invoiceType === "PERFORMA_TAMILNADU_CUSTOMER" && (
+                 {invoiceType === "PROFORMA_TAMILNADU_CUSTOMER" && (
             <tr>
               <td
                 colSpan={5}
                 className="px-4 py-5 text-right font-medium text-black dark:text-white"
               >
-                CGST ({18}%):
+                CGST ({9}%):
               </td>
               <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
                 {/* CGST value */}
@@ -634,13 +634,13 @@ const TestParamsForm = ({
               </td>
             </tr>
             )}
-            {invoiceType === "PERFORMA_TAMILNADU_CUSTOMER" && (
+            {invoiceType === "PROFORMA_TAMILNADU_CUSTOMER" && (
             <tr>
               <td
                 colSpan={5}
                 className="px-4 py-5 text-right font-medium text-black dark:text-white"
               >
-                SGST ({18}%):
+                SGST ({9}%):
               </td>
               <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
                 {/* SGST value */}
@@ -648,7 +648,7 @@ const TestParamsForm = ({
               </td>
             </tr>
             )}
-            {(invoiceType === "OTHER_STATE_CUSTOMER" || invoiceType === "PERFORMA_OTHER_STATE_CUSTOMER") && (
+            {(invoiceType === "OTHER_STATE_CUSTOMER" || invoiceType === "PROFORMA_OTHER_STATE_CUSTOMER") && (
               <tr>
                 <td
                   colSpan={5}

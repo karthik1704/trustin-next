@@ -11,12 +11,12 @@ import {
 import { dateFormatter } from "@/lib/utils";
 
 import { Data } from "@/app/dashboard/invoices/[id]/typings";
-import Header from "../common/performa-header";
+import Header from "../common/proforma-header";
 import Footer from "../common/footer";
 import CustomerDetails from "../common/customer-details";
-import ExtraSection from "../common/performa-extra-section";
+import ExtraSection from "../common/proforma-extra-section";
 import TamilInvoiceParameterTable from "../parameters/tamilnadu-parameters-table";
-import TamilnaduTotalSection from "../total-sections/performa/tamil-total-section";
+import TamilnaduTotalSection from "../total-sections/proforma/tamil-total-section";
 
 Font.register({
   family: "Cambria",

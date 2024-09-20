@@ -2,7 +2,6 @@ import React from "react";
 import { View, Text, StyleSheet } from "@react-pdf/renderer";
 import { Invoice } from "../../../../../app/dashboard/invoices/[id]/typings";
 import {ToWords} from "to-words";
-
 const styles = StyleSheet.create({
   tableRow: {
     flexDirection: "row",
@@ -22,10 +21,8 @@ const styles = StyleSheet.create({
 interface TotalSectionProps {
   invoice: Invoice;
 }
-
 const toWords = new ToWords();
-
-const TamilnaduTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
+const OtherStateTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
   const { currency } = invoice;
   return (
     <View>
@@ -38,7 +35,7 @@ const TamilnaduTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Sub Total ({currency})
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.sub_total}
         </Text>
       </View>
@@ -52,7 +49,7 @@ const TamilnaduTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Discount ({currency})
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.discount}
         </Text>
       </View>
@@ -64,23 +61,10 @@ const TamilnaduTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
             { width: "81%", textAlign: "right", borderRightWidth: 1 },
           ]}
         >
-          Add: CGST @ 18%
+          Add: IGST @ 18%
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
-          {invoice.cgst}
-        </Text>
-      </View>
-      <View style={styles.tableRow}>
-        <Text
-          style={[
-            styles.tableCell,
-            { width: "81%", textAlign: "right", borderRightWidth: 1 },
-          ]}
-        >
-          Add: SGST @ 18%
-        </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
-          {invoice.sgst}
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
+          {invoice.igst}
         </Text>
       </View>
       <View style={styles.tableRow}>
@@ -92,7 +76,7 @@ const TamilnaduTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Grand Total (in {currency})
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.grand_total}
         </Text>
       </View>
@@ -110,4 +94,4 @@ const TamilnaduTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
   );
 };
 
-export default TamilnaduTotalSection;
+export default OtherStateTotalSection;

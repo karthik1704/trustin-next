@@ -20,7 +20,7 @@ import {
 } from "@react-pdf/renderer";
 
 import { Data } from "./typings";
-import { invoiceTypes, performaInvoiceTypes } from '../constants';
+import { invoiceTypes, proformaInvoiceTypes } from '../constants';
 import CombineWorkflow from "./combine-workflow";
 import EmailPopup from "./email-popup";
 import InvoiceEditForm from "./invoice-edit-form";
@@ -30,12 +30,12 @@ import ExemptedInvoice from "@/components/Print/invoice/exempted-invoice";
 import TamilNaduInvoice from "@/components/Print/invoice/tamilnadu-invoice";
 import USDInvoice from "@/components/Print/invoice/usd-invoice";
 import OtherStateInvoice from "@/components/Print/invoice/other-state-invoice";
-import PerformaUSDInvoice from "@/components/Print/invoice/performa/performa-usd-invoice";
-import PerformaExemptedInvoice from "@/components/Print/invoice/performa/performa-exempted-invoice";
-import PerformaTamilNaduInvoice from "@/components/Print/invoice/performa/performa-tamilnadu-invoice";
-import PerformaOtherStateInvoice from "@/components/Print/invoice/performa/performa-other-state-invoice";
+import ProformaUSDInvoice from "@/components/Print/invoice/proforma/proforma-usd-invoice";
+import ProformaExemptedInvoice from "@/components/Print/invoice/proforma/proforma-exempted-invoice";
+import ProformaTamilNaduInvoice from "@/components/Print/invoice/proforma/proforma-tamilnadu-invoice";
+import ProformaOtherStateInvoice from "@/components/Print/invoice/proforma/proforma-other-state-invoice";
 
-const InvoiceComponent = ({ type, invoiceData, invoice_mode }: { type: string; invoiceData: Data, invoice_mode:"INVOICE" | "PERFORMA_INVOICE" }) => {
+const InvoiceComponent = ({ type, invoiceData, invoice_mode }: { type: string; invoiceData: Data, invoice_mode:"INVOICE" | "PROFORMA_INVOICE" }) => {
 
   if(invoice_mode === "INVOICE"){
     switch (type) {
@@ -53,17 +53,17 @@ const InvoiceComponent = ({ type, invoiceData, invoice_mode }: { type: string; i
         return null;
     }
   }
-  if(invoice_mode === "PERFORMA_INVOICE"){
+  if(invoice_mode === "PROFORMA_INVOICE"){
     switch (type) {
     
-      case "PERFORMA_USD":
-          return <PerformaUSDInvoice invoiceData={invoiceData} />;
-      case "PERFORMA_EXEMPTED_CUSTOMER":
-        return <PerformaExemptedInvoice invoiceData={invoiceData} />;
-      case "PERFORMA_TAMILNADU_CUSTOMER":
-        return <PerformaTamilNaduInvoice invoiceData={invoiceData} />;
-      case "PERFORMA_OTHER_STATE_CUSTOMER":
-        return <PerformaOtherStateInvoice invoiceData={invoiceData} />;
+      case "PROFORMA_USD":
+          return <ProformaUSDInvoice invoiceData={invoiceData} />;
+      case "PROFORMA_EXEMPTED_CUSTOMER":
+        return <ProformaExemptedInvoice invoiceData={invoiceData} />;
+      case "PROFORMA_TAMILNADU_CUSTOMER":
+        return <ProformaTamilNaduInvoice invoiceData={invoiceData} />;
+      case "PROFORMA_OTHER_STATE_CUSTOMER":
+        return <ProformaOtherStateInvoice invoiceData={invoiceData} />;
       default:
         console.log("invoice type not found");
         return null;

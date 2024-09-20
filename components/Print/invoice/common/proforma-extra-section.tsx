@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const USDExtraSection = ({ note, authorized_sign_id }: { note?: string, authorized_sign_id: number|null }) => {
+const ExtraSection = ({ note, authorized_sign_id }: { note?: string, authorized_sign_id: number|null }) => {
   return (
     <View>
       {note && (
@@ -38,12 +38,17 @@ const USDExtraSection = ({ note, authorized_sign_id }: { note?: string, authoriz
         </View>
       )}
       <View
-        style={{ textAlign: "right", justifyContent: "flex-end", marginTop: 3 }}
+        style={{ marginTop: 3 }}
       >
-        <Text>For Trustin Analytical Solutions Pvt. Ltd</Text>
-        {authorized_sign_id && <Image src={SIGN_IMAGES[authorized_sign_id] ?? SIGN_IMAGES[24]} style={{width: 100, height: 100}} />}
-        </View>
-      <View style={{ marginTop: 80, marginBottom: 20 }}>
+        <Text style={{ textAlign: "right" }}>For Trustin Analytical Solutions Pvt. Ltd</Text>
+        {/* <Text>{authorized_sign_id}</Text> */}
+        {authorized_sign_id && (
+          <View style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
+            <Image src={SIGN_IMAGES[authorized_sign_id] ?? SIGN_IMAGES[24]} style={{width: 150, height: 50}} />
+          </View>
+        )}
+      </View>
+      <View style={{ marginTop: 20, marginBottom: 10 }}>
         <Text
           style={{
             fontSize: 8,
@@ -55,11 +60,11 @@ const USDExtraSection = ({ note, authorized_sign_id }: { note?: string, authoriz
           Payment Terms & Conditions:
         </Text>
         <Text style={{ fontSize: 8, marginLeft: 2, marginVertical: 5 }}>
-          1. 100% payment against Performa Invoice.
+          1. 100% payment against Proforma Invoice.
         </Text>
         <Text style={{ fontSize: 8, marginLeft: 2, marginVertical: 5 }}>
-          2. Wire Transfer should be drawn in favour of &quot;TRUSTIN ANALYTICAL
-          SOLUTIONS PVT LTD&quot; payable at Chennai.
+          2. Cheque / Demand Draft should be drawn in favour of &quot;TRUSTIN
+          ANALYTICAL SOLUTIONS PVT LTD&quot; payable at Chennai.
         </Text>
       </View>
       <View>
@@ -72,16 +77,12 @@ const USDExtraSection = ({ note, authorized_sign_id }: { note?: string, authoriz
           <Text style={styles.value}>Indian Bank & East Tambaram Branch</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>SWIFT Code</Text>
-          <Text style={styles.value}>IDIBINBBTSY</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>AD Code</Text>
-          <Text style={styles.value}>0260106</Text>
+          <Text style={styles.label}>IFSC Code</Text>
+          <Text style={styles.value}>IDIB000T004</Text>
         </View>
       </View>
     </View>
   );
 };
 
-export default USDExtraSection;
+export default ExtraSection;

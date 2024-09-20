@@ -38,7 +38,7 @@ const initialState: InitialState = {
   message: null,
 };
 type FormValues = {
-  invoice_mode: 'INVOICE' | 'PERFORMA_INVOICE';
+  invoice_mode: 'INVOICE' | 'PROFORMA_INVOICE';
   company_name: string;
   discount: number | undefined;
   invoice_type: string;
@@ -158,7 +158,7 @@ const InvoiceEditForm = ({ data, actionFn }: props) => {
               disabled={true}
             >
               <option value="INVOICE">Invoice</option>
-              <option value="PERFORMA_INVOICE">Performa Invoice</option>
+              <option value="PROFORMA_INVOICE">Proforma Invoice</option>
             </Select>
             <div className="w-full">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -442,11 +442,11 @@ const TestParamsForm = ({
       }
     }
    
-    if (invoiceMode === "PERFORMA_INVOICE"){
-      if (invoiceType === "PERFORMA_TAMILNADU_CUSTOMER") {
-        sgstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
-        cgstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
-      } else if (invoiceType === "PERFORMA_OTHER_STATE_CUSTOMER") {
+    if (invoiceMode === "PROFORMA_INVOICE"){
+      if (invoiceType === "PROFORMA_TAMILNADU_CUSTOMER") {
+        sgstAmount = parseFloat((newSubtotal * 0.09).toFixed(2));
+        cgstAmount = parseFloat((newSubtotal * 0.09).toFixed(2));
+      } else if (invoiceType === "PROFORMA_OTHER_STATE_CUSTOMER") {
         igstAmount = parseFloat((newSubtotal * 0.18).toFixed(2));
       }
     }
@@ -642,13 +642,13 @@ const TestParamsForm = ({
               </td>
             </tr>
             )}
-            {invoiceType === "PERFORMA_TAMILNADU_CUSTOMER" && (
+            {invoiceType === "PROFORMA_TAMILNADU_CUSTOMER" && (
             <tr>
               <td
                 colSpan={5}
                 className="px-4 py-5 text-right font-medium text-black dark:text-white"
               >
-                CGST ({18}%):
+                CGST ({9}%):
               </td>
               <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
                 {/* CGST value */}
@@ -656,13 +656,13 @@ const TestParamsForm = ({
               </td>
             </tr>
             )}
-            {invoiceType === "PERFORMA_TAMILNADU_CUSTOMER" && (
+            {invoiceType === "PROFORMA_TAMILNADU_CUSTOMER" && (
             <tr>
               <td
                 colSpan={5}
                 className="px-4 py-5 text-right font-medium text-black dark:text-white"
               >
-                SGST ({18}%):
+                SGST ({9}%):
               </td>
               <td className="border-b border-[#eee] px-4 py-5 text-right font-medium text-black dark:text-white">
                 {/* SGST value */}
@@ -670,7 +670,7 @@ const TestParamsForm = ({
               </td>
             </tr>
             )}
-            {(invoiceType === "OTHER_STATE_CUSTOMER" || invoiceType === "PERFORMA_OTHER_STATE_CUSTOMER") && (  
+            {(invoiceType === "OTHER_STATE_CUSTOMER" || invoiceType === "PROFORMA_OTHER_STATE_CUSTOMER") && (  
                <tr>
                <td
                  colSpan={5}

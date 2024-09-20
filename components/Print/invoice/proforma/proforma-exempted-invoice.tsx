@@ -11,13 +11,13 @@ import {
 import { dateFormatter, getLaterDate } from "@/lib/utils";
 
 import { Data } from "@/app/dashboard/invoices/[id]/typings";
-import Header from "../common/performa-header";
+import Header from "../common/proforma-header";
 import Footer from "../common/footer";
 import CustomerDetails from "../common/customer-details";
 import TotalSection from "../common/total-section";
-import ExtraSection from "../common/performa-extra-section";
+import ExtraSection from "../common/proforma-extra-section";
 import ExemptedInvoiceParameterTable from "../parameters/exempted-parameters-table";
-import ExemptedTotalSection from "../total-sections/performa/exempted-total-section";
+import ExemptedTotalSection from "../total-sections/proforma/exempted-total-section";
 
 Font.register({
   family: "Cambria",

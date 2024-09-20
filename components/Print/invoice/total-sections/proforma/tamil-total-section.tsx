@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "@react-pdf/renderer";
 import { Invoice } from "../../../../../app/dashboard/invoices/[id]/typings";
 import {ToWords} from "to-words";
+
 const styles = StyleSheet.create({
   tableRow: {
     flexDirection: "row",
@@ -23,7 +24,8 @@ interface TotalSectionProps {
 }
 
 const toWords = new ToWords();
-const ExemptedTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
+
+const TamilnaduTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
   const { currency } = invoice;
   return (
     <View>
@@ -36,13 +38,13 @@ const ExemptedTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Sub Total ({currency})
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.sub_total}
         </Text>
       </View>
-      {invoice.discount >0 && (
-        <View style={styles.tableRow}>
-          <Text
+      {invoice.discount > 0 && (
+      <View style={styles.tableRow}>
+        <Text
           style={[
             styles.tableCell,
             { width: "81%", textAlign: "right", borderRightWidth: 1 },
@@ -50,11 +52,37 @@ const ExemptedTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Discount ({currency})
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.discount}
-          </Text>
-        </View>
+        </Text>
+      </View>
       )}
+      <View style={styles.tableRow}>
+        <Text
+          style={[
+            styles.tableCell,
+            { width: "81%", textAlign: "right", borderRightWidth: 1 },
+          ]}
+        >
+          Add: CGST @ 9%
+        </Text>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
+          {invoice.cgst}
+        </Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text
+          style={[
+            styles.tableCell,
+            { width: "81%", textAlign: "right", borderRightWidth: 1 },
+          ]}
+        >
+          Add: SGST @ 9%
+        </Text>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
+          {invoice.sgst}
+        </Text>
+      </View>
       <View style={styles.tableRow}>
         <Text
           style={[
@@ -64,7 +92,7 @@ const ExemptedTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
         >
           Grand Total (in {currency})
         </Text>
-        <Text style={[styles.tableCell, { width: "19%", textAlign: "center" }]}>
+        <Text style={[styles.tableCell, { width: "19%", textAlign: "left" }]}>
           {invoice.grand_total}
         </Text>
       </View>
@@ -82,4 +110,4 @@ const ExemptedTotalSection: React.FC<TotalSectionProps> = ({ invoice }) => {
   );
 };
 
-export default ExemptedTotalSection;
+export default TamilnaduTotalSection;

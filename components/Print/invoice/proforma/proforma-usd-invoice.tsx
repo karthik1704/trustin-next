@@ -11,13 +11,12 @@ import {
 import { dateFormatter, getLaterDate } from "@/lib/utils";
 
 import { Data } from "@/app/dashboard/invoices/[id]/typings";
-import Header from "../common/performa-header";
+import Header from "../common/proforma-header";
 import Footer from "../common/footer";
 import CustomerDetails from "../common/customer-details";
-import ExtraSection from "../common/performa-extra-section";
-import OtherStateInvoiceParameterTable from "../parameters/other-state-parameters-table";
-import OtherStateTotalSection from "../total-sections/performa/other-state-total-section";
-
+import USDTamilInvoiceParameterTable from "../parameters/usd-parameters-table";
+import USDTotalSection from "../total-sections/proforma/usd-total-section";
+import USDExtraSection from "../common/proforma-usd-extra-section";
 
 Font.register({
   family: "Cambria",
@@ -100,11 +99,11 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const OtherStateInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => (
+const ProformaUSDInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.section}>
-        <Header />
+        <Header lut_arn={invoiceData.invoice.lut_arn} />
         <View>
           <View
             style={{
@@ -154,15 +153,15 @@ const OtherStateInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => 
           </View>
 
           <CustomerDetails invoiceData={invoiceData} />
-          <OtherStateInvoiceParameterTable
+          <USDTamilInvoiceParameterTable
             parameters={invoiceData.invoice.invoice_parameters}
             currency={invoiceData.invoice.currency}
             invoice_type={invoiceData.invoice.invoice_type}
-            tested_type={invoiceData.invoice.tested_type}
+            tested_type={invoiceData.invoice.tested_type }
             invoice={invoiceData.invoice}
           />
-          <OtherStateTotalSection invoice={invoiceData.invoice} />
-          <ExtraSection note={invoiceData.invoice.note} authorized_sign_id={invoiceData.invoice.authorized_sign_id } />
+          <USDTotalSection invoice={invoiceData.invoice} />
+          <USDExtraSection note={invoiceData.invoice.note} authorized_sign_id={invoiceData.invoice.authorized_sign_id } />
         </View>
         <Footer />
       </View>
@@ -170,4 +169,4 @@ const OtherStateInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => 
   </Document>
 );
 
-export default OtherStateInvoice;
+export default ProformaUSDInvoice;

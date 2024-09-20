@@ -9,11 +9,11 @@ export const invoiceTypes = {
 }
 
 
-export const performaInvoiceTypes = {
-    PERFORMA_USD: "Performa USD Customer",
-    PERFORMA_EXEMPTED_CUSTOMER: "Performa Exempted Customer",
-    PERFORMA_TAMILNADU_CUSTOMER: "Performa Tamil Nadu Customer",
-    PERFORMA_OTHER_STATE_CUSTOMER: "Performa Other State Customer",
+export const proformaInvoiceTypes = {
+    PROFORMA_USD: "Proforma USD Customer",
+    PROFORMA_EXEMPTED_CUSTOMER: "Proforma Exempted Customer",
+    PROFORMA_TAMILNADU_CUSTOMER: "Proforma Tamil Nadu Customer",
+    PROFORMA_OTHER_STATE_CUSTOMER: "Proforma Other State Customer",
     
 }
 

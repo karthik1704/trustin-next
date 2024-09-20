@@ -11,12 +11,12 @@ import {
 import { dateFormatter } from "@/lib/utils";
 
 import { Data } from "@/app/dashboard/invoices/[id]/typings";
-import Header from "../common/performa-header";
+import Header from "../common/proforma-header";
 import Footer from "../common/footer";
 import CustomerDetails from "../common/customer-details";
-import ExtraSection from "../common/performa-extra-section";
+import ExtraSection from "../common/proforma-extra-section";
 import TamilInvoiceParameterTable from "../parameters/tamilnadu-parameters-table";
-import TamilnaduTotalSection from "../total-sections/performa/tamil-total-section";
+import TamilnaduTotalSection from "../total-sections/proforma/tamil-total-section";
 
 Font.register({
   family: "Cambria",
@@ -100,51 +100,33 @@ const styles = StyleSheet.create({
   },
 });
 
-// Create Document Component
-const PARAMS_PER_FULL_PAGE = 7;
-const PARAMS_ON_LAST_PAGE = 3;
 
-const splitParametersIntoPages = (parameters: any[]) => {
-  if (parameters.length <= 3) {
-    return [parameters];
-  }
- 
-  const pages = [];
-  const totalParams = parameters.length;
-  const fullPages = Math.floor(
-    (totalParams - PARAMS_ON_LAST_PAGE) / PARAMS_PER_FULL_PAGE,
-  );
-
-  for (let i = 0; i < fullPages; i++) {
-    pages.push(
-      parameters.slice(
-        i * PARAMS_PER_FULL_PAGE,
-        (i + 1) * PARAMS_PER_FULL_PAGE,
-      ),
-    );
-  }
-
-  const remainingParams = totalParams - fullPages * PARAMS_PER_FULL_PAGE;
-  if (remainingParams > PARAMS_ON_LAST_PAGE) {
-    pages.push(
-      parameters.slice(fullPages * PARAMS_PER_FULL_PAGE, -PARAMS_ON_LAST_PAGE),
-    );
-  }
-
-  pages.push(parameters.slice(-PARAMS_ON_LAST_PAGE));
-
-  return pages;
-};
 
 const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => {
-  const parameters = invoiceData.invoice.invoice_parameters;
-  const parameterPages = splitParametersIntoPages(parameters);
+  const { invoice } = invoiceData;
+  const { invoice_parameters, sample_id_nos } = invoice;
+
+  // Determine the number of parameters per page based on sample_id_nos length
+  let parametersPerPage;
+  if (sample_id_nos.length < 100) {
+    parametersPerPage = 9;
+  } else if (sample_id_nos.length < 200) {
+    parametersPerPage = 7;
+  } else {
+    parametersPerPage = 5;
+  }
+
+  // Split invoice_parameters into chunks for each page
+  const parameterChunks = [];
+  for (let i = 0; i < invoice_parameters.length; i += parametersPerPage) {
+    parameterChunks.push(invoice_parameters.slice(i, i + parametersPerPage));
+  }
+
 
   return (
     <Document>
-      {parameterPages.map((pageParams, index) => {
-        const startingIndex = index * PARAMS_PER_FULL_PAGE;
-        return (
+ 
+ {parameterChunks.map((chunk, index) => (
           <Page key={index} size="A4" style={styles.page}>
             <View style={styles.section}>
               <Header />
@@ -199,15 +181,14 @@ const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => {
 
                 <CustomerDetails invoiceData={invoiceData} fixed />
                 <TamilInvoiceParameterTable
-                  parameters={pageParams}
+                  parameters={chunk}
                   currency={invoiceData.invoice.currency}
                   invoice_type={invoiceData.invoice.invoice_type}
                   tested_type={invoiceData.invoice.tested_type}
                   invoice={invoiceData.invoice}
-                  startingIndex={startingIndex}
+                  startingIndex={0}
                 />
-
-                {index === parameterPages.length - 1 && (
+           {index === parameterChunks.length - 1 && (
                   <>
                     <TamilnaduTotalSection invoice={invoiceData.invoice} />
                     <ExtraSection
@@ -216,14 +197,13 @@ const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => {
                         invoiceData.invoice.authorized_sign_id
                       }
                     />
-                  </>
-                )}
+                    </>
+           )}
               </View>
               <Footer />
             </View>
           </Page>
-        );
-      })}
+        ))}
     </Document>
   );
 };
