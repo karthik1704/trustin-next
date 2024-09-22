@@ -43,7 +43,7 @@ const USDExtraSection = ({ note, authorized_sign_id }: { note?: string, authoriz
         <Text>For Trustin Analytical Solutions Pvt. Ltd</Text>
         {authorized_sign_id && <Image src={SIGN_IMAGES[authorized_sign_id] ?? SIGN_IMAGES[24]} style={{width: 100, height: 100}} />}
         </View>
-      <View style={{ marginTop: 80, marginBottom: 20 }}>
+      <View style={{ marginTop: 20, marginBottom: 10 }}>
         <Text
           style={{
             fontSize: 8,

@@ -100,33 +100,45 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
 const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => {
   const { invoice } = invoiceData;
   const { invoice_parameters, sample_id_nos } = invoice;
 
-  // Determine the number of parameters per page based on sample_id_nos length
-  let parametersPerPage;
-  if (sample_id_nos.length < 100) {
-    parametersPerPage = 9;
-  } else if (sample_id_nos.length < 200) {
-    parametersPerPage = 7;
-  } else {
-    parametersPerPage = 5;
-  }
+  const getParametersPerPage = (parameters: any[]) => {
+    let parametersPerPage = 13; // Default value
+
+    if (sample_id_nos.length < 100) {
+      parametersPerPage = 13;
+    } else if (sample_id_nos.length < 200) {
+      parametersPerPage = 9;
+    } else {
+      parametersPerPage = 7;
+    }
+    parameters.forEach((param) => {
+      if (param.key === "test_parameter" && param.value.length > 17) {
+        parametersPerPage -= 1; // Reduce by 1 if length of test_parameter is above 17
+      }
+      if (param.key === "test_parameter" && param.value.length > 28) {
+        parametersPerPage -= 1; // Further reduce by 1 if length is above 28
+      }
+    });
+
+    return Math.max(parametersPerPage, 1); // Ensure at least 1 parameter per page
+  };
 
   // Split invoice_parameters into chunks for each page
   const parameterChunks = [];
-  for (let i = 0; i < invoice_parameters.length; i += parametersPerPage) {
-    parameterChunks.push(invoice_parameters.slice(i, i + parametersPerPage));
+  let currentParameters = [...invoice_parameters];
+  while (currentParameters.length > 0) {
+    const parametersPerPage = getParametersPerPage(currentParameters);
+    parameterChunks.push(currentParameters.slice(0, parametersPerPage));
+    currentParameters = currentParameters.slice(parametersPerPage);
   }
-
 
   return (
     <Document>
- 
- {parameterChunks.map((chunk, index) => (
+      {parameterChunks.length > 0 &&
+        parameterChunks.map((chunk, index) => (
           <Page key={index} size="A4" style={styles.page}>
             <View style={styles.section}>
               <Header />
@@ -180,25 +192,29 @@ const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => {
                 </View>
 
                 <CustomerDetails invoiceData={invoiceData} fixed />
-                <TamilInvoiceParameterTable
-                  parameters={chunk}
-                  currency={invoiceData.invoice.currency}
-                  invoice_type={invoiceData.invoice.invoice_type}
-                  tested_type={invoiceData.invoice.tested_type}
-                  invoice={invoiceData.invoice}
-                  startingIndex={0}
-                />
-           {index === parameterChunks.length - 1 && (
-                  <>
+                <View wrap={false}>
+                  <TamilInvoiceParameterTable
+                    parameters={chunk}
+                    currency={invoiceData.invoice.currency}
+                    invoice_type={invoiceData.invoice.invoice_type}
+                    tested_type={invoiceData.invoice.tested_type}
+                    invoice={invoiceData.invoice}
+                    startingIndex={index * chunk.length}
+                  />
+                  {index === parameterChunks.length - 1 && (
                     <TamilnaduTotalSection invoice={invoiceData.invoice} />
+                  )}
+                </View>
+                {index === parameterChunks.length - 1 && (
+                  <View wrap={false}>
                     <ExtraSection
                       note={invoiceData.invoice.note}
                       authorized_sign_id={
                         invoiceData.invoice.authorized_sign_id
                       }
                     />
-                    </>
-           )}
+                  </View>
+                )}
               </View>
               <Footer />
             </View>

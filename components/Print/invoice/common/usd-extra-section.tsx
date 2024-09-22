@@ -63,7 +63,7 @@ const USDExtraSection = ({
         )}
       </View>
 
-      <View style={{ marginTop: 80, marginBottom: 20 }}>
+      <View style={{ marginTop: 20, marginBottom: 10 }}>
         <Text
           style={{
             fontSize: 8,

@@ -62,6 +62,7 @@ interface InvoiceParameterTableProps {
   invoice_type: string;
   tested_type: TestedTypeKey;
   invoice: Invoice;
+  startingIndex: number;
 }
 
 const TestedType = {
@@ -79,8 +80,9 @@ const OtherStateInvoiceParameterTable: React.FC<InvoiceParameterTableProps> = ({
   invoice_type,
   tested_type,
   invoice,
+  startingIndex
 }: InvoiceParameterTableProps) => (
-  <View style={styles.table}>
+  <View style={styles.table} wrap={false}>
     <View style={[styles.tableRow, styles.tableHeader]}>
       <View style={[styles.tableCol, { width: "6%" }]}>
         <Text style={styles.tableCell}>Sl.No</Text>
@@ -110,7 +112,7 @@ const OtherStateInvoiceParameterTable: React.FC<InvoiceParameterTableProps> = ({
         style={[styles.tableRow, { fontWeight: "bold", fontSize: 8 }]}
       >
         <View style={[styles.tableCol, { width: "6%" }]}>
-          <Text style={styles.tableCell}>{index + 1}</Text>
+          <Text style={styles.tableCell}>{index + startingIndex + 1}</Text>
         </View>
         <View style={[styles.tableCol, { width: "30%" }]}>
           <Text style={styles.tableCell}>{item.test_parameter}</Text>

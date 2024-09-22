@@ -104,42 +104,20 @@ const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => {
   const { invoice_parameters, sample_id_nos } = invoice;
 
   // Determine the number of parameters per page based on sample_id_nos length
-  // let parametersPerPage;
-
-
-  const getParametersPerPage = (parameters: any[]) => {
-    let parametersPerPage = 13; // Default value
-
-    if (sample_id_nos.length < 100) {
-      parametersPerPage = 13;
-    } else if (sample_id_nos.length < 200) {
-      parametersPerPage = 9;
-    } else {
-      parametersPerPage = 7;
-    }
-    parameters.forEach(param => {
-      if (param.key === 'test_parameter' && param.value.length > 17) {
-        parametersPerPage -= 1; // Reduce by 1 if length of test_parameter is above 17
-      }
-      if (param.key === 'test_parameter' && param.value.length > 28) {
-        parametersPerPage -= 1; // Further reduce by 1 if length is above 28
-      }
-    });
-
-    return Math.max(parametersPerPage, 1); // Ensure at least 1 parameter per page
-  };
-
-  
+  let parametersPerPage;
+  if (sample_id_nos.length < 100) {
+    parametersPerPage = 13;
+  } else if (sample_id_nos.length < 200) {
+    parametersPerPage = 9;
+  } else {
+    parametersPerPage = 7;
+  }
 
   // Split invoice_parameters into chunks for each page
   const parameterChunks = [];
-  let currentParameters = [...invoice_parameters];
-  while (currentParameters.length > 0) {
-    const parametersPerPage = getParametersPerPage(currentParameters);
-    parameterChunks.push(currentParameters.slice(0, parametersPerPage));
-    currentParameters = currentParameters.slice(parametersPerPage);
+  for (let i = 0; i < invoice_parameters.length; i += parametersPerPage) {
+    parameterChunks.push(invoice_parameters.slice(i, i + parametersPerPage));
   }
-
   console.log(parameterChunks.length);
   return (
     <Document>
@@ -195,9 +173,9 @@ const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => {
                     {dateFormatter(invoiceData.invoice.updated_at)}
                   </Text>
                 </View>
-               
+                <View wrap={false}>
                   <CustomerDetails invoiceData={invoiceData} fixed />
-               
+                </View>
                 <View wrap={false}>
                   <TamilInvoiceParameterTable
                     parameters={chunk}
@@ -205,7 +183,7 @@ const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => {
                     invoice_type={invoiceData.invoice.invoice_type}
                     tested_type={invoiceData.invoice.tested_type}
                     invoice={invoiceData.invoice}
-                    startingIndex={index * chunk.length}
+                    startingIndex={index * parametersPerPage}
                   />
                   {index === parameterChunks.length - 1 && (
                     <TamilnaduTotalSection invoice={invoiceData.invoice} />

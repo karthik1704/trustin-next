@@ -62,7 +62,7 @@ interface CustomerDetailsProps {
 
 const CustomerDetails: React.FC<CustomerDetailsProps> = ({ invoiceData, fixed=false }) => {
   return (
-    <View fixed> 
+    <View fixed={fixed} wrap={false}> 
       <View style={styles.container}>
         <Text style={styles.headerText}>Customer Details</Text>
       </View>
@@ -80,7 +80,7 @@ const CustomerDetails: React.FC<CustomerDetailsProps> = ({ invoiceData, fixed=fa
         <Text style={styles.value}>{invoiceData.invoice.contact_phone}</Text>
       </View> */}
       <View style={[styles.row, {paddingHorizontal:0, paddingBottom:0}]}>
-        <Text style={[styles.label, {width:152}]}>Customer Address</Text>
+        <Text style={[styles.label, {width:158}]}>Customer Address</Text>
         <View style={{ display: 'flex', flexDirection: 'column' }}>
           <Text style={[styles.value, {paddingHorizontal:2}]}>{invoiceData.invoice.customer_address}</Text>
           <View style={styles.emailContainer}>

@@ -99,74 +99,130 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const USDInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Header lut_arn={invoiceData.invoice.lut_arn} />
-        <View>
-          <View
-            style={{
-              border: "1 solid #000",
-              display: "flex",
-              flexDirection: "row",
-              fontWeight: "bold",
-              fontSize: "10px",
-              padding: 2,
-            }}
-            fixed
-          >
-            <Text
-              style={{
-                borderRight: "1 solid #000",
-                width: 140,
-                padding: 1,
-                fontWeight: "medium",
-              }}
-            >
-              Invoice No.
-            </Text>
-            <Text
-              style={{
-                borderRight: "1 solid #000",
-                width: 140,
-                padding: 2,
-                marginLeft: 4,
-              }}
-            >
-              {invoiceData.invoice.invoice_code}
-            </Text>
+const USDInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => {
+  const { invoice } = invoiceData;
+  const { invoice_parameters, sample_id_nos } = invoice;
 
-            <Text
-              style={{
-                borderRight: "1 solid #000",
-                width: 100,
-                padding: 1,
-                fontWeight: "medium",
-              }}
-            >
-              Date
-            </Text>
-            <Text style={{ padding: 2, marginLeft: 4 }}>
-              {dateFormatter(invoiceData.invoice.updated_at)}
-            </Text>
-          </View>
+  // Determine the number of parameters per page based on sample_id_nos length
+  const getParametersPerPage = (parameters: any[]) => {
+    let parametersPerPage = 13; // Default value
 
-          <CustomerDetails invoiceData={invoiceData} />
-          <USDTamilInvoiceParameterTable
-            parameters={invoiceData.invoice.invoice_parameters}
-            currency={invoiceData.invoice.currency}
-            invoice_type={invoiceData.invoice.invoice_type}
-            tested_type={invoiceData.invoice.tested_type }
-            invoice={invoiceData.invoice}
-          />
-          <USDTotalSection invoice={invoiceData.invoice} />
-          <USDExtraSection note={invoiceData.invoice.note} authorized_sign_id={invoiceData.invoice.authorized_sign_id } />
-        </View>
-        <Footer />
-      </View>
-    </Page>
-  </Document>
-);
+    if (sample_id_nos.length < 100) {
+      parametersPerPage = 13;
+    } else if (sample_id_nos.length < 200) {
+      parametersPerPage = 9;
+    } else {
+      parametersPerPage = 7;
+    }
+    parameters.forEach((param) => {
+      if (param.key === "test_parameter" && param.value.length > 17) {
+        parametersPerPage -= 1; // Reduce by 1 if length of test_parameter is above 17
+      }
+      if (param.key === "test_parameter" && param.value.length > 28) {
+        parametersPerPage -= 1; // Further reduce by 1 if length is above 28
+      }
+    });
+
+    return Math.max(parametersPerPage, 1); // Ensure at least 1 parameter per page
+  };
+
+  // Split invoice_parameters into chunks for each page
+  const parameterChunks = [];
+  let currentParameters = [...invoice_parameters];
+  while (currentParameters.length > 0) {
+    const parametersPerPage = getParametersPerPage(currentParameters);
+    parameterChunks.push(currentParameters.slice(0, parametersPerPage));
+    currentParameters = currentParameters.slice(parametersPerPage);
+  }
+
+  return (
+    <Document>
+      {parameterChunks.length > 0 &&
+        parameterChunks.map((chunk, index) => (
+          <Page key={index} size="A4" style={styles.page}>
+            <View style={styles.section}>
+              <Header lut_arn={invoiceData.invoice.lut_arn} />
+              <View>
+                <View
+                  style={{
+                    border: "1 solid #000",
+                    display: "flex",
+                    flexDirection: "row",
+                    fontWeight: "bold",
+                    fontSize: "10px",
+                    padding: 2,
+                  }}
+                  fixed
+                >
+                  <Text
+                    style={{
+                      borderRight: "1 solid #000",
+                      width: 140,
+                      padding: 1,
+                      fontWeight: "medium",
+                    }}
+                  >
+                    Invoice No.
+                  </Text>
+                  <Text
+                    style={{
+                      borderRight: "1 solid #000",
+                      width: 140,
+                      padding: 2,
+                      marginLeft: 4,
+                    }}
+                  >
+                    {invoiceData.invoice.invoice_code}
+                  </Text>
+
+                  <Text
+                    style={{
+                      borderRight: "1 solid #000",
+                      width: 100,
+                      padding: 1,
+                      fontWeight: "medium",
+                    }}
+                  >
+                    Date
+                  </Text>
+                  <Text style={{ padding: 2, marginLeft: 4 }}>
+                    {dateFormatter(invoiceData.invoice.updated_at)}
+                  </Text>
+                </View>
+
+                <View wrap={false}>
+                  <CustomerDetails invoiceData={invoiceData} fixed />
+                </View>
+                <View wrap={false}>
+                  <USDTamilInvoiceParameterTable
+                    parameters={chunk}
+                    currency={invoiceData.invoice.currency}
+                    invoice_type={invoiceData.invoice.invoice_type}
+                    tested_type={invoiceData.invoice.tested_type}
+                    invoice={invoiceData.invoice}
+                    startingIndex={index * chunk.length}
+                  />
+                  {index === parameterChunks.length - 1 && (
+                    <USDTotalSection invoice={invoiceData.invoice} />
+                  )}
+                </View>
+                {index === parameterChunks.length - 1 && (
+                  <View wrap={false}>
+                    <USDExtraSection
+                      note={invoiceData.invoice.note}
+                      authorized_sign_id={
+                        invoiceData.invoice.authorized_sign_id
+                      }
+                    />
+                  </View>
+                )}
+              </View>
+              <Footer />
+            </View>
+          </Page>
+        ))}
+    </Document>
+  );
+};
 
 export default USDInvoice;

@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   section: {
     marginTop: 100,
-    marginBottom: 70,
+    marginBottom: 60,
     marginHorizontal: 10,
     // marginTop: 0,
     padding: 5,

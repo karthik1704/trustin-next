@@ -11,12 +11,12 @@ import {
 import { dateFormatter, getLaterDate } from "@/lib/utils";
 
 import { Data } from "@/app/dashboard/invoices/[id]/typings";
-import Header from "../common/proforma-header";
-import Footer from "../common/footer";
-import CustomerDetails from "../common/customer-details";
-import USDTamilInvoiceParameterTable from "../parameters/usd-parameters-table";
-import USDTotalSection from "../total-sections/proforma/usd-total-section";
-import USDExtraSection from "../common/proforma-usd-extra-section";
+import Header from "./common/header";
+import Footer from "./common/footer";
+import CustomerDetails from "./common/customer-details";
+import ExtraSection from "./common/extra-section";
+import TamilInvoiceParameterTable from "./parameters/tamilnadu-parameters-table";
+import TamilnaduTotalSection from "./total-sections/tamil-total-section";
 
 Font.register({
   family: "Cambria",
@@ -99,49 +99,31 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const ProformaUSDInvoice: React.FC<{ invoiceData: Data }> = ({
-  invoiceData,
-}) => {
+const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => {
   const { invoice } = invoiceData;
   const { invoice_parameters, sample_id_nos } = invoice;
 
-  const getParametersPerPage = (parameters: any[]) => {
-    let parametersPerPage = 13; // Default value
-
-    if (sample_id_nos.length < 100) {
-      parametersPerPage = 13;
-    } else if (sample_id_nos.length < 200) {
-      parametersPerPage = 9;
-    } else {
-      parametersPerPage = 7;
-    }
-    parameters.forEach((param) => {
-      if (param.key === "test_parameter" && param.value.length > 17) {
-        parametersPerPage -= 1; // Reduce by 1 if length of test_parameter is above 17
-      }
-      if (param.key === "test_parameter" && param.value.length > 28) {
-        parametersPerPage -= 1; // Further reduce by 1 if length is above 28
-      }
-    });
-
-    return Math.max(parametersPerPage, 1); // Ensure at least 1 parameter per page
-  };
+  // Determine the number of parameters per page based on sample_id_nos length
+  let parametersPerPage;
+  if (sample_id_nos.length < 100) {
+    parametersPerPage = 13;
+  } else if (sample_id_nos.length < 200) {
+    parametersPerPage = 9;
+  } else {
+    parametersPerPage = 7;
+  }
 
   // Split invoice_parameters into chunks for each page
   const parameterChunks = [];
-  let currentParameters = [...invoice_parameters];
-  while (currentParameters.length > 0) {
-    const parametersPerPage = getParametersPerPage(currentParameters);
-    parameterChunks.push(currentParameters.slice(0, parametersPerPage));
-    currentParameters = currentParameters.slice(parametersPerPage);
+  for (let i = 0; i < invoice_parameters.length; i += parametersPerPage) {
+    parameterChunks.push(invoice_parameters.slice(i, i + parametersPerPage));
   }
-
   return (
     <Document>
       {parameterChunks.map((chunk, index) => (
         <Page key={index} size="A4" style={styles.page}>
           <View style={styles.section}>
-            <Header lut_arn={invoiceData.invoice.lut_arn} />
+            <Header />
             <View>
               <View
                 style={{
@@ -191,27 +173,24 @@ const ProformaUSDInvoice: React.FC<{ invoiceData: Data }> = ({
               </View>
 
               <CustomerDetails invoiceData={invoiceData} fixed />
-              <View wrap={false}>
-                <USDTamilInvoiceParameterTable
-                  parameters={chunk}
-                  currency={invoiceData.invoice.currency}
-                  invoice_type={invoiceData.invoice.invoice_type}
-                  tested_type={invoiceData.invoice.tested_type}
-                  invoice={invoiceData.invoice}
-                  startingIndex={index * chunk.length}
-                />
 
-                {index === parameterChunks.length - 1 && (
-                  <USDTotalSection invoice={invoiceData.invoice} />
-                )}
-              </View>
+              <TamilInvoiceParameterTable
+                parameters={chunk}
+                currency={invoiceData.invoice.currency}
+                invoice_type={invoiceData.invoice.invoice_type}
+                tested_type={invoiceData.invoice.tested_type}
+                invoice={invoiceData.invoice}
+                startingIndex={index * parametersPerPage}
+              />
               {index === parameterChunks.length - 1 && (
-                <View wrap={false}>
-                  <USDExtraSection
+                <>
+                  <TamilnaduTotalSection invoice={invoiceData.invoice} />
+
+                  <ExtraSection
                     note={invoiceData.invoice.note}
                     authorized_sign_id={invoiceData.invoice.authorized_sign_id}
                   />
-                </View>
+                </>
               )}
             </View>
             <Footer />
@@ -221,4 +200,4 @@ const ProformaUSDInvoice: React.FC<{ invoiceData: Data }> = ({
     </Document>
   );
 };
-export default ProformaUSDInvoice;
+export default TamilNaduInvoice;
