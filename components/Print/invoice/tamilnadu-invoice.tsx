@@ -105,10 +105,9 @@ const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => {
 
   // Determine the number of parameters per page based on sample_id_nos length
   // let parametersPerPage;
-
+  let parametersPerPage = 13; // Default value
 
   const getParametersPerPage = (parameters: any[]) => {
-    let parametersPerPage = 13; // Default value
 
     if (sample_id_nos.length < 100) {
       parametersPerPage = 13;
@@ -205,7 +204,7 @@ const TamilNaduInvoice: React.FC<{ invoiceData: Data }> = ({ invoiceData }) => {
                     invoice_type={invoiceData.invoice.invoice_type}
                     tested_type={invoiceData.invoice.tested_type}
                     invoice={invoiceData.invoice}
-                    startingIndex={index * chunk.length}
+                    startingIndex={index * parametersPerPage}
                   />
                   {index === parameterChunks.length - 1 && (
                     <TamilnaduTotalSection invoice={invoiceData.invoice} />
