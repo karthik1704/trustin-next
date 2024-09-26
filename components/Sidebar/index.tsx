@@ -54,11 +54,11 @@ const adminMenuList = [
     pathname: "parameters",
     icon: <TestTubes />,
   },
-  {
-    name: "Quotations",
-    pathname: "quotations",
-    icon: <BadgeIndianRupee />,
-  },
+  // {
+  //   name: "Quotations",
+  //   pathname: "quotations",
+  //   icon: <BadgeIndianRupee />,
+  // },
 ];
 
 const menulist = [
